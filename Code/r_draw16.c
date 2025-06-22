@@ -1,7 +1,6 @@
 
 // r_draw16.c : 16bpp (HIGHCOLOR) span/column drawer functions
 //
-//       NOTE: no includes because this is included as part of r_draw.c
 
 #include "doomdef.h"
 #include "st_stuff.h"
