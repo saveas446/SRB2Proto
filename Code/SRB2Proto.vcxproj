@@ -95,6 +95,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>dinput8.lib;dxguid.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)\..\Binaries\srb2win.exe</OutputFile>
     </Link>
     <CustomBuildStep>
       <Command>
