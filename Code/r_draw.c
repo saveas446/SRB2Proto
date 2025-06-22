@@ -106,10 +106,8 @@ byte*                   ds_source;      // start of a 64*64 tile image
 //
 // Spectre/Invisibility.
 //
-#define FUZZTABLE     50
-#define FUZZOFF       (1)
 
-static  int fuzzoffset[FUZZTABLE] =
+int fuzzoffset[FUZZTABLE] =
 {
     FUZZOFF,-FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,
     FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,
@@ -120,7 +118,7 @@ static  int fuzzoffset[FUZZTABLE] =
     FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF
 };
 
-static  int fuzzpos = 0;     // move through the fuzz table
+int fuzzpos = 0;     // move through the fuzz table
 
 
 //  fuzzoffsets are dependend of vid width, for optimising purpose
@@ -459,17 +457,3 @@ void R_DrawViewBorder (void)
     // useless, old dirty rectangle stuff
     //V_MarkRect (0,0,vid.width, vid.height-ST_HEIGHT);
 }
-
-
-// ==========================================================================
-//                   INCLUDE 8bpp DRAWING CODE HERE
-// ==========================================================================
-
-#include "r_draw8.c"
-
-
-// ==========================================================================
-//                   INCLUDE 16bpp DRAWING CODE HERE
-// ==========================================================================
-
-#include "r_draw16.c"

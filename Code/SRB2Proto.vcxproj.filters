@@ -493,9 +493,6 @@
     <Text Include="_logs\tokin.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="AM_Automap">
-      <UniqueIdentifier>{1f6d8753-0639-45db-b211-eeab565c9246}</UniqueIdentifier>
-    </Filter>
     <Filter Include="I_Interface">
       <UniqueIdentifier>{956ad6da-f373-4bd0-8b8e-757e532ffa25}</UniqueIdentifier>
     </Filter>

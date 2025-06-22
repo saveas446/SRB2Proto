@@ -3,6 +3,17 @@
 //
 //       NOTE: no includes because this is included as part of r_draw.c
 
+#include "doomdef.h"
+#include "st_stuff.h"
+#include "i_video.h"
+#include "vid_copy.h"
+#include "v_video.h"
+#include "w_wad.h"
+#include "m_fixed.h"
+#include "z_zone.h"
+#include "r_local.h"
+#include "r_draw.h"
+
 // THIS IS THE VERY BEGINNING OF DOOM LEGACY's HICOLOR MODE (or TRUECOLOR)
 // Doom Legacy will use HICOLOR textures, rendered through software, and
 // may use MMX, or WILL use MMX to get a decent speed.

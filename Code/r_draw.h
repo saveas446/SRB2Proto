@@ -10,10 +10,17 @@
 // -------------------------------
 // COMMON STUFF FOR 8bpp AND 16bpp
 // -------------------------------
+
+#define FUZZTABLE     50
+#define FUZZOFF       (1)
+
 extern byte*            ylookup[MAXVIDHEIGHT];
 extern byte*            ylookup1[MAXVIDHEIGHT];
 extern byte*            ylookup2[MAXVIDHEIGHT];
 extern int              columnofs[MAXVIDWIDTH];
+extern int              fuzzoffset[FUZZTABLE];
+
+extern int              fuzzpos;
 
 #ifdef HORIZONTALDRAW
 //Fab 17-06-98

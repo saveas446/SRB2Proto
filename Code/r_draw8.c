@@ -1,8 +1,16 @@
 
 // r_draw8.c : 8bpp span/column drawer functions
 //
-//       NOTE: no includes because this is included as part of r_draw.c
 
+#include "doomdef.h"
+#include "st_stuff.h"
+#include "i_video.h"
+#include "vid_copy.h"
+#include "v_video.h"
+#include "w_wad.h"
+#include "z_zone.h"
+#include "r_local.h"
+#include "r_draw.h"
 
 
 // ==========================================================================
