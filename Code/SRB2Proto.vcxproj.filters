@@ -1,0 +1,533 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Am_map.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="D_clisrv.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="D_items.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="D_main.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="D_net.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="D_netcmd.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="D_netfil.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="Dehacked.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="Dstrings.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\dx_error.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="F_finale.c">
+      <Filter>F_Finale</Filter>
+    </ClCompile>
+    <ClCompile Include="F_wipe.c">
+      <Filter>F_Finale</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\fabdxlib.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="G_game.c">
+      <Filter>G_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="G_input.c">
+      <Filter>G_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="g_state.c">
+      <Filter>G_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Hu_stuff.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="i_tcp.c">
+      <Filter>I_Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="M_argv.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_bbox.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_cheat.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_fixed.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_menu.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_misc.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_random.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="M_swap.c">
+      <Filter>M_Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\Mid2strm.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="Info.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_ceilng.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_doors.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_enemy.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_fab.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_floor.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_inter.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_lights.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_map.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_maputl.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_mobj.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_plats.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_pspr.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_saveg.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_setup.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_sight.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_spec.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_switch.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_telept.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_tick.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="P_user.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Tables.c">
+      <Filter>P_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="R_bsp.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_data.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_draw.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_draw8.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_main.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_plane.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_segs.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_sky.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="r_splats.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="R_things.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="r_draw16.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Qmus2mid.c">
+      <Filter>S_Sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="S_sound.c">
+      <Filter>S_Sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="Sounds.c">
+      <Filter>S_Sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="St_lib.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="St_stuff.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="V_video.c">
+      <Filter>R_Render</Filter>
+    </ClCompile>
+    <ClCompile Include="W_wad.c">
+      <Filter>W_Wad</Filter>
+    </ClCompile>
+    <ClCompile Include="Wi_stuff.c">
+      <Filter>H_Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_cd.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_dbg.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_dll.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_main.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_net.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_snd.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_sys.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\win_vid.c">
+      <Filter>Win32App</Filter>
+    </ClCompile>
+    <ClCompile Include="Z_zone.c">
+      <Filter>D_Doom</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="byteptr.h">
+      <Filter>I_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Am_map.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="D_clisrv.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_englsh.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_event.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_french.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_items.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_main.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_net.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_netcmd.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="d_netfil.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_player.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_think.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="D_ticcmd.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="Dehacked.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="Doomdata.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="Doomdef.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="Doomstat.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="Doomtype.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="Dstrings.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+    <ClInclude Include="F_finale.h">
+      <Filter>F_Finale</Filter>
+    </ClInclude>
+    <ClInclude Include="F_wipe.h">
+      <Filter>F_Finale</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\fabdxlib.h">
+      <Filter>Win32App</Filter>
+    </ClInclude>
+    <ClInclude Include="G_game.h">
+      <Filter>G_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="G_input.h">
+      <Filter>G_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="g_state.h">
+      <Filter>G_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Hu_stuff.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="I_net.h">
+      <Filter>I_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="I_sound.h">
+      <Filter>I_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="I_system.h">
+      <Filter>I_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="I_video.h">
+      <Filter>I_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Keys.h">
+      <Filter>I_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="M_argv.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_bbox.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_cheat.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_fixed.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_menu.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_misc.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_random.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="M_swap.h">
+      <Filter>M_Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\Mid2strm.h">
+      <Filter>Win32App</Filter>
+    </ClInclude>
+    <ClInclude Include="Info.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_fab.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_inter.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_local.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="p_maputl.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_mobj.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_pspr.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_saveg.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_setup.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_spec.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="P_tick.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Tables.h">
+      <Filter>P_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="R_bsp.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_data.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_defs.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_draw.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_local.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_main.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_plane.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_segs.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_sky.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="r_splats.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_state.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="R_things.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="S_sound.h">
+      <Filter>S_Sounds</Filter>
+    </ClInclude>
+    <ClInclude Include="Sounds.h">
+      <Filter>S_Sounds</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="St_lib.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="St_stuff.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="V_video.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Vid_copy.h">
+      <Filter>R_Render</Filter>
+    </ClInclude>
+    <ClInclude Include="W_wad.h">
+      <Filter>W_Wad</Filter>
+    </ClInclude>
+    <ClInclude Include="Wi_stuff.h">
+      <Filter>H_Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_dbg.h">
+      <Filter>Win32App</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_dll.h">
+      <Filter>Win32App</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_main.h">
+      <Filter>Win32App</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\win_vid.h">
+      <Filter>Win32App</Filter>
+    </ClInclude>
+    <ClInclude Include="Z_zone.h">
+      <Filter>D_Doom</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="_logs\log.txt" />
+    <Text Include="_logs\Logboris.txt" />
+    <Text Include="_logs\tokin.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AM_Automap">
+      <UniqueIdentifier>{1f6d8753-0639-45db-b211-eeab565c9246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I_Interface">
+      <UniqueIdentifier>{956ad6da-f373-4bd0-8b8e-757e532ffa25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D_Doom">
+      <UniqueIdentifier>{a9cefe4c-25d6-4be4-be26-7132f9d5e159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="H_Hud">
+      <UniqueIdentifier>{81b033b5-48d1-4b14-83ca-58b6df41bd89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32App">
+      <UniqueIdentifier>{326390f5-fcee-46e3-a9a1-1cf86e8a1cdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="F_Finale">
+      <UniqueIdentifier>{33ef1a9d-6373-4f61-a3d6-ac00795bb890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="G_Game">
+      <UniqueIdentifier>{046b9943-cfbc-45cb-91f7-998514da98ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="M_Misc">
+      <UniqueIdentifier>{da8677a4-2c38-4f00-a31e-df216549aca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="R_Render">
+      <UniqueIdentifier>{bc3e1796-4ea2-4da1-aa65-f7bf8bf82cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="P_Player">
+      <UniqueIdentifier>{ad5301c1-f323-455d-9b5a-89193c2ac065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="S_Sounds">
+      <UniqueIdentifier>{2747e110-3292-4bc7-89c9-51a5663bc8d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="W_Wad">
+      <UniqueIdentifier>{13d8ff25-5163-4047-ab58-9d04c7b15703}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
