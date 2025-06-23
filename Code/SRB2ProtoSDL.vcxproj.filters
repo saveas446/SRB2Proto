@@ -31,9 +31,6 @@
     <Filter Include="W_Wad">
       <UniqueIdentifier>{cdac329c-114d-4f97-bfc8-05dd43343a15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Win32App">
-      <UniqueIdentifier>{cdd2b75b-976d-41fa-9835-8deaaa4c2e54}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dehacked.c">
@@ -242,39 +239,6 @@
     </ClCompile>
     <ClCompile Include="W_wad.c">
       <Filter>W_Wad</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\dx_error.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\fabdxlib.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\Mid2strm.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_cd.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_dbg.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_dll.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_main.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_net.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_snd.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_sys.c">
-      <Filter>Win32App</Filter>
-    </ClCompile>
-    <ClCompile Include="win32\win_vid.c">
-      <Filter>Win32App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,24 +466,6 @@
     </ClInclude>
     <ClInclude Include="W_wad.h">
       <Filter>W_Wad</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\fabdxlib.h">
-      <Filter>Win32App</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\Mid2strm.h">
-      <Filter>Win32App</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\win_dbg.h">
-      <Filter>Win32App</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\win_dll.h">
-      <Filter>Win32App</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\win_main.h">
-      <Filter>Win32App</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\win_vid.h">
-      <Filter>Win32App</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
