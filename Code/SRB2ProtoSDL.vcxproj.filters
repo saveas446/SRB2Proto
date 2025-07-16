@@ -31,6 +31,9 @@
     <Filter Include="W_Wad">
       <UniqueIdentifier>{cdac329c-114d-4f97-bfc8-05dd43343a15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDLapp">
+      <UniqueIdentifier>{71304b8f-4e53-431c-b37c-ef967727c1cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dehacked.c">
@@ -239,6 +242,27 @@
     </ClCompile>
     <ClCompile Include="W_wad.c">
       <Filter>W_Wad</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\i_cdmus.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\i_main.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\i_net.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\i_sound.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\i_system.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\i_video.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
+    <ClCompile Include="sdl2\dosstr.c">
+      <Filter>SDLapp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

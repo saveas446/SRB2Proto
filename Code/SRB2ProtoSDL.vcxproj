@@ -77,6 +77,13 @@
     <ClCompile Include="r_splats.c" />
     <ClCompile Include="R_things.c" />
     <ClCompile Include="Screen.c" />
+    <ClCompile Include="sdl2\dosstr.c" />
+    <ClCompile Include="sdl2\i_cdmus.c" />
+    <ClCompile Include="sdl2\i_main.c" />
+    <ClCompile Include="sdl2\i_net.c" />
+    <ClCompile Include="sdl2\i_sound.c" />
+    <ClCompile Include="sdl2\i_system.c" />
+    <ClCompile Include="sdl2\i_video.c" />
     <ClCompile Include="Sounds.c" />
     <ClCompile Include="St_lib.c" />
     <ClCompile Include="St_stuff.c" />
@@ -174,7 +181,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -275,7 +282,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;HAVE_SDL;FORCESDLMAIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
       <PrecompiledHeaderOutputFile>.\Release\SRB2ProtoSDL.pch</PrecompiledHeaderOutputFile>
@@ -304,7 +311,8 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>dxguid.lib;dinput8.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
