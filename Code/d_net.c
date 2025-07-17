@@ -491,10 +491,11 @@ void D_CheckNetGame (void)
         I_Error ("Doomcom buffer invalid!");
     if (doomcom->numnodes>MAXNETNODES)
         I_Error ("To much nodes (%d), max:%d",doomcom->numnodes,MAXNETNODES);
-
+#endif
     netbuffer = (doomdata_t *)&doomcom->data;
     ticdup=1;
 
+#ifndef HAVE_SDL
 #ifdef DEBUGFILE
     if (M_CheckParm ("-debugfile"))
     {
