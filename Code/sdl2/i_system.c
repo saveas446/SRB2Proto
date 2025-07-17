@@ -16,9 +16,38 @@ void I_GetFreeMem(ULONG *total)
 	total = NULL;
 }
 
-ULONG I_GetTime(void) 
+static long    hacktics = 0;       //faB: used locally for keyboard repeat keys
+static DWORD starttickcount = 0; // hack for win2k time bug
+int I_GetTime(void)
 {
-	return 0;
+	int newtics = 0;
+
+	if (!starttickcount) // high precision timer
+	{
+		LARGE_INTEGER currtime; // use only LowPart if high resolution counter is not available
+		static LARGE_INTEGER basetime = { {0, 0} };
+
+		// use this if High Resolution timer is found
+		static LARGE_INTEGER frequency;
+
+		if (!basetime.LowPart)
+		{
+			if (!QueryPerformanceFrequency(&frequency))
+				frequency.QuadPart = 0;
+			else
+				QueryPerformanceCounter(&basetime);
+		}
+
+		if (frequency.LowPart && QueryPerformanceCounter(&currtime))
+		{
+			newtics = (INT32)((currtime.QuadPart - basetime.QuadPart) * TICRATE
+				/ frequency.QuadPart);
+		}
+	}
+	else
+		newtics = (GetTickCount() - starttickcount) / (1000 / TICRATE);
+
+	return newtics;
 }
 
 void I_Sleep(void){}
@@ -27,10 +56,13 @@ void I_GetEvent(void){}
 
 void I_OsPolling(void){}
 
-ticcmd_t *I_BaseTiccmd(void)
+// Apparently this isn't system specific so Ctrl+C,Ctrl+V it is
+ticcmd_t        emptycmd;
+ticcmd_t* I_BaseTiccmd(void)
 {
-	return NULL;
+	return &emptycmd;
 }
+
 
 ticcmd_t *I_BaseTiccmd2(void)
 {
@@ -97,7 +129,7 @@ void I_OutputMsg(const char *error, ...)
 }
 
 // Just print this to the console for now
-void I_LoadingScreen(LPCSTR msg)
+void I_LoadingScreen(const char* msg)
 {
 	SDL_Log(msg);
 }
@@ -140,11 +172,6 @@ int I_StartupSystem(void)
 
 void I_ShutdownSystem(void){}
 
-void I_GetDiskFreeSpace(INT64* freespace)
-{
-	freespace = NULL;
-}
-
 char *I_GetUserName(void)
 {
 	return NULL;
@@ -157,11 +184,6 @@ int I_mkdir(const char *dirname, int unixright)
 	return -1;
 }
 
-UINT64 I_FileSize(const char *filename)
-{
-	filename = NULL;
-	return (UINT64)-1;
-}
 
 const char *I_LocateWad(void)
 {

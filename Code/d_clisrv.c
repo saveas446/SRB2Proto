@@ -1247,6 +1247,8 @@ void SendClientCmd (void)
     {
         lastsenttime=I_GetTime();
 */
+
+#ifndef HAVE_SDL
     netbuffer->packettype=CLIENTCMD;
     netbuffer->u.clientpak.client_tic = gametic;
 
@@ -1293,7 +1295,7 @@ void SendClientCmd (void)
         if( HSendPacket(servernode,true,0) ) // send can be fail for some reasons...
         localtextcmd2[0]=0;
     }
-
+#endif
 }
 
 
@@ -1697,6 +1699,7 @@ void NetUpdate(void)
     Local_Maketic (realtics);    // make local tic, and call menu ?!
     if(server && !demoplayback)
         SendClientCmd ();        // send it
+
     GetPackets ();               // get packet from client or from server
 
     // client send the command after a receive of the server

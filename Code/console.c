@@ -889,8 +889,10 @@ void CONS_Printf (char *fmt, ...)
     // echo console prints to log file
 #ifdef HAVE_SDL
     if (logstream != INVALID_HANDLE_VALUE)
-        I_FPrintf (logstream, "%s", txt);
-#elif defined(SRB2_WIN32)
+        I_FPrintf(logstream, "%s", txt);
+#endif
+
+#ifdef SRB2_WIN32
     if (logstream != INVALID_HANDLE_VALUE)
         FPrintf(logstream, "%s", txt);     // uses win_dbg.c FPrintf()
 #endif

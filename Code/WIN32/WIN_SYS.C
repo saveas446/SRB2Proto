@@ -229,21 +229,13 @@ int I_GetTime(void)
 
         if (frequency.LowPart && QueryPerformanceCounter(&currtime))
         {
-            newtics = (int)((currtime.QuadPart - basetime.QuadPart) * TICRATE
+            newtics = (INT32)((currtime.QuadPart - basetime.QuadPart) * TICRATE
                 / frequency.QuadPart);
-        }
-        else
-        {
-            currtime.LowPart = timeGetTime();
-            if (!basetime.LowPart)
-                basetime.LowPart = currtime.LowPart;
-            newtics = ((currtime.LowPart - basetime.LowPart) / (1000 / TICRATE));
         }
     }
     else
         newtics = (GetTickCount() - starttickcount) / (1000 / TICRATE);
 
-    hacktics = newtics; // a local counter for keyboard repeat key
     return newtics;
 }
 

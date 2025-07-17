@@ -35,7 +35,7 @@ int SDL_main(int argc, char** argv)
 #endif
 }
 
-void I_FPrintf(HANDLE fileHandle, LPCTSTR lpFmt, ...)
+void I_FPrintf(SDL_RWops* fileHandle, char* lpFmt, ...)
 {
 	char    str[1999];
 	va_list arglist;

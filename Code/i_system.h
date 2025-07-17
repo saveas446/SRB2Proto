@@ -11,6 +11,10 @@
 #pragma interface
 #endif
 
+#ifdef HAVE_SDL
+#include <SDL_rwops.h>
+#endif
+
 // See Shutdown_xxx() routines.
 extern byte graphics_started;
 extern byte keyboard_started;
@@ -101,7 +105,11 @@ void I_RemoveExitFunc (void (*func)());
 int  I_StartupSystem (void);
 void I_ShutdownSystem (void);
 
+#ifdef HAVE_SDL
+void I_FPrintf(SDL_RWops* fileHandle, char* lpFmt, ...);
+#else
 void I_FPrintf(HANDLE fileHandle, char* lpFmt, ...);
+#endif
 
 
 #endif
