@@ -77,14 +77,19 @@ void I_Quit(void)
 
 void I_Error(const char *error, ...)
 {
-	char    str[1999];
-	va_list arglist;
+	va_list args;
+	va_start(args, error);
 
-	va_start(arglist, error);
-	wvsprintf(str, error, arglist);
-	va_end(arglist);
+	int len = vsnprintf(NULL, 0, error, args);
+	va_end(args);
 
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SRB2 Error", error, NULL);
+	char* buffer = (char*)malloc(len + 1);
+
+	va_start(args, error);
+	vsnprintf(buffer, len + 1, error, args);
+	va_end(args);
+
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SRB2 Error", buffer, NULL);
 
 	error = NULL;
 	exit(-1);
@@ -169,6 +174,20 @@ void I_StartFrame(void) {
 				if (!up)
 					e_w.type = ev_keydown;
 
+				// Intercept modifier keys
+				if (SDL_GetModState() == KMOD_SHIFT) {
+					e_w.data1 = KEY_SHIFT;
+					return;
+				}
+				if (SDL_GetModState() == KMOD_CTRL) {
+					e_w.data1 = KEY_CTRL;
+					return;
+				}
+				if (SDL_GetModState() == KMOD_ALT) {
+					e_w.data1 = KEY_ALT;
+					return;
+				}
+
 				switch (e_s.key.keysym.sym) {
 					case SDLK_UP:
 						e_w.data1 = KEY_UPARROW;
@@ -188,8 +207,8 @@ void I_StartFrame(void) {
 				}
 					
 				// For when I inevitably come back to this
-				SDL_Log("Virtual key code: 0x%02X (%c)\n", e_s.key.keysym.sym, e_s.key.keysym.sym);
-				SDL_Log("Physical key code: 0x%02X (%c)\n", e_s.key.keysym.scancode, e_s.key.keysym.scancode);
+				//SDL_Log("Virtual key code: 0x%02X (%c)\n", e_s.key.keysym.sym, e_s.key.keysym.sym);
+				//SDL_Log("Physical key code: 0x%02X (%c)\n", e_s.key.keysym.scancode, e_s.key.keysym.scancode);
 				D_PostEvent(&e_w);
 				break;
 		}

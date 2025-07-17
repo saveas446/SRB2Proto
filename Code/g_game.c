@@ -459,6 +459,17 @@ void G_BuildTiccmd (ticcmd_t* cmd, int realtics)
         forward -= ( (joyymove * forwardmove[1]) >> 10 );               // ANALOG!
     }
 
+    // Make sure no
+    for (int i = 0; i < num_gamecontrols; i++) {
+        if (gamecontrol[i][0] > 292) {
+            gamecontrol[i][0] = 0;
+            CONS_Printf("WARNING: Key bound to invalid key value! Setting to 0.");
+        }
+        if (gamecontrol[i][1] > 292) {
+            gamecontrol[i][1] = 0;
+            CONS_Printf("WARNING: Key bound to invalid key value! Setting to 0.");
+        }
+    }
 
     //added:07-02-98: some people strafe left & right with mouse buttons
     if (gamekeydown[gamecontrol[gc_straferight][0]] ||
