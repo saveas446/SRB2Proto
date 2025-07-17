@@ -154,14 +154,21 @@ void I_StartTic(void){}
 void I_StartFrame(void) {
 	event_t e_w;
 	SDL_Event e_s;
+	// This exists so we can reuse most of the keydown event code for the keyup event
+	boolean up = false;
 
 	while (SDL_PollEvent(&e_s) != 0) {
 		switch (e_s.type) {
 			case SDL_QUIT:
 				I_Quit();
 				break;
+			case SDL_KEYUP:
+				e_w.type = ev_keyup;
+				up = true;
 			case SDL_KEYDOWN:
-				e_w.type = ev_keydown;
+				if (!up)
+					e_w.type = ev_keydown;
+
 				switch (e_s.key.keysym.sym) {
 					case SDLK_UP:
 						e_w.data1 = KEY_UPARROW;

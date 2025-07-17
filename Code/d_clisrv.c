@@ -495,6 +495,7 @@ typedef enum {
    cl_notthefiles
 } cl_mode_t;
 
+
 //
 // D_ArbitrateNetStart
 //
@@ -1248,7 +1249,6 @@ void SendClientCmd (void)
         lastsenttime=I_GetTime();
 */
 
-#ifndef HAVE_SDL
     netbuffer->packettype=CLIENTCMD;
     netbuffer->u.clientpak.client_tic = gametic;
 
@@ -1295,7 +1295,6 @@ void SendClientCmd (void)
         if( HSendPacket(servernode,true,0) ) // send can be fail for some reasons...
         localtextcmd2[0]=0;
     }
-#endif
 }
 
 
