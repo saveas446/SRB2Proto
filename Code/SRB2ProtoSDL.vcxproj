@@ -77,7 +77,6 @@
     <ClCompile Include="r_splats.c" />
     <ClCompile Include="R_things.c" />
     <ClCompile Include="Screen.c" />
-    <ClCompile Include="sdl2\dosstr.c" />
     <ClCompile Include="sdl2\i_cdmus.c" />
     <ClCompile Include="sdl2\i_main.c" />
     <ClCompile Include="sdl2\i_net.c" />
@@ -160,6 +159,7 @@
     <ClInclude Include="R_state.h" />
     <ClInclude Include="R_things.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="sdl2\i_main.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="St_lib.h" />
     <ClInclude Include="St_stuff.h" />
@@ -282,7 +282,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;HAVE_SDL;FORCESDLMAIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;__WIN32__;__MSC__;HAVE_SDL;FORCESDLMAIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
       <PrecompiledHeaderOutputFile>.\Release\SRB2ProtoSDL.pch</PrecompiledHeaderOutputFile>

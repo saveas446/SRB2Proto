@@ -5,7 +5,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifdef __WIN32__
+#ifndef HAVE_SDL
+
+#ifdef WIN32
 #include <winsock.h>
 #else
 #if !defined(SCOUW2) && !defined(SCOUW7)
@@ -44,7 +46,7 @@
 
 #include "doomstat.h"
 
-#ifdef __WIN32__
+#ifdef WIN32
     // some undifined under win32
     #define IPPORT_USERRESERVED 5000
     #define errno             h_errno // some very strange things happen when not use h_error ?!?
@@ -354,3 +356,4 @@ int I_InitTcpNetwork( void )
 
     return 1;
 }
+#endif

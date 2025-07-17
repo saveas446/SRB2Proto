@@ -261,9 +261,6 @@
     <ClCompile Include="sdl2\i_video.c">
       <Filter>SDLapp</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2\dosstr.c">
-      <Filter>SDLapp</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dehacked.h">
@@ -490,6 +487,9 @@
     </ClInclude>
     <ClInclude Include="W_wad.h">
       <Filter>W_Wad</Filter>
+    </ClInclude>
+    <ClInclude Include="sdl2\i_main.h">
+      <Filter>SDLapp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

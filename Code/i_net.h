@@ -83,7 +83,7 @@ typedef struct
 } doomcom_t;
 
 extern doomcom_t *doomcom;
-// Called by D_DoomMain.
+// Called by D_SRB2Main.
 
 // to be defined by the network driver
 void (*I_NetGet) (void);

@@ -1,6 +1,6 @@
 
 // d_main.c :
-//      DOOM main program (D_DoomMain) and game loop (D_DoomLoop),
+//      DOOM main program (D_SRB2Main) and game loop (D_SRB2Loop),
 //      plus functions to determine game mode (shareware, registered),
 //      parse command line parameters, configure game parameters (turbo),
 //      and call the startup functions.
@@ -66,7 +66,7 @@
 #define FGCOLOR         8
 
 extern int mb_used;     // base memory allocation, changeable by -mb parm.
-                        // note: TEMPORARY hack, check D_DoomMain.
+                        // note: TEMPORARY hack, check D_SRB2Main.
 
 
 //
@@ -77,7 +77,7 @@ int             pagetic;
 char            *pagename;
 
 //  PROTOS
-void D_DoomLoop (void);
+void D_SRB2Loop (void);
 void D_PageDrawer (char* lumpname);
 void D_AdvanceDemo (void);
 
@@ -441,7 +441,7 @@ void D_Display (void)
 
 
 // =========================================================================
-//   D_DoomLoop
+//   D_SRB2Loop
 // =========================================================================
 extern  boolean   demorecording;
 
@@ -450,7 +450,7 @@ static  ULONG     lastrendered;
 ULONG   rendergametic;
 
 // note: the win32 version returns from this routine !
-void D_DoomLoop (void)
+void D_SRB2Loop (void)
 {
     if (demorecording)
         G_BeginRecording ();
@@ -692,7 +692,7 @@ void D_DoAdvanceDemo (void)
 }
 
 // =========================================================================
-//   D_DoomMain
+//   D_SRB2Main
 // =========================================================================
 
 //
@@ -1083,9 +1083,9 @@ void D_MakeTitleString( char *s )
 
 
 //
-// D_DoomMain
+// D_SRB2Main
 //
-void D_DoomMain (void)
+void D_SRB2Main (void)
 {
     int     p;
     char    file[256];
@@ -1503,7 +1503,7 @@ void D_DoomMain (void)
         gamestate=GS_WAITINGPLAYERS;
         wipegamestate = GS_WAITINGPLAYERS;
 
-        D_DoomLoop ();
+        D_SRB2Loop ();
         return;         // win32 version returns (see win_main.c)
     }
 
@@ -1535,7 +1535,7 @@ void D_DoomMain (void)
 
     }
 
-    D_DoomLoop ();
+    D_SRB2Loop ();
 
     // DOS never returns
     // win32 version returns (see win_main.c)

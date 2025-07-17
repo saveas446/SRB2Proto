@@ -1,6 +1,4 @@
 #include "../i_net.h"
+#include "../doomtype.h"
 
-boolean I_InitNetwork(void)
-{
-	return false;
-}
+void I_InitNetwork(void) {}

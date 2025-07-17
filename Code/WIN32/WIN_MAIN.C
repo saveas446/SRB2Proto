@@ -414,8 +414,8 @@ int WINAPI HandledWinMain(HINSTANCE hInstance,
     // setup glide ?
     
     // startup Doom Legacy
-    CONS_Printf ("D_DoomMain() ...\n");
-    D_DoomMain ();
+    CONS_Printf ("D_SRB2Main() ...\n");
+    D_SRB2Main ();
     
     //
     // da main Windoze loop

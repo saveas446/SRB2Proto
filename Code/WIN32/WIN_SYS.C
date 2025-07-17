@@ -307,7 +307,7 @@ void I_StartTic()
 
     //faB: we need to dispatch messages to the window
     //     so the window procedure can respond to messages and PostEvent() for keys
-    //     during D_DoomMain startup.
+    //     during D_SRB2Main startup.
     if (PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE))
     {
         if (GetMessage( &msg, NULL, 0, 0))
@@ -1338,7 +1338,7 @@ int  I_StartupSystem(void)
 #endif
 
     // create DirectInput - so that I_StartupKeyboard/Mouse can be called later on
-    // from D_DoomMain just like DOS version
+    // from D_SRB2Main just like DOS version
     hr = DirectInput8Create (myInstance, DIRECTINPUT_VERSION, &IID_IDirectInput8, (void**)&lpDI, NULL);
 
     if ( SUCCEEDED( hr ) )

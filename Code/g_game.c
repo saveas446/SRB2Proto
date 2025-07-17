@@ -892,7 +892,7 @@ boolean G_Responder (event_t* ev)
 
 //
 //  Activates the new features of Doom LEGACY, by default
-//  This is done at the start of D_DoomLoop, before a demo
+//  This is done at the start of D_SRB2Loop, before a demo
 //  starts playing, because for older demos, some features
 //  are disabled.
 //

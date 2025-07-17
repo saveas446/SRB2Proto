@@ -31,7 +31,7 @@ byte*   I_ZoneBase (int *size);
 
 void I_GetFreeMem(void);
 
-// Called by D_DoomLoop,
+// Called by D_SRB2Loop,
 // returns current time in tics.
 ULONG I_GetTime (void);
 
@@ -40,7 +40,7 @@ void I_GetEvent (void);
 
 
 //
-// Called by D_DoomLoop,
+// Called by D_SRB2Loop,
 // called before processing any tics in a frame
 // (just after displaying a frame).
 // Time consuming syncronous operations
@@ -51,7 +51,7 @@ void I_StartFrame (void);
 
 
 //
-// Called by D_DoomLoop,
+// Called by D_SRB2Loop,
 // called before processing each tic in a frame.
 // Quick syncronous operations are performed here.
 // Can call D_PostEvent.
@@ -100,6 +100,9 @@ void I_RemoveExitFunc (void (*func)());
 // Setup signal handler, plus stuff for trapping errors and cleanly exit.
 int  I_StartupSystem (void);
 void I_ShutdownSystem (void);
+
+void I_FPrintf(HANDLE fileHandle, char* lpFmt, ...);
+
 
 #endif
 //-----------------------------------------------------------------------------

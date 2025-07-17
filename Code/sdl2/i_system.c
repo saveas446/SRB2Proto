@@ -1,9 +1,15 @@
 #include "../doomdef.h"
 #include "../i_system.h"
+#include "../i_joy.h"
+
+#include "i_main.h"
+#include <SDL_messagebox.h>
 
 byte graphics_started = 0;
 
 byte keyboard_started = 0;
+
+JoyType_t   Joystick;
 
 void I_GetFreeMem(ULONG *total)
 {
@@ -38,6 +44,15 @@ void I_Quit(void)
 
 void I_Error(const char *error, ...)
 {
+	char    str[1999];
+	va_list arglist;
+
+	va_start(arglist, error);
+	wvsprintf(str, error, arglist);
+	va_end(arglist);
+
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SRB2 Error", error, NULL);
+
 	error = NULL;
 	exit(-1);
 }
@@ -155,4 +170,24 @@ int I_PutEnv(char *variable)
 {
 	variable = NULL;
 	return -1;
+}
+
+byte* I_ZoneBase(int* size)
+{
+	void* pmem;
+
+	// do it the old way
+	*size = mb_used * 1024 * 1024;
+	pmem = malloc(*size);
+
+	if (!pmem)
+	{
+		I_Error("Could not allocate %d megabytes.\n"
+			"Please use -mb parameter and specify a lower value.\n", mb_used);
+	}
+
+	//TODO: lock the memory
+	memset(pmem, 0, *size);
+
+	return (byte*)pmem;
 }
