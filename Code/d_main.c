@@ -887,6 +887,38 @@ void D_MakeTitleString( char *s )
     strcpy(s,temp);
 }
 
+char* wad_filenames[30] = {
+    "SRB2Z1M1.wad",
+    "SRB2Z1M2.wad",
+    "SRB2Z1M3.wad",
+    "SRB2Z2M1.wad",
+    "SRB2Z2M2.wad",
+    "SRB2Z2M3.wad",
+    "SRB2Z3M1.wad",
+    "SRB2Z3M2.wad",
+    "SRB2Z3M3.wad",
+    "SRB2Z4M1.wad",
+    "SRB2Z4M2.wad",
+    "SRB2Z4M3.wad",
+    "SRB2Z5M1.wad",
+    "SRB2Z5M2.wad",
+    "SRB2Z5M3.wad",
+    "SRB2Z6M1.wad",
+    "SRB2Z6M2.wad",
+    "SRB2Z6M3.wad",
+    "SRB2Z7M1.wad",
+    "SRB2Z7M2.wad",
+    "SRB2Z7M3.wad",
+    "SRB2Z8M1.wad",
+    "SRB2Z8M2.wad",
+    "SRB2Z8M3.wad",
+    "WOOD.wad",
+    "SPDHWY.wad",
+    "REALHPZ.wad",
+    "SRB2DM1.wad",
+    "SRB2DM2.wad",
+    "SRB2DM3.wad",
+};
 
 //
 // D_SRB2Main
@@ -894,6 +926,8 @@ void D_MakeTitleString( char *s )
 void D_SRB2Main (void)
 {
     int     p;
+    int     d;
+    char*   s;
     char    file[256];
     char    legacy[82];    //added:18-02-98: legacy title banner
     char    title[82];    //added:11-01-98:moved, doesn't need to be global
@@ -925,6 +959,25 @@ void D_SRB2Main (void)
     {
         while (M_IsNextParm())
             LoadDehackedFile (M_GetNextParm());
+    }
+
+    // Convenient parm for adding dev maps quickly ported from Demo 2 Ultimate
+    if (M_CheckParm("-addmap") && M_IsNextParm()) {
+        while (M_IsNextParm())
+        {
+            s = M_GetNextParm();
+
+            // Convert string to double
+            sscanf(s, "%d", &d);
+
+            // Check just in case the user tries to load an invalid map number
+            if (d > 0 && d < 31) {
+                // Decrement for array indexing purposes
+                d--;
+
+                D_AddFile(wad_filenames[d]);
+            }
+        }
     }
 
     // search for a deh in -file parm....
@@ -1014,6 +1067,26 @@ void D_SRB2Main (void)
             break;
         }
         D_AddFile (file);
+    }
+
+    // Convenient parm for adding dev maps quickly ported from Demo 2 Ultimate
+    if (M_CheckParm("-addmap") && M_IsNextParm()) {
+        while (M_IsNextParm())
+        {
+            s = M_GetNextParm();
+
+            // Convert string to double
+            sscanf(s, "%d", &d);
+
+            // Check just in case the user tries to load an invalid map number
+            if (d > 0 && d < 51) {
+                // Decrement for array indexing purposes
+                d--;
+
+                D_AddFile(wad_filenames[d]);
+                modifiedgame = true;
+            }
+        }
     }
 
     if (M_CheckParm ("-file"))
