@@ -491,5 +491,8 @@
     <ClInclude Include="sdl2\i_main.h">
       <Filter>SDLapp</Filter>
     </ClInclude>
+    <ClInclude Include="sdl2\i_video.h">
+      <Filter>SDLapp</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

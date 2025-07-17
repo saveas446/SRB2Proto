@@ -146,8 +146,10 @@ void SCR_Startup (void)
 {
     vid.modenum = 0;
     
+#ifndef HAVE_SDL
     vid.dupx = 1;
     vid.dupy = 1;
+#endif
 
     scaledofs = 0;
     vid.centerofs = 0;

@@ -4,6 +4,7 @@
 
 #include "i_main.h"
 #include <SDL_messagebox.h>
+#include <SDL_events.h>
 
 byte graphics_started = 0;
 
@@ -149,7 +150,44 @@ int I_GetKey(void)
 
 void I_StartTic(void){}
 
-void I_StartFrame(void) {}
+// Translate SDL2's events into Doom Legacy ones 
+void I_StartFrame(void) {
+	event_t e_w;
+	SDL_Event e_s;
+
+	while (SDL_PollEvent(&e_s) != 0) {
+		switch (e_s.type) {
+			case SDL_QUIT:
+				I_Quit();
+				break;
+			case SDL_KEYDOWN:
+				e_w.type = ev_keydown;
+				switch (e_s.key.keysym.sym) {
+					case SDLK_UP:
+						e_w.data1 = KEY_UPARROW;
+						break;
+					case SDLK_DOWN:
+						e_w.data1 = KEY_DOWNARROW;
+						break;
+					case SDLK_RIGHT:
+						e_w.data1 = KEY_RIGHTARROW;
+						break;
+					case SDLK_LEFT:
+						e_w.data1 = KEY_LEFTARROW;
+						break;
+					default:
+						e_w.data1 = e_s.key.keysym.sym;
+						break;
+				}
+					
+				// For when I inevitably come back to this
+				SDL_Log("Virtual key code: 0x%02X (%c)\n", e_s.key.keysym.sym, e_s.key.keysym.sym);
+				SDL_Log("Physical key code: 0x%02X (%c)\n", e_s.key.keysym.scancode, e_s.key.keysym.scancode);
+				D_PostEvent(&e_w);
+				break;
+		}
+	}
+}
 
 void I_SetMusicVolume(void) {}
 

@@ -160,6 +160,7 @@
     <ClInclude Include="R_things.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="sdl2\i_main.h" />
+    <ClInclude Include="sdl2\i_video.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="St_lib.h" />
     <ClInclude Include="St_stuff.h" />

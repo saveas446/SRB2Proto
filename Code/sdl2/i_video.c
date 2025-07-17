@@ -1,6 +1,7 @@
 #include "../doomdef.h"
 #include "../command.h"
 #include "../i_video.h"
+#include "i_video.h"
 #include <SDL.h>
 #include "../screen.h"
 
@@ -14,10 +15,10 @@ consvar_t cv_vidwait = {"vid_wait", "On", CV_SAVE, CV_OnOff, NULL, 0, 0, NULL};
 
 SDL_Window* SDL_window;
 
-SDL_DisplayMode SDL_displaymode;
-
 SDL_Renderer* SDL_renderer;
-SDL_Texture* window_texture;
+SDL_Surface* surface;
+SDL_Surface* window_surface;
+
 
 // temp temp temp teMP TEMP TEMP TEMP TEMPORARY!!!
 // once we have stuff displaying to the sdl2 window we'll have more than one video mode
@@ -29,11 +30,8 @@ void I_StartupGraphics(void){
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
 
-	if(SDL_GetCurrentDisplayMode(0, &SDL_displaymode))
-		I_Error("I_StartupGraphics(): Error while initializing display mode");
-
 	// Init window (hardcoded to 640x400 for now) in the center of the screen
-	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_displaymode.w >> 1, SDL_displaymode.h >> 1, VID_WIDTH, VID_HEIGHT, 0);
+	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, VID_WIDTH, VID_HEIGHT, 0);
 
 	if (!SDL_window) 
 		I_Error("I_StartupGraphics(): Could not create window!");
@@ -42,15 +40,18 @@ void I_StartupGraphics(void){
 	if (!SDL_renderer)
 		I_Error("I_StartupGraphics(): Could not create renderer!");
 
-	window_texture = SDL_CreateTexture(SDL_renderer, SDL_PIXELFORMAT_RGB332, SDL_TEXTUREACCESS_STREAMING, VID_WIDTH, VID_HEIGHT);
+	surface = SDL_CreateRGBSurfaceWithFormat(0, VID_WIDTH, VID_HEIGHT, 8, SDL_PIXELFORMAT_INDEX8);
+	window_surface = SDL_GetWindowSurface(SDL_window);
 
+	
 	// just hardcoding the video mode for now, i just wanna get things drawing
 	vid.modenum = NULL;
 	vid.width = VID_WIDTH;
 	vid.height = VID_HEIGHT;
 	vid.bpp = VID_BPP;
 	vid.rowbytes = VID_WIDTH * VID_BPP;
-
+	vid.dupx = 2;
+	vid.dupy = 2;
 	
 	// allocate buffer
 	// We're gonna replace this soon right? Right????
@@ -62,9 +63,24 @@ void I_ShutdownGraphics(void){
 	SDL_DestroyWindow(SDL_window);
 }
 
+SDL_Color palettebuf[256];
+
+// Translate 
 void I_SetPalette(byte *palette)
 {
-	palette = NULL;
+	RGB_t* rgbpalette;
+	rgbpalette = palette;
+
+	// 255 colors * 3 color channels
+	for (int i = 0; i < 255; i++) {
+
+		palettebuf[i].r = rgbpalette[i].r;
+		palettebuf[i].g = rgbpalette[i].g;
+		palettebuf[i].b = rgbpalette[i].b;
+		palettebuf[i].a = 255;
+
+		SDL_SetPaletteColors(surface->format->palette, palettebuf, 0, 256);
+	}
 }
 
 // For now, the only mode is 640x400 windowed
@@ -98,10 +114,14 @@ void I_UpdateNoBlit(void){}
 
 void I_FinishUpdate(void)
 {
-	SDL_UpdateTexture(window_texture, NULL, vid.buffer, vid.rowbytes);
-	SDL_RenderClear(SDL_renderer);
-	SDL_RenderCopy(SDL_renderer, window_texture, NULL, NULL);
-	SDL_RenderPresent(SDL_renderer);
+	byte* pixels = surface->pixels;
+	// Copy vid.buffer to our surface
+	for (int i = 0; i < VID_WIDTH * VID_HEIGHT; i++) {
+		pixels[i] = vid.buffer[i];
+	}
+
+	SDL_BlitSurface(surface, NULL, window_surface, NULL);
+	SDL_UpdateWindowSurface(SDL_window);
 }
 
 void I_WaitVBL(int count)
