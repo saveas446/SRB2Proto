@@ -471,7 +471,7 @@ void D_SRB2Loop (void)
     oldentertics = I_GetTime ();
 
 #ifndef LINUX
-#ifdef __WIN32__
+#ifdef SRB2_WIN32
     if ( hWndMain!=NULL )
     {
         SetFocus(hWndMain);
@@ -484,11 +484,11 @@ void D_SRB2Loop (void)
     CONS_Printf ("I_StartupKeyboard...\n");
     I_StartupKeyboard ();
 #endif
-#ifdef __WIN32__
+#ifdef SRB2_WIN32
     CONS_Printf ("I_StartupMouse...\n");
     I_DoStartupMouse ();
 #endif
-#ifndef __WIN32__
+#ifndef SRB2_WIN32
     while (1)
         D_DoomInnerLoop ();
 #endif
@@ -1282,7 +1282,7 @@ void D_SRB2Main (void)
     CONS_Printf (text[W_INIT_NUM]);
     if(!W_InitMultipleFiles (startupwadfiles))
     {
-#ifdef __WIN32__
+#ifdef SRB2_WIN32
         extern  HWND    hWndMain;
         MessageBox (hWndMain, "A WAD file was not found", "Doom Legacy Error", MB_OK);
 #else

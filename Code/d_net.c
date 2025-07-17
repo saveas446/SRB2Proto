@@ -485,6 +485,8 @@ void D_CheckNetGame (void)
     // check and initialize the network driver
     I_InitNetwork ();
 
+// Temp for now, I just wanna get the game functional
+#ifndef HAVE_SDL
     if (doomcom->id != DOOMCOM_ID)
         I_Error ("Doomcom buffer invalid!");
     if (doomcom->numnodes>MAXNETNODES)
@@ -504,6 +506,7 @@ void D_CheckNetGame (void)
 #endif
 
     D_ClientServerInit();
+#endif
 }
 
 

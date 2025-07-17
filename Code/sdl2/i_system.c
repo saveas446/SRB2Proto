@@ -96,6 +96,14 @@ void I_OutputMsg(const char *error, ...)
 	error = NULL;
 }
 
+// Just print this to the console for now
+void I_LoadingScreen(LPCSTR msg)
+{
+	SDL_Log(msg);
+}
+
+void I_DoStartupMouse(void){}
+
 void I_StartupMouse(void){}
 
 void I_StartupMouse2(void){}
@@ -106,6 +114,12 @@ int I_GetKey(void)
 {
 	return 0;
 }
+
+void I_StartTic(void){}
+
+void I_StartFrame(void) {}
+
+void I_SetMusicVolume(void) {}
 
 void I_StartupTimer(void){}
 

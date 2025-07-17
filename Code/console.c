@@ -890,13 +890,15 @@ void CONS_Printf (char *fmt, ...)
 #ifdef HAVE_SDL
     if (logstream != INVALID_HANDLE_VALUE)
         I_FPrintf (logstream, "%s", txt);
-#elif defined(WIN32)
+#elif defined(SRB2_WIN32)
     if (logstream != INVALID_HANDLE_VALUE)
         FPrintf(logstream, "%s", txt);     // uses win_dbg.c FPrintf()
 #endif
 
+#ifndef HAVE_SDL
     if(debugfile)
         fprintf(debugfile,"%s",txt);
+#endif
 
     if (!con_started || !graphics_started)
     {

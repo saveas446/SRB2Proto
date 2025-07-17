@@ -12,11 +12,16 @@ log.txt
 gamedata.dat
 ogllog.txt
 srb2log.txt
+SDL2.dll
+sdllog.txt
 
 # Builds
 fabdoom.exe
 FABDOOM.EXE
 SRB2Proto.exe
+SRB2Proto_DEBUG.exe
+SRB2ProtoSDL.exe
+SRB2ProtoSDL_DEBUG.exe
 srb2win.exe
 srb2sdl.exe
 srb2debug.exe

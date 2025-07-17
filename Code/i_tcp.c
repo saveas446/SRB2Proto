@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifndef HAVE_SDL
+#ifdef SRB2_WIN32
 
 #ifdef WIN32
 #include <winsock.h>

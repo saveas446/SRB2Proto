@@ -16,15 +16,18 @@ int SDL_main(int argc, char** argv)
 	myargc = argc;
 	myargv = argv; /// \todo pull out path to exe from this string
 
+
+	// init logstream
+	logstream = SDL_RWFromFile("sdllog.txt", "a");
+	if (!logstream)
+		I_Error("Unable to initialize log file.");
+
 	// startup SRB2
 	CONS_Printf ("Setting up SRB2...\n");
 	D_SRB2Main();
 	CONS_Printf ("Entering main game loop...\n");
 	// never return
 	D_SRB2Loop();
-
-	// init logstream
-	logstream = SDL_RWFromFile("sdllog.txt", "w");
 
 	// return to OS
 #ifndef __GNUC__
