@@ -22,8 +22,8 @@ SDL_Surface* window_surface;
 
 // temp temp temp teMP TEMP TEMP TEMP TEMPORARY!!!
 // once we have stuff displaying to the sdl2 window we'll have more than one video mode
-#define VID_WIDTH 640
-#define VID_HEIGHT 400
+#define VID_WIDTH 1280
+#define VID_HEIGHT 800
 #define VID_BPP 1
 
 void I_StartupGraphics(void){
@@ -50,8 +50,8 @@ void I_StartupGraphics(void){
 	vid.height = VID_HEIGHT;
 	vid.bpp = VID_BPP;
 	vid.rowbytes = VID_WIDTH * VID_BPP;
-	vid.dupx = 2;
-	vid.dupy = 2;
+	vid.dupx = 4;
+	vid.dupy = 4;
 	
 	// allocate buffer
 	// We're gonna replace this soon right? Right????
