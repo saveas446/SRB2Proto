@@ -19,6 +19,12 @@ SDL_DisplayMode SDL_displaymode;
 SDL_Renderer* SDL_renderer;
 SDL_Texture* window_texture;
 
+// temp temp temp teMP TEMP TEMP TEMP TEMPORARY!!!
+// once we have stuff displaying to the sdl2 window we'll have more than one video mode
+#define VID_WIDTH 640
+#define VID_HEIGHT 400
+#define VID_BPP 1
+
 void I_StartupGraphics(void){
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
@@ -27,7 +33,7 @@ void I_StartupGraphics(void){
 		I_Error("I_StartupGraphics(): Error while initializing display mode");
 
 	// Init window (hardcoded to 640x400 for now) in the center of the screen
-	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_displaymode.w >> 1, SDL_displaymode.h >> 1, 640, 400, 0);
+	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_displaymode.w >> 1, SDL_displaymode.h >> 1, VID_WIDTH, VID_HEIGHT, 0);
 
 	if (!SDL_window) 
 		I_Error("I_StartupGraphics(): Could not create window!");
@@ -36,13 +42,15 @@ void I_StartupGraphics(void){
 	if (!SDL_renderer)
 		I_Error("I_StartupGraphics(): Could not create renderer!");
 
-	window_texture = SDL_CreateTexture(SDL_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 640, 400);
+	window_texture = SDL_CreateTexture(SDL_renderer, SDL_PIXELFORMAT_RGB332, SDL_TEXTUREACCESS_STREAMING, VID_WIDTH, VID_HEIGHT);
 
 	// just hardcoding the video mode for now, i just wanna get things drawing
 	vid.modenum = NULL;
-	vid.width = 640;
-	vid.height = 400;
-	vid.bpp = 2;
+	vid.width = VID_WIDTH;
+	vid.height = VID_HEIGHT;
+	vid.bpp = VID_BPP;
+	vid.rowbytes = VID_WIDTH * VID_BPP;
+
 	
 	// allocate buffer
 	// We're gonna replace this soon right? Right????
@@ -68,8 +76,8 @@ int VID_NumModes(void)
 
 int VID_GetModeForSize(int w, int h)
 {
-	w = 640;
-	h = 400;
+	w = VID_WIDTH;
+	h = VID_HEIGHT;
 	return 0;
 }
 
@@ -90,11 +98,9 @@ void I_UpdateNoBlit(void){}
 
 void I_FinishUpdate(void)
 {
-	// Clear screen
-	SDL_SetRenderDrawColor(SDL_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_UpdateTexture(window_texture, NULL, vid.buffer, vid.rowbytes);
 	SDL_RenderClear(SDL_renderer);
-
-	// Update screen
+	SDL_RenderCopy(SDL_renderer, window_texture, NULL, NULL);
 	SDL_RenderPresent(SDL_renderer);
 }
 
