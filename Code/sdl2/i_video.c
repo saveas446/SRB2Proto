@@ -4,6 +4,7 @@
 #include "i_video.h"
 #include <SDL.h>
 #include "../screen.h"
+#include "../z_zone.h"
 
 rendermode_t rendermode = render_soft;
 
@@ -13,50 +14,45 @@ boolean allow_fullscreen = false;
 
 consvar_t cv_vidwait = {"vid_wait", "On", CV_SAVE, CV_OnOff, NULL, 0, 0, NULL};
 
-SDL_Window* SDL_window;
+SDL_Window* SDL_window = NULL;
 
 SDL_Renderer* SDL_renderer;
 SDL_Surface* surface;
 SDL_Surface* window_surface;
 
-
-// temp temp temp teMP TEMP TEMP TEMP TEMPORARY!!!
-// once we have stuff displaying to the sdl2 window we'll have more than one video mode
-#define VID_WIDTH 1280
-#define VID_HEIGHT 800
-#define VID_BPP 1
-
-void I_StartupGraphics(void){
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
-
-	// Init window (hardcoded to 640x400 for now) in the center of the screen
-	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, VID_WIDTH, VID_HEIGHT, 0);
-
-	if (!SDL_window) 
-		I_Error("I_StartupGraphics(): Could not create window!");
-
-	SDL_renderer = SDL_CreateRenderer(SDL_window, -1, SDL_RENDERER_ACCELERATED);
-	if (!SDL_renderer)
-		I_Error("I_StartupGraphics(): Could not create renderer!");
-
-	surface = SDL_CreateRGBSurfaceWithFormat(0, VID_WIDTH, VID_HEIGHT, 8, SDL_PIXELFORMAT_INDEX8);
-	window_surface = SDL_GetWindowSurface(SDL_window);
-
-	
-	// just hardcoding the video mode for now, i just wanna get things drawing
-	vid.modenum = NULL;
-	vid.width = VID_WIDTH;
-	vid.height = VID_HEIGHT;
-	vid.bpp = VID_BPP;
-	vid.rowbytes = VID_WIDTH * VID_BPP;
-	vid.dupx = 4;
-	vid.dupy = 4;
-	
-	// allocate buffer
-	// We're gonna replace this soon right? Right????
-	vid.buffer = malloc((vid.width * vid.height * vid.bpp * NUMSCREENS) + (vid.width * ST_HEIGHT * vid.bpp));
-}
+vmode_t window_modes[3] = {
+		// Fallback mode, 320x200 is gross
+		{
+			NULL,
+			"320x200W", //faB: W to make sure it's the windowed mode
+			640, 400,   //(200.0/320.0)*(320.0/240.0),
+			640, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"640x400W", //faB: W to make sure it's the windowed mode
+			640, 400,   //(200.0/320.0)*(320.0/240.0),
+			640, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"1280x800W", //faB: W to make sure it's the windowed mode
+			1280, 800,   //(200.0/320.0)*(320.0/240.0),
+			1280, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+};
 
 void I_ShutdownGraphics(void){
 	SDL_DestroyRenderer(SDL_renderer);
@@ -65,7 +61,7 @@ void I_ShutdownGraphics(void){
 
 SDL_Color palettebuf[256];
 
-// Translate 
+// Translate Doom palette into SDL palette
 void I_SetPalette(byte *palette)
 {
 	RGB_t* rgbpalette;
@@ -83,31 +79,72 @@ void I_SetPalette(byte *palette)
 	}
 }
 
-// For now, the only mode is 640x400 windowed
-
 int VID_NumModes(void)
 {
-	return 1;
+	return 2;
 }
 
 int VID_GetModeForSize(int w, int h)
 {
-	w = VID_WIDTH;
-	h = VID_HEIGHT;
-	return 0;
+	return 1;
 }
 
+// TODO: Some of the stuff done when we change modes might not be needed. See how much we can keep between mode switches (For example, we might just be able to change the window's dimensions instead of destroying and remaking it)
 int VID_SetMode(int modenum)
 {
-	modenum = 0;
+	if (SDL_window != NULL)
+		SDL_DestroyWindow(SDL_window);
+
+	if (SDL_renderer != NULL)
+		SDL_DestroyRenderer(SDL_renderer);
+
+	if (surface != NULL)
+		SDL_FreeSurface(surface);
+
+	vid.modenum = modenum;
+	vid.width = window_modes[modenum].width;
+	vid.height = window_modes[modenum].height;
+	vid.bpp = window_modes[modenum].bytesperpixel;
+	vid.rowbytes = window_modes[modenum].rowbytes;
+	vid.dupx = vid.width / 320;
+	vid.dupy = vid.height / 200;
+	vid.recalc = 1;
+
+	// Init window (hardcoded to 640x400 for now) in the center of the screen
+	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid.width, vid.height, 0);
+
+	if (!SDL_window)
+		I_Error("I_StartupGraphics(): Could not create window!");
+
+	SDL_renderer = SDL_CreateRenderer(SDL_window, -1, SDL_RENDERER_ACCELERATED);
+	if (!SDL_renderer)
+		I_Error("I_StartupGraphics(): Could not create renderer!");
+
+	surface = SDL_CreateRGBSurfaceWithFormat(0, vid.width, vid.height, 8, SDL_PIXELFORMAT_INDEX8);
+	
+	// Init palette... again
+	I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+	window_surface = SDL_GetWindowSurface(SDL_window);
+
+	// allocate buffer
+	if (vid.buffer)
+		free(vid.buffer);
+
+	vid.buffer = malloc((vid.width * vid.height * vid.bpp * NUMSCREENS) + (vid.width * ST_HEIGHT * vid.bpp));
+
 	return 0;
 }
 
+void I_StartupGraphics(void) {
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
+
+	VID_SetMode(0);
+}
 
 const char *VID_GetModeName(int modenum)
 {
-	modenum = 0;
-	return NULL;
+	return window_modes[modenum].name;
 }
 
 void I_UpdateNoBlit(void){}
@@ -116,7 +153,7 @@ void I_FinishUpdate(void)
 {
 	byte* pixels = surface->pixels;
 	// Copy vid.buffer to our surface
-	for (int i = 0; i < VID_WIDTH * VID_HEIGHT; i++) {
+	for (int i = 0; i < vid.width * vid.height; i++) {
 		pixels[i] = vid.buffer[i];
 	}
 
