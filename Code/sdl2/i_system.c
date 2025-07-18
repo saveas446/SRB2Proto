@@ -215,8 +215,6 @@ void I_StartFrame(void) {
 	}
 }
 
-void I_SetMusicVolume(void) {}
-
 void I_StartupTimer(void){}
 
 void I_AddExitFunc(void (*func)())

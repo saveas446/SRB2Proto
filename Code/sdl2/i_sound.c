@@ -22,6 +22,7 @@ void I_FreeSfx(sfxinfo_t *sfx)
 }
 
 void I_StartupSound(void){
+	SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
 	SDL_Init(SDL_INIT_AUDIO);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
@@ -90,16 +91,16 @@ void I_InitMIDIMusic(void){}
 
 void I_ShutdownMIDIMusic(void){}
 
-void I_SetMIDIMusicVolume(int volume)
+void I_SetMusicVolume(int volume)
 {
-	volume = 0;
+	Mix_VolumeMusic(volume << 2);
 }
 
 int I_RegisterSong(void *data, int len)
 {
 #ifdef HAVE_SDL_MIXER
 	SDL_RWops* rw = SDL_RWFromConstMem(data, len);
-	Mix_LoadMUSType_RW(rw, MUS_MID, 1);
+	music = Mix_LoadMUSType_RW(rw, MUS_MID, 1);
 #else
 	data = NULL;
 	len = 0;
