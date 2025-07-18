@@ -1,5 +1,10 @@
+#include "../byteptr.h"
+#include "../doomstat.h"
 #include "../i_sound.h"
+#include "../m_fixed.h"
 #include "../s_sound.h"
+#include "../w_wad.h"
+#include "../z_zone.h"
 
 #include <SDL.h>
 #ifdef HAVE_SDL_MIXER
@@ -12,10 +17,144 @@ Mix_Music* music;
 
 byte sound_started = 0;
 
+#ifdef HAVE_SDL_MIXER
+//lazy copy paste from 2.1.25's SDL2 implementation
+//i'm too stupid to implement this myself ok
+static Mix_Chunk* ds2chunk(void* stream)
+{
+	short ver, freq;
+	int samples, i, newsamples;
+	char* sound;
+
+	char* s;
+	short* d;
+	short o;
+	fixed_t step, frac;
+
+	short* stream2 = stream;
+
+	// lump header
+	ver = READUSHORT(stream2); // sound version format?
+	if (ver != 3) // It should be 3 if it's a doomsound...
+		return NULL; // onos! it's not a doomsound!
+	freq = READUSHORT(stream2);
+	samples = READULONG(stream2);
+
+	// convert from signed 8bit ???hz to signed 16bit 44100hz.
+	switch (freq)
+	{
+	case 44100:
+		if (samples >= UINT32_MAX >> 2)
+			return NULL; // would wrap, can't store.
+		newsamples = samples;
+		break;
+	case 22050:
+		if (samples >= UINT32_MAX >> 3)
+			return NULL; // would wrap, can't store.
+		newsamples = samples << 1;
+		break;
+	case 11025:
+		if (samples >= UINT32_MAX >> 4)
+			return NULL; // would wrap, can't store.
+		newsamples = samples << 2;
+		break;
+	default:
+		frac = (44100 << FRACBITS) / (UINT32)freq;
+		if (!(frac & 0xFFFF)) // other solid multiples (change if FRACBITS != 16)
+			newsamples = samples * (frac >> FRACBITS);
+		else // strange and unusual fractional frequency steps, plus anything higher than 44100hz.
+			newsamples = FixedMul(FixedDiv(samples, freq), 44100) + 1; // add 1 to counter truncation.
+		if (newsamples >= UINT32_MAX >> 2)
+			return NULL; // would and/or did wrap, can't store.
+		break;
+	}
+	sound = Z_Malloc(newsamples << 2, PU_SOUND, NULL); // samples * frequency shift * bytes per sample * channels
+
+	s = (char*)stream2;
+	d = (INT16*)sound;
+
+	i = 0;
+	switch (freq)
+	{
+	case 44100: // already at the same rate? well that makes it simple.
+		while (i++ < samples)
+		{
+			o = ((INT16)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+		}
+		break;
+	case 22050: // unwrap 2x
+		while (i++ < samples)
+		{
+			o = ((INT16)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+		}
+		break;
+	case 11025: // unwrap 4x
+		while (i++ < samples)
+		{
+			o = ((INT16)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+			*d++ = o; // left channel
+			*d++ = o; // right channel
+		}
+		break;
+	default: // convert arbitrary hz to 44100.
+		step = 0;
+		frac = ((UINT32)freq << FRACBITS) / 44100 + 1; //Add 1 to counter truncation.
+		while (i < samples)
+		{
+			o = (INT16)(*s + 0x80) << 8; // changed signedness and shift up to 16 bits
+			while (step < FRACUNIT) // this is as fast as I can make it.
+			{
+				*d++ = o; // left channel
+				*d++ = o; // right channel
+				step += frac;
+			}
+			do {
+				i++; s++;
+				step -= FRACUNIT;
+			} while (step >= FRACUNIT);
+		}
+		break;
+	}
+
+	// return Mixer Chunk.
+	return Mix_QuickLoad_RAW(sound, (Uint32)((UINT8*)d - sound));
+}
+#endif
+
 void *I_GetSfx(sfxinfo_t *sfx)
 {
+#ifdef HAVE_SDL_MIXER
+    byte*               dssfx;
+    int                 size;
+
+    if (sfx->lumpnum<0)
+        sfx->lumpnum = S_GetSfxLumpNum (sfx);
+
+    //CONS_Printf ("I_GetSfx(%d)\n", sfx->lumpnum);
+
+    size = W_LumpLength (sfx->lumpnum);
+
+    // PU_CACHE because the data is copied to the DIRECTSOUNDBUFFER, the one here will not be used
+    dssfx = (byte*) W_CacheLumpNum (sfx->lumpnum, PU_SOUND);
+
+    // return the LPDIRECTSOUNDBUFFER, which will be stored in S_sfx[].data
+    return (void *)ds2chunk(dssfx);
+#else
 	sfx = NULL;
 	return NULL;
+#endif
 }
 
 void I_FreeSfx(sfxinfo_t *sfx)
@@ -37,20 +176,35 @@ void I_ShutdownSound(void){
 
 int I_StartSound(int id, int vol, int sep, int pitch, int priority, int channel)
 {
-	int handle = Mix_PlayChannel(channel, S_sfx[id].data, -1);
-	Mix_Volume(channel, vol << 2);
-	return handle;
+#ifdef HAVE_SDL_MIXER
+	if (!nosound) {
+		CONS_Printf("I_StartSound(): Playing sound id %d!\n", id);
+		int handle = Mix_PlayChannel(channel, S_sfx[id].data, -1);
+		Mix_Volume(channel, vol << 2);
+		return handle;
+	}
+#endif
 }
 
 void I_StopSound(int handle)
 {
+#ifdef HAVE_SDL_MIXER
+	if (!nosound) {
+		Mix_HaltChannel(handle);
+	}
+#else
 	handle = 0;
+#endif
 }
 
 int I_SoundIsPlaying(int handle)
 {
+#ifdef HAVE_SDL_MIXER
+	return Mix_Playing(handle);
+#else
 	handle = 0;
 	return -1;
+#endif
 }
 
 void I_UpdateSoundParams(int handle, int vol, int sep, int pitch)
@@ -66,13 +220,17 @@ void I_SetSfxVolume(int volume){}
 byte music_started = 0;
 
 void I_InitMusic(void){
+#ifdef HAVE_SDL_MIXER
 	SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
 	SDL_Init(SDL_INIT_AUDIO);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+#endif
 }
 
 void I_ShutdownMusic(void){
+#ifdef HAVE_SDL_MIXER
 	Mix_CloseAudio();
+#endif
 }
 
 void I_PauseSong(int handle)
