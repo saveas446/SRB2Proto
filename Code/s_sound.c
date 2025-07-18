@@ -415,7 +415,8 @@ void S_StartSoundAtVolume( void*         origin_p,
                                          volume,
                                          sep,
                                          pitch,
-                                         priority);
+                                         priority,
+                                         cnum);
 }
 
 void S_StartSound( void*         origin,

@@ -262,7 +262,8 @@ int I_StartSound (int            id,
                           int            vol,
                           int            sep,
                           int            pitch,
-                          int            priority )
+                          int            priority,
+                          int            channel)
 {
     HRESULT     hr;
     LPDIRECTSOUNDBUFFER     dsbuffer;

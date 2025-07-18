@@ -24,6 +24,7 @@
 #define __S_SOUND__
 
 #include "sounds.h"
+#include "command.h"
 
 extern consvar_t stereoreverse;
 

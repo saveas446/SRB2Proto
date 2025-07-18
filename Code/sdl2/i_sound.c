@@ -1,4 +1,6 @@
 #include "../i_sound.h"
+#include "../s_sound.h"
+
 #include <SDL.h>
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
@@ -22,23 +24,22 @@ void I_FreeSfx(sfxinfo_t *sfx)
 }
 
 void I_StartupSound(void){
-	SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
-	SDL_Init(SDL_INIT_AUDIO);
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	Mix_AllocateChannels(cv_numChannels.value);
 }
 
 void I_ShutdownSound(void){
-	Mix_CloseAudio();
+	
 }
 
 //
 //  SFX I/O
 //
 
-int I_StartSound(int id, int vol, int sep, int pitch, int priority)
+int I_StartSound(int id, int vol, int sep, int pitch, int priority, int channel)
 {
-	id = vol =sep = pitch = priority = 0;
-	return -1;
+	int handle = Mix_PlayChannel(channel, S_sfx[id].data, -1);
+	Mix_Volume(channel, vol << 2);
+	return handle;
 }
 
 void I_StopSound(int handle)
@@ -57,19 +58,22 @@ void I_UpdateSoundParams(int handle, int vol, int sep, int pitch)
 	handle = vol = sep = pitch = 0;
 }
 
-void I_SetSfxVolume(int volume)
-{
-	volume = 0;
-}
+void I_SetSfxVolume(int volume){}
 
 //
 //  MUSIC I/O
 //
 byte music_started = 0;
 
-void I_InitMusic(void){}
+void I_InitMusic(void){
+	SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
+	SDL_Init(SDL_INIT_AUDIO);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+}
 
-void I_ShutdownMusic(void){}
+void I_ShutdownMusic(void){
+	Mix_CloseAudio();
+}
 
 void I_PauseSong(int handle)
 {
@@ -127,28 +131,3 @@ void I_UnRegisterSong(int handle)
 {
 	handle = 0;
 }
-
-//
-//  DIGMUSIC I/O
-//
-
-byte digmusic_started = 0;
-
-void I_InitDigMusic(void){}
-
-void I_ShutdownDigMusic(void){}
-
-boolean I_StartDigSong(const char *musicname, int looping)
-{
-	musicname = NULL;
-	looping = 0;
-	return false;
-}
-
-void I_StopDigSong(void){}
-
-void I_SetDigMusicVolume(int volume)
-{
-	volume = 0;
-}
-
