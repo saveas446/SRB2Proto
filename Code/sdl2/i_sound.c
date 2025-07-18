@@ -1,4 +1,12 @@
 #include "../i_sound.h"
+#include <SDL.h>
+#ifdef HAVE_SDL_MIXER
+#include <SDL_mixer.h>
+#endif
+
+#ifdef HAVE_SDL_MIXER
+Mix_Music* music;
+#endif
 
 byte sound_started = 0;
 
@@ -13,9 +21,14 @@ void I_FreeSfx(sfxinfo_t *sfx)
 	sfx = NULL;
 }
 
-void I_StartupSound(void){}
+void I_StartupSound(void){
+	SDL_Init(SDL_INIT_AUDIO);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+}
 
-void I_ShutdownSound(void){}
+void I_ShutdownSound(void){
+	Mix_CloseAudio();
+}
 
 //
 //  SFX I/O
@@ -84,16 +97,24 @@ void I_SetMIDIMusicVolume(int volume)
 
 int I_RegisterSong(void *data, int len)
 {
+#ifdef HAVE_SDL_MIXER
+	SDL_RWops* rw = SDL_RWFromConstMem(data, len);
+	Mix_LoadMUSType_RW(rw, MUS_MID, 1);
+#else
 	data = NULL;
 	len = 0;
 	return -1;
+#endif
 }
 
 void I_PlaySong(int handle, int looping)
 {
+#ifdef HAVE_SDL_MIXER
+	Mix_PlayMusic(music, -1);
+#else
 	handle = 0;
 	looping = 0;
-	return false;
+#endif
 }
 
 void I_StopSong(int handle)
