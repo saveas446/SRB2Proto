@@ -961,25 +961,6 @@ void D_SRB2Main (void)
             LoadDehackedFile (M_GetNextParm());
     }
 
-    // Convenient parm for adding dev maps quickly ported from Demo 2 Ultimate
-    if (M_CheckParm("-addmap") && M_IsNextParm()) {
-        while (M_IsNextParm())
-        {
-            s = M_GetNextParm();
-
-            // Convert string to double
-            sscanf(s, "%d", &d);
-
-            // Check just in case the user tries to load an invalid map number
-            if (d > 0 && d < 31) {
-                // Decrement for array indexing purposes
-                d--;
-
-                D_AddFile(wad_filenames[d]);
-            }
-        }
-    }
-
     // search for a deh in -file parm....
     if (M_CheckParm ("-file"))
     {
@@ -1070,7 +1051,8 @@ void D_SRB2Main (void)
     }
 
     // Convenient parm for adding dev maps quickly ported from Demo 2 Ultimate
-    if (M_CheckParm("-addmap") && M_IsNextParm()) {
+    if (M_CheckParm("-addmap")) {
+        CONS_Printf("addmap parm detected\n");
         while (M_IsNextParm())
         {
             s = M_GetNextParm();
