@@ -22,8 +22,8 @@ byte sound_started = 0;
 //i'm too stupid to implement this myself ok
 static Mix_Chunk* ds2chunk(void* stream)
 {
-	short ver, freq;
-	int samples, i, newsamples;
+	unsigned short ver, freq;
+	unsigned int samples, i, newsamples;
 	char* sound;
 
 	char* s;
