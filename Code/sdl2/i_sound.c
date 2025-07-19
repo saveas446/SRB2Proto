@@ -163,6 +163,10 @@ void I_FreeSfx(sfxinfo_t *sfx)
 }
 
 void I_StartupSound(void){
+#ifdef _WIN32
+	SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
+#endif
+
 	Mix_AllocateChannels(cv_numChannels.value);
 }
 
@@ -179,7 +183,7 @@ int I_StartSound(int id, int vol, int sep, int pitch, int priority, int channel)
 #ifdef HAVE_SDL_MIXER
 	if (!nosound) {
 		CONS_Printf("I_StartSound(): Playing sound id %d!\n", id);
-		int handle = Mix_PlayChannel(channel, S_sfx[id].data, -1);
+		int handle = Mix_PlayChannel(channel, S_sfx[id].data, 0);
 		Mix_Volume(channel, vol << 2);
 		return handle;
 	}
