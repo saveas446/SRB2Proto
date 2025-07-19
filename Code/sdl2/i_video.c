@@ -168,13 +168,13 @@ void I_WaitVBL(int count)
 
 void I_ReadScreen(byte *scr)
 {
-	scr = NULL;
+	SDL_memcpy(scr, vid.buffer, vid.width * vid.height * vid.bpp);
 }
 
 void VID_BlitLinearScreen(byte* srcptr, byte* destptr, int width, int height, int srcrowbytes, int destrowbytes){
 	if (srcrowbytes == destrowbytes)
 	{
-		memcpy(destptr, srcptr, srcrowbytes * height);
+		SDL_memcpy(destptr, srcptr, srcrowbytes * height);
 	}
 	else
 	{
