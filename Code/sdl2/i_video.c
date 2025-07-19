@@ -67,8 +67,8 @@ void I_SetPalette(byte *palette)
 	RGB_t* rgbpalette;
 	rgbpalette = palette;
 
-	// 255 colors * 3 color channels
-	for (int i = 0; i < 255; i++) {
+	// 256 colors * 3 color channels
+	for (int i = 0; i < 256; i++) {
 
 		palettebuf[i].r = rgbpalette[i].r;
 		palettebuf[i].g = rgbpalette[i].g;
