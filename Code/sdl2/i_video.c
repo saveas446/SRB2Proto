@@ -22,13 +22,34 @@ SDL_Surface* surface;
 SDL_Surface* window_surface;
 SDL_Surface* icon_surface;
 
-vmode_t window_modes[3] = {
+vmode_t window_modes[10] = {
 		// Fallback mode, 320x200 is gross
 		{
 			NULL,
 			"320x200W", //faB: W to make sure it's the windowed mode
-			640, 400,   //(200.0/320.0)*(320.0/240.0),
-			640, 1,     // rowbytes, bytes per pixel
+			320, 200,   //(200.0/320.0)*(320.0/240.0),
+			320, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		// Non-fallback copy of 320x200W, if you WANT to use 320x200W for some reason
+		{
+			NULL,
+			"320x200W", //faB: W to make sure it's the windowed mode
+			320, 200,   //(200.0/320.0)*(320.0/240.0),
+			320, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"320x240W", //faB: W to make sure it's the windowed mode
+			320, 240,   //(200.0/320.0)*(320.0/240.0),
+			320, 1,     // rowbytes, bytes per pixel
 			1, 2,       // windowed (TRUE), numpages
 			NULL,
 			NULL,
@@ -39,6 +60,46 @@ vmode_t window_modes[3] = {
 			"640x400W", //faB: W to make sure it's the windowed mode
 			640, 400,   //(200.0/320.0)*(320.0/240.0),
 			640, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"640x480W", //faB: W to make sure it's the windowed mode
+			640, 480,   //(200.0/320.0)*(320.0/240.0),
+			640, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"800x600W", //faB: W to make sure it's the windowed mode
+			800, 600,   //(200.0/320.0)*(320.0/240.0),
+			800, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"1024x768W", //faB: W to make sure it's the windowed mode
+			1024, 768,   //(200.0/320.0)*(320.0/240.0),
+			1024, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"1280x720W", //faB: W to make sure it's the windowed mode
+			1280, 720,   //(200.0/320.0)*(320.0/240.0),
+			1280, 1,     // rowbytes, bytes per pixel
 			1, 2,       // windowed (TRUE), numpages
 			NULL,
 			NULL,
@@ -115,7 +176,7 @@ void I_SetPalette(byte *palette)
 int VID_NumModes(void)
 {
 	// TODO: Find a way to get length of windowed_modes and return that
-	return 2;
+	return 10;
 }
 
 int VID_GetModeForSize(int w, int h)
@@ -174,7 +235,7 @@ void I_StartupGraphics(void) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
 
-	VID_SetMode(0);
+	VID_SetMode(2);
 	graphics_started = true;
 }
 
