@@ -5,6 +5,7 @@
 #include "i_main.h"
 #include <SDL_messagebox.h>
 #include <SDL_events.h>
+#include <SDL_mouse.h>
 
 byte graphics_started = 0;
 
@@ -212,6 +213,12 @@ void I_StartFrame(void) {
 				// For when I inevitably come back to this
 				//SDL_Log("Virtual key code: 0x%02X (%c)\n", e_s.key.keysym.sym, e_s.key.keysym.sym);
 				//SDL_Log("Physical key code: 0x%02X (%c)\n", e_s.key.keysym.scancode, e_s.key.keysym.scancode);
+				D_PostEvent(&e_w);
+				break;
+			case SDL_MOUSEMOTION:
+				e_w.type = ev_mouse;
+				e_w.data1 = 0;
+				SDL_GetMouseState(&e_w.data2, &e_w.data3);
 				D_PostEvent(&e_w);
 				break;
 		}

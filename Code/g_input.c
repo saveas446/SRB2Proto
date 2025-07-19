@@ -77,6 +77,8 @@ void  G_MapEventsToControls (event_t *ev)
         break;
 
       case ev_mouse:           // buttons hare virtual keys
+        CONS_Printf("ev->data2: %d\n", ev->data2);
+        CONS_Printf("ev->data3: %d\n", ev->data3);
         mousex = ev->data2*(cv_mousesens.value+1)/10;
         mousey = ev->data3*(cv_mousesens.value+1)/10;
 
