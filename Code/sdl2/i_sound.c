@@ -225,15 +225,18 @@ byte music_started = 0;
 
 void I_InitMusic(void){
 #ifdef HAVE_SDL_MIXER
-	SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
-	SDL_Init(SDL_INIT_AUDIO);
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	if (!nomusic) {
+		SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
+		SDL_Init(SDL_INIT_AUDIO);
+		Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	}
 #endif
 }
 
 void I_ShutdownMusic(void){
 #ifdef HAVE_SDL_MIXER
-	Mix_CloseAudio();
+	if (!nomusic)
+		Mix_CloseAudio();
 #endif
 }
 
@@ -247,16 +250,6 @@ void I_ResumeSong(int handle)
 	handle = 0;
 }
 
-//
-//  MIDI I/O
-//
-
-byte midimusic_started = 0;
-
-void I_InitMIDIMusic(void){}
-
-void I_ShutdownMIDIMusic(void){}
-
 void I_SetMusicVolume(int volume)
 {
 	Mix_VolumeMusic(volume << 2);
@@ -265,8 +258,10 @@ void I_SetMusicVolume(int volume)
 int I_RegisterSong(void *data, int len)
 {
 #ifdef HAVE_SDL_MIXER
-	SDL_RWops* rw = SDL_RWFromConstMem(data, len);
-	music = Mix_LoadMUSType_RW(rw, MUS_MID, 1);
+	if (!nomusic) {
+		SDL_RWops* rw = SDL_RWFromConstMem(data, len);
+		music = Mix_LoadMUSType_RW(rw, MUS_MID, 1);
+	}
 #else
 	data = NULL;
 	len = 0;
@@ -277,7 +272,9 @@ int I_RegisterSong(void *data, int len)
 void I_PlaySong(int handle, int looping)
 {
 #ifdef HAVE_SDL_MIXER
-	Mix_PlayMusic(music, -1);
+	if (!nomusic) {
+		Mix_PlayMusic(music, -1);
+	}
 #else
 	handle = 0;
 	looping = 0;
