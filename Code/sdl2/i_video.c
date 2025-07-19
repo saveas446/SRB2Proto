@@ -181,7 +181,7 @@ int VID_NumModes(void)
 
 int VID_GetModeForSize(int w, int h)
 {
-	return 1;
+	return 3;
 }
 
 // TODO: Some of the stuff done when we change modes might not be needed. See how much we can keep between mode switches (For example, we might just be able to change the window's dimensions instead of destroying and remaking it)
@@ -235,7 +235,8 @@ void I_StartupGraphics(void) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
 
-	VID_SetMode(2);
+	VID_SetMode(3);
+
 	graphics_started = true;
 }
 
