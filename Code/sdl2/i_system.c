@@ -219,6 +219,11 @@ void I_StartFrame(void) {
 				e_w.type = ev_mouse;
 				e_w.data1 = 0;
 				SDL_GetMouseState(&e_w.data2, &e_w.data3);
+
+				// Adjust mouse X
+				e_w.data2 -= 250;
+				e_w.data2 >>= 2;
+
 				D_PostEvent(&e_w);
 				break;
 		}
