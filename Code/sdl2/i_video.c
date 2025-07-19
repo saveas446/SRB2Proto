@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "../screen.h"
 #include "../z_zone.h"
+#include "../i_system.h"
 
 rendermode_t rendermode = render_soft;
 
@@ -57,6 +58,7 @@ vmode_t window_modes[3] = {
 void I_ShutdownGraphics(void){
 	SDL_DestroyRenderer(SDL_renderer);
 	SDL_DestroyWindow(SDL_window);
+	graphics_started = false;
 }
 
 SDL_Color palettebuf[256];
@@ -81,6 +83,7 @@ void I_SetPalette(byte *palette)
 
 int VID_NumModes(void)
 {
+	// TODO: Find a way to get length of windowed_modes and return that
 	return 2;
 }
 
@@ -140,6 +143,7 @@ void I_StartupGraphics(void) {
 		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
 
 	VID_SetMode(0);
+	graphics_started = true;
 }
 
 const char *VID_GetModeName(int modenum)
