@@ -27,7 +27,7 @@
 rendermode_t    rendermode;
 
 // synchronize page flipping with screen refresh
-consvar_t       cv_vidwait = {"vid_wait","1",CV_SAVE};
+consvar_t       cv_vidwait = {"vid_wait","1", NULL, CV_SAVE};
 
 boolean         highcolor;
 

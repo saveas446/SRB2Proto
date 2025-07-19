@@ -13,7 +13,7 @@ boolean highcolor = false;
 
 boolean allow_fullscreen = false;
 
-consvar_t cv_vidwait = {"vid_wait", "On", CV_SAVE, CV_OnOff, NULL, 0, 0, NULL};
+consvar_t cv_vidwait = {"vid_wait", "On", NULL, CV_SAVE, CV_OnOff, NULL, 0, 0, NULL};
 
 SDL_Window* SDL_window = NULL;
 

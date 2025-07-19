@@ -214,7 +214,7 @@ void P_SetTranslucencies (void)
 void BloodTime_OnChange (void);
 
 // how much tics to last for the last (third) frame of blood (S_BLOODx)
-consvar_t cv_bloodtime = {"bloodtime","1",CV_NETVAR|CV_CALL|CV_NOINIT,CV_Unsigned,BloodTime_OnChange};
+consvar_t cv_bloodtime = {"bloodtime","1", NULL, CV_NETVAR|CV_CALL|CV_NOINIT,CV_Unsigned,BloodTime_OnChange};
 
 // Called when var. 'bloodtime' is changed : set the blood states duration
 //

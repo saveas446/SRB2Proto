@@ -917,16 +917,16 @@ void HU_drawCrosshair (void)
 
 // better do HackChatmacros() because the strings are NULL !!
 
-consvar_t cv_chatmacro1 = {"_chatmacro1", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro2 = {"_chatmacro2", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro3 = {"_chatmacro3", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro4 = {"_chatmacro4", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro5 = {"_chatmacro5", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro6 = {"_chatmacro6", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro7 = {"_chatmacro7", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro8 = {"_chatmacro8", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro9 = {"_chatmacro9", NULL, CV_SAVE,NULL};
-consvar_t cv_chatmacro0 = {"_chatmacro0", NULL, CV_SAVE,NULL};
+consvar_t cv_chatmacro1 = {"_chatmacro1", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro2 = {"_chatmacro2", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro3 = {"_chatmacro3", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro4 = {"_chatmacro4", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro5 = {"_chatmacro5", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro6 = {"_chatmacro6", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro7 = {"_chatmacro7", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro8 = {"_chatmacro8", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro9 = {"_chatmacro9", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro0 = {"_chatmacro0", NULL, NULL,  CV_SAVE,NULL};
 
 
 // set the chatmacros original text, before config is executed

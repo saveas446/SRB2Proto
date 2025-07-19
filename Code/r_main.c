@@ -105,17 +105,17 @@ lighttable_t*           zlight[LIGHTLEVELS][MAXLIGHTZ];
 // bumped light from gun blasts
 int                     extralight;
 
-consvar_t cv_chasecam = {"chasecam","0",0,CV_OnOff};
+consvar_t cv_chasecam = {"chasecam","0", NULL, 0,CV_OnOff};
 
-consvar_t cv_psprites = {"playersprites","1",0,CV_OnOff};
-consvar_t cv_perspcorr = {"perspectivecrunch","0",0,CV_OnOff};
-consvar_t cv_tiltview = {"tiltview","0",0,CV_OnOff};
+consvar_t cv_psprites = {"playersprites","1", NULL, 0,CV_OnOff};
+consvar_t cv_perspcorr = {"perspectivecrunch","0", NULL, 0,CV_OnOff};
+consvar_t cv_tiltview = {"tiltview","0", NULL, 0,CV_OnOff};
 
 // added 16-6-98:splitscreen
 
 void SplitScreen_OnChange(void);
 
-consvar_t cv_splitscreen = {"splitscreen","0",CV_CALL | CV_NOTINNET,CV_OnOff,SplitScreen_OnChange};
+consvar_t cv_splitscreen = {"splitscreen","0", NULL, CV_CALL | CV_NOTINNET,CV_OnOff,SplitScreen_OnChange};
 
 void SplitScreen_OnChange(void)
 {

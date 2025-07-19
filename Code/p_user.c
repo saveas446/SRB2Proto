@@ -598,9 +598,9 @@ camera_t camera;
 //#define VIEWCAM_DIST    (128<<FRACBITS)
 //#define VIEWCAM_HEIGHT  (20<<FRACBITS)
 
-consvar_t cv_cam_dist   = {"cam_dist","128",CV_FLOAT,NULL};
-consvar_t cv_cam_height = {"cam_height","20",CV_FLOAT,NULL};
-consvar_t cv_cam_speed  = {"cam_speed","0.25",CV_FLOAT,NULL};
+consvar_t cv_cam_dist   = {"cam_dist","128", NULL, CV_FLOAT,NULL};
+consvar_t cv_cam_height = {"cam_height","20", NULL, CV_FLOAT,NULL};
+consvar_t cv_cam_speed  = {"cam_speed","0.25", NULL, CV_FLOAT,NULL};
 
 void P_ResetCamera (player_t *player)
 {

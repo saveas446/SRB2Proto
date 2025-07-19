@@ -108,17 +108,17 @@ char*    con_buffer;
 
 
 // how many seconds the hud messages lasts on the screen
-consvar_t   cons_msgtimeout = {"con_hudtime","5",CV_SAVE,CV_Unsigned};
+consvar_t   cons_msgtimeout = {"con_hudtime","5", NULL, CV_SAVE,CV_Unsigned};
 
 // number of lines console move per frame
-consvar_t   cons_speed = {"con_speed","8",CV_CALL|CV_SAVE,CV_Unsigned,&CONS_speed_Change};
+consvar_t   cons_speed = {"con_speed","8", NULL, CV_CALL|CV_SAVE,CV_Unsigned,&CONS_speed_Change};
 
 // percentage of screen height to use for console
-consvar_t   cons_height = {"con_height","50",CV_SAVE,CV_Unsigned};
+consvar_t   cons_height = {"con_height","50", NULL, CV_SAVE,CV_Unsigned};
 
 CV_PossibleValue_t backpic_cons_t[]={{0,"translucent"},{1,"picture"},{0,NULL}};
 // whether to use console background picture, or translucent mode
-consvar_t   cons_backpic = {"con_backpic","0",CV_SAVE,backpic_cons_t};
+consvar_t   cons_backpic = {"con_backpic","0", NULL, CV_SAVE,backpic_cons_t};
 
 
 //  Check CONS_speed value (must be positive and >0)

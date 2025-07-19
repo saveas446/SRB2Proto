@@ -92,6 +92,7 @@ typedef struct consvar_s
 {
     char    *name;
     char    *string;
+    char    *helptext;
     int     flags;             // flags see above
     CV_PossibleValue_t *PossibleValue;  // table of possible values
     void    (*func) (void);    // called on change, if CV_CALL set
