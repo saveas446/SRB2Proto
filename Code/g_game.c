@@ -474,10 +474,10 @@ void G_BuildTiccmd (ticcmd_t* cmd, int realtics)
     //added:07-02-98: some people strafe left & right with mouse buttons
     if (gamekeydown[gamecontrol[gc_straferight][0]] ||
         gamekeydown[gamecontrol[gc_straferight][1]])
-        cmd->buttons |= BT_CAMRIGHT; // Tails 03-04-2000
+        side += sidemove[speed];
     if (gamekeydown[gamecontrol[gc_strafeleft][0]] ||
         gamekeydown[gamecontrol[gc_strafeleft][1]])
-        cmd->buttons |= BT_CAMLEFT; // Tails 03-04-2000
+        side -= sidemove[speed];
 
     //added:07-02-98: fire with any button/key
     if (gamekeydown[gamecontrol[gc_fire][0]] ||

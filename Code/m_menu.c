@@ -1157,8 +1157,8 @@ menuitem_t ControlMenu[]=
     {IT_CALL | IT_STRING2,"Turn Right"  ,M_ChangeControl,gc_turnright  },
     {IT_CALL | IT_STRING2,"Run"         ,M_ChangeControl,gc_speed      },
     {IT_CALL | IT_STRING2,"Strafe On"   ,M_ChangeControl,gc_strafe     },
-    {IT_CALL | IT_STRING2,"Camera Left" ,M_ChangeControl,gc_strafeleft }, // Tails 03-04-2000
-    {IT_CALL | IT_STRING2,"Camera Right",M_ChangeControl,gc_straferight}, // Tails 03-04-2000
+    {IT_CALL | IT_STRING2,"Strafe Left" ,M_ChangeControl,gc_strafeleft }, // Tails 03-04-2000
+    {IT_CALL | IT_STRING2,"Strafe Right",M_ChangeControl,gc_straferight}, // Tails 03-04-2000
     {IT_CALL | IT_STRING2,"Look Up"     ,M_ChangeControl,gc_lookup     },
     {IT_CALL | IT_STRING2,"Look Down"   ,M_ChangeControl,gc_lookdown   },
     {IT_CALL | IT_STRING2,"Center View" ,M_ChangeControl,gc_centerview },
