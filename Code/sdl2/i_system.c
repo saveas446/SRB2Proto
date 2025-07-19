@@ -1,4 +1,5 @@
 #include "../doomdef.h"
+#include "../m_misc.h"
 #include "../i_system.h"
 #include "../i_joy.h"
 
@@ -73,6 +74,7 @@ ticcmd_t *I_BaseTiccmd2(void)
 
 void I_Quit(void)
 {
+	M_SaveConfig(NULL);
 	exit(0);
 }
 
@@ -92,6 +94,7 @@ void I_Error(const char *error, ...)
 
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SRB2 Error", buffer, NULL);
 
+	M_SaveConfig(NULL);
 	error = NULL;
 	exit(-1);
 }
