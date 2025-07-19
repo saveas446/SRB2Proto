@@ -114,7 +114,7 @@ int VID_SetMode(int modenum)
 	vid.recalc = 1;
 
 	// Init window (hardcoded to 640x400 for now) in the center of the screen
-	SDL_window = SDL_CreateWindow("SRB2 March 2000 Prototype", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid.width, vid.height, 0);
+	SDL_window = SDL_CreateWindow("NewMillenium (SDL2 backend)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid.width, vid.height, 0);
 
 	if (!SDL_window)
 		I_Error("I_StartupGraphics(): Could not create window!");
