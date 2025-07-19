@@ -175,16 +175,19 @@ void I_StartFrame(void) {
 					e_w.type = ev_keydown;
 
 				// Intercept modifier keys
-				if (SDL_GetModState() == KMOD_SHIFT) {
+				if (SDL_GetModState() & KMOD_SHIFT) {
 					e_w.data1 = KEY_SHIFT;
+					D_PostEvent(&e_w);
 					return;
 				}
-				if (SDL_GetModState() == KMOD_CTRL) {
+				if (SDL_GetModState() & KMOD_CTRL) {
 					e_w.data1 = KEY_CTRL;
+					D_PostEvent(&e_w);
 					return;
 				}
-				if (SDL_GetModState() == KMOD_ALT) {
+				if (SDL_GetModState() & KMOD_ALT) {
 					e_w.data1 = KEY_ALT;
+					D_PostEvent(&e_w);
 					return;
 				}
 
