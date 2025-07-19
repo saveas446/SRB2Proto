@@ -173,7 +173,7 @@ void M_GameOption(int choice);
 void M_NetOption(int choice);
 
 menu_t MainDef,SinglePlayerDef,MultiPlayerDef,SetupMultiPlayerDef,
-       EpiDef,NewDef,OptionsDef,VidModeDef,ControlDef,SoundDef,
+       EpiDef,NewDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundDef,
        ReadDef2,ReadDef1,SaveDef,LoadDef,ControlDef2,GameOptionDef,
        NetOptionDef;
 
@@ -843,23 +843,10 @@ void M_VerifyNightmare(int ch)
 //added:10-02-98: note: alphaKey member is the y offset
 menuitem_t OptionsMenu[]=
 {
-    {IT_STRING | IT_CVAR,"Messages:"       ,&cv_showmessages    ,0},
-    {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Screen Size"     ,&cv_viewsize        ,10},
-    {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Brightness"      ,&cv_usegamma        ,20},
-    {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Mouse Speed"     ,&cv_mousesens       ,30},
-    {IT_STRING | IT_CVAR,"Always Run"      ,&cv_autorun         ,40},
-    {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,50},
-    {IT_STRING | IT_CVAR,"Invert Mouse"    ,&cv_invertmouse     ,60},
-    {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Mlook Speed"     ,&cv_mlooksens       ,70},
-    {IT_STRING | IT_CVAR,"Crosshair"       ,&cv_crosshair       ,80},
-    {IT_CALL   | IT_WHITESTRING,"Game Options..."  ,M_GameOption,110},
-    {IT_SUBMENU | IT_WHITESTRING,"Sound Volume..."  ,&SoundDef  ,120},
-    {IT_SUBMENU | IT_WHITESTRING,"Video Options..." ,&VidModeDef,130},
-    {IT_CALL    | IT_WHITESTRING,"Setup Controls...",M_SetupControlsMenu,140}
+    {IT_CALL   | IT_PATCH,"M_GAMOPT"  ,M_GameOption,'g'},
+    {IT_SUBMENU | IT_PATCH,"M_SVOL"  ,&SoundDef  ,'s'},
+    {IT_SUBMENU | IT_PATCH,"M_VIDOPT" ,&VideoOptionsDef,'v'},
+    {IT_SUBMENU | IT_PATCH,"M_CONOPT",&ControlOptionsDef,'c'}
 };
 
 menu_t  OptionsDef =
@@ -868,6 +855,30 @@ menu_t  OptionsDef =
     sizeof(OptionsMenu)/sizeof(menuitem_t),
     &MainDef,
     OptionsMenu,
+    M_DrawGenericMenu,
+    60,40,
+    0
+};
+
+//added:10-02-98: note: alphaKey member is the y offset
+menuitem_t ControlOptionsMenu[] =
+{
+    {IT_STRING | IT_CVAR
+     | IT_CV_SLIDER     ,"Mouse Speed"     ,&cv_mousesens       ,20},
+    {IT_STRING | IT_CVAR,"Always Run"      ,&cv_autorun         ,30},
+    {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,40},
+    {IT_STRING | IT_CVAR,"Invert Mouse"    ,&cv_invertmouse     ,50},
+    {IT_STRING | IT_CVAR
+     | IT_CV_SLIDER     ,"Mlook Speed"     ,&cv_mlooksens       ,60},
+    {IT_CALL | IT_WHITESTRING,"Configure Keybinds...",M_SetupControlsMenu,80}
+};
+
+menu_t  ControlOptionsDef =
+{
+    "M_OPTTTL",
+    sizeof(ControlOptionsMenu) / sizeof(menuitem_t),
+    &OptionsDef,
+    ControlOptionsMenu,
     M_DrawGenericMenu,
     60,40,
     0
@@ -908,13 +919,14 @@ menuitem_t GameOptionsMenu[]=
 {
 //    {IT_STRING | IT_CVAR,"Item Respawn"        ,&cv_itemrespawn        ,0}, Tails 11-09-99
 //    {IT_STRING | IT_CVAR,"Item Respawn time"   ,&cv_itemrespawntime    ,10}, Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Enemy Respawn"     ,&cv_respawnmonsters    ,20}, // Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Enemy Respawn time",&cv_respawnmonsterstime,30}, // Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Fast Enemies"       ,&cv_fastmonsters       ,40}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Messages:"       ,&cv_showmessages    ,0},
+    {IT_STRING | IT_CVAR,"Enemy Respawn"     ,&cv_respawnmonsters    ,10}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Enemy Respawn time",&cv_respawnmonsterstime,20}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Fast Enemies"       ,&cv_fastmonsters       ,30}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Crosshair"       ,&cv_crosshair       ,40}
 //    {IT_STRING | IT_CVAR,"Gravity"             ,&cv_gravity            ,50}, Tails 11-09-99
 //    {IT_STRING | IT_CVAR,"Solid corpse"        ,&cv_solidcorpse        ,60}, Tails 11-09-99
 //    {IT_STRING | IT_CVAR,"BloodTime"           ,&cv_bloodtime          ,70}, Tails 11-09-99
-    {IT_CALL   | IT_WHITESTRING,"Network Options..."  ,M_NetOption     ,110}
 };
 
 menu_t  GameOptionDef =
@@ -1170,7 +1182,7 @@ menu_t  ControlDef =
 {
     "M_CONTRO",
     sizeof(ControlMenu)/sizeof(menuitem_t),
-    &OptionsDef,
+    &ControlOptionsDef,
     ControlMenu,
     M_DrawControl,
     50,40,
@@ -1203,7 +1215,7 @@ menu_t  ControlDef2 =
 {
     "M_CONTRO",
     sizeof(ControlMenu2)/sizeof(menuitem_t),
-    &OptionsDef,
+    &ControlOptionsDef,
     ControlMenu2,
     M_DrawControl,
     50,40,
@@ -1367,6 +1379,27 @@ void M_ChangeControl(int choice)
 //===========================================================================
 //                        VIDEO MODE MENU
 //===========================================================================
+
+menuitem_t VideoOptionsMenu[] =
+{
+    {IT_STRING | IT_CVAR
+     | IT_CV_SLIDER     ,"Screen Size"     ,&cv_viewsize        ,40},
+    {IT_STRING | IT_CVAR
+     | IT_CV_SLIDER     ,"Brightness"      ,&cv_usegamma        ,50},
+    {IT_SUBMENU | IT_WHITESTRING,"Change Resolution..." ,&VidModeDef,80},
+};
+
+menu_t  VideoOptionsDef =
+{
+    "M_VIDOPT",
+    sizeof(VideoOptionsMenu) / sizeof(menuitem_t),
+    &OptionsDef,
+    VideoOptionsMenu,
+    M_DrawGenericMenu,
+    60,40,
+    0
+};
+
 void M_DrawVideoMode(void);             //added:30-01-98:
 
 void M_HandleVideoMode (int ch);
@@ -1380,7 +1413,7 @@ menu_t  VidModeDef =
 {
     NULL,
     1,                  // # of menu items
-    &OptionsDef,        // previous menu
+    &VideoOptionsDef,        // previous menu
     VideoModeMenu,      // menuitem_t ->
     M_DrawVideoMode,    // drawing routine ->
     48,60,              // x,y
