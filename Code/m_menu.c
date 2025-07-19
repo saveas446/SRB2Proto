@@ -856,7 +856,6 @@ menuitem_t OptionsMenu[]=
     {IT_STRING | IT_CVAR
      | IT_CV_SLIDER     ,"Mlook Speed"     ,&cv_mlooksens       ,70},
     {IT_STRING | IT_CVAR,"Crosshair"       ,&cv_crosshair       ,80},
-    {IT_STRING | IT_CVAR,"Autoaim"         ,&cv_autoaim         ,90},
     {IT_CALL   | IT_WHITESTRING,"Game Options..."  ,M_GameOption,110},
     {IT_SUBMENU | IT_WHITESTRING,"Sound Volume..."  ,&SoundDef  ,120},
     {IT_SUBMENU | IT_WHITESTRING,"Video Options..." ,&VidModeDef,130},
