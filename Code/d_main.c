@@ -633,10 +633,7 @@ void D_DoAdvanceDemo (void)
     paused = false;
     gameaction = ga_nothing;
 
-    if ( gamemode == retail )
-        demosequence = (demosequence+1)%7;
-    else
-        demosequence = (demosequence+1)%6;
+    demosequence = (demosequence+1) & 1;
 
     switch (demosequence)
     {
@@ -653,40 +650,9 @@ void D_DoAdvanceDemo (void)
           S_StartMusic (mus_intro);
         break;
       case 1:
-        G_DeferedPlayDemo ("demo1");
-        break;
-      case 2:
         pagetic = 200;
         gamestate = GS_DEMOSCREEN;
         pagename = "CREDIT";
-        break;
-      case 3:
-        G_DeferedPlayDemo ("demo2");
-        break;
-      case 4:
-        gamestate = GS_DEMOSCREEN;
-        if ( gamemode == commercial)
-        {
-            pagetic = TICRATE * 11;
-            pagename = "TITLEPIC";
-            S_StartMusic(mus_dm2ttl);
-        }
-        else
-        {
-            pagetic = 200;
-
-            if ( gamemode == retail )
-              pagename = text[CREDIT_NUM];
-            else
-              pagename = text[HELP2_NUM];
-        }
-        break;
-      case 5:
-        G_DeferedPlayDemo ("demo3");
-        break;
-        // THE DEFINITIVE DOOM Special Edition demo
-      case 6:
-        G_DeferedPlayDemo ("demo4");
         break;
     }
 }
