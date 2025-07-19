@@ -486,6 +486,7 @@
     <ClInclude Include="Z_zone.h">
       <Filter>D_Doom</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="_logs\log.txt" />
@@ -526,5 +527,11 @@
     <Filter Include="W_Wad">
       <UniqueIdentifier>{13d8ff25-5163-4047-ab58-9d04c7b15703}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NewMillenium.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="WIN32\Srb2win.ico" />
   </ItemGroup>
 </Project>

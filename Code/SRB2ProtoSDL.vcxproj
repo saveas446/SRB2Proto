@@ -83,6 +83,7 @@
     <ClCompile Include="sdl2\i_sound.c" />
     <ClCompile Include="sdl2\i_system.c" />
     <ClCompile Include="sdl2\i_video.c" />
+    <ClCompile Include="sdl2\Srb2win.c" />
     <ClCompile Include="Sounds.c" />
     <ClCompile Include="St_lib.c" />
     <ClCompile Include="St_stuff.c" />

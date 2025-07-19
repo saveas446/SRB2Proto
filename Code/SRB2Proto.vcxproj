@@ -309,6 +309,7 @@
     <ClInclude Include="P_setup.h" />
     <ClInclude Include="P_spec.h" />
     <ClInclude Include="P_tick.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="R_bsp.h" />
     <ClInclude Include="R_data.h" />
     <ClInclude Include="R_defs.h" />
@@ -343,6 +344,12 @@
     <Text Include="_logs\log.txt" />
     <Text Include="_logs\Logboris.txt" />
     <Text Include="_logs\tokin.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NewMillenium.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="WIN32\Srb2win.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

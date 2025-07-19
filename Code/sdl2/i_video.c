@@ -20,6 +20,7 @@ SDL_Window* SDL_window = NULL;
 SDL_Renderer* SDL_renderer;
 SDL_Surface* surface;
 SDL_Surface* window_surface;
+SDL_Surface* icon_surface;
 
 vmode_t window_modes[3] = {
 		// Fallback mode, 320x200 is gross
@@ -54,6 +55,36 @@ vmode_t window_modes[3] = {
 			0          // misc
 		},
 };
+
+static void SetSDLIcon(SDL_Window* window)
+{
+
+	// Somebody please find a better way to do this later, I hate #including .c files
+#include "Srb2win.c"
+
+	Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	int shift = (my_icon.bytes_per_pixel == 3) ? 8 : 0;
+	rmask = 0xff000000 >> shift;
+	gmask = 0x00ff0000 >> shift;
+	bmask = 0x0000ff00 >> shift;
+	amask = 0x000000ff >> shift;
+#else // little endian, like x86
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = (gimp_image.bytes_per_pixel == 3) ? 0 : 0xff000000;
+#endif
+
+	icon_surface = SDL_CreateRGBSurfaceFrom((void*)gimp_image.pixel_data,
+		gimp_image.width, gimp_image.height, gimp_image.bytes_per_pixel * 8,
+		gimp_image.bytes_per_pixel * gimp_image.width, rmask, gmask, bmask, amask);
+
+	SDL_SetWindowIcon(SDL_window, icon_surface);
+
+	SDL_FreeSurface(icon_surface);
+
+}
 
 void I_ShutdownGraphics(void){
 	SDL_DestroyRenderer(SDL_renderer);
@@ -115,6 +146,7 @@ int VID_SetMode(int modenum)
 
 	// Init window (hardcoded to 640x400 for now) in the center of the screen
 	SDL_window = SDL_CreateWindow("NewMillenium (SDL2 backend)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid.width, vid.height, 0);
+	SetSDLIcon(SDL_window);
 
 	if (!SDL_window)
 		I_Error("I_StartupGraphics(): Could not create window!");

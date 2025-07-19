@@ -261,6 +261,9 @@
     <ClCompile Include="sdl2\i_video.c">
       <Filter>SDLapp</Filter>
     </ClCompile>
+    <ClCompile Include="sdl2\Srb2win.c">
+      <Filter>SDLapp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dehacked.h">
