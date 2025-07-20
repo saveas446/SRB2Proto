@@ -27,10 +27,10 @@ void CV_Gravity_OnChange (void);
 
 CV_PossibleValue_t viewheight_cons_t[]={{16,"MIN"},{56,"MAX"},{0,NULL}};
 
-consvar_t cv_viewheight = {"viewheight","41", NULL, 0,viewheight_cons_t,NULL};
+consvar_t cv_viewheight = {"viewheight","41", NULL, CAT_VIDEO, 0,viewheight_cons_t,NULL};
 
 //Fab:26-07-98:
-consvar_t cv_gravity = {"gravity","0.5", NULL, CV_NETVAR|CV_FLOAT|CV_CALL|CV_NOINIT,NULL,CV_Gravity_OnChange}; // No longer required in autoexec.cfg! Tails 12-01-99
+consvar_t cv_gravity = {"gravity","0.5", NULL, CAT_GAMECONFIG, CV_NETVAR|CV_FLOAT|CV_CALL|CV_NOINIT,NULL,CV_Gravity_OnChange}; // No longer required in autoexec.cfg! Tails 12-01-99
 
 // just echo to everybody for multiplayer
 void CV_Gravity_OnChange (void)
@@ -562,8 +562,8 @@ P_NightmareRespawn (mobj_t* mobj)
 }
 
 
-consvar_t cv_respawnmonsters = {"respawnmonsters","0", NULL, CV_NETVAR,CV_OnOff};
-consvar_t cv_respawnmonsterstime = {"respawnmonsterstime","12", NULL, CV_NETVAR,NULL};
+consvar_t cv_respawnmonsters = {"respawnmonsters","0", NULL, CAT_GAMECONFIG, CV_NETVAR,CV_OnOff};
+consvar_t cv_respawnmonsterstime = {"respawnmonsterstime","12", NULL, CAT_GAMECONFIG, CV_NETVAR,NULL};
 
 
 //
@@ -967,8 +967,8 @@ void P_RemoveMobj (mobj_t* mobj)
 }
 
 
-consvar_t cv_itemrespawntime={"respawnitemtime","30", NULL, CV_NETVAR,NULL};
-consvar_t cv_itemrespawn    ={"respawnitem"    , "0", NULL, CV_NETVAR,CV_OnOff};
+consvar_t cv_itemrespawntime={"respawnitemtime","30", NULL, CAT_GAMECONFIG, CV_NETVAR,NULL};
+consvar_t cv_itemrespawn    ={"respawnitem"    , "0", NULL, CAT_GAMECONFIG, CV_NETVAR,CV_OnOff};
 
 //
 // P_RespawnSpecials

@@ -108,17 +108,17 @@ char*    con_buffer;
 
 
 // how many seconds the hud messages lasts on the screen
-consvar_t   cons_msgtimeout = {"con_hudtime","5", NULL, CV_SAVE,CV_Unsigned};
+consvar_t   cons_msgtimeout = {"con_hudtime","5", NULL, CAT_CONSOLE, CV_SAVE,CV_Unsigned};
 
 // number of lines console move per frame
-consvar_t   cons_speed = {"con_speed","8", NULL, CV_CALL|CV_SAVE,CV_Unsigned,&CONS_speed_Change};
+consvar_t   cons_speed = {"con_speed","8", NULL, CAT_CONSOLE,  CV_CALL|CV_SAVE,CV_Unsigned,&CONS_speed_Change};
 
 // percentage of screen height to use for console
-consvar_t   cons_height = {"con_height","50", NULL, CV_SAVE,CV_Unsigned};
+consvar_t   cons_height = {"con_height","50", NULL, CAT_CONSOLE,  CV_SAVE,CV_Unsigned};
 
 CV_PossibleValue_t backpic_cons_t[]={{0,"translucent"},{1,"picture"},{0,NULL}};
 // whether to use console background picture, or translucent mode
-consvar_t   cons_backpic = {"con_backpic","0", NULL, CV_SAVE,backpic_cons_t};
+consvar_t   cons_backpic = {"con_backpic","0", NULL, CAT_CONSOLE,  CV_SAVE,backpic_cons_t};
 
 
 //  Check CONS_speed value (must be positive and >0)
@@ -311,13 +311,13 @@ void CON_Init(void)
     CV_RegisterVar (&cons_speed);
     CV_RegisterVar (&cons_height);
     CV_RegisterVar (&cons_backpic);
-    COM_AddCommand ("cls", CONS_Clear_f);
-    COM_AddCommand ("english", CONS_English_f);
-    COM_AddCommand ("french", CONS_French_f);
-    COM_AddCommand ("bind", CONS_Bind_f);
+    COM_AddCommand ("cls", NULL, CAT_CONSOLE, CONS_Clear_f);
+    COM_AddCommand ("english", NULL, CAT_MISC, CONS_English_f);
+    COM_AddCommand ("french", NULL, CAT_MISC, CONS_French_f);
+    COM_AddCommand ("bind", NULL, CAT_INPUT, CONS_Bind_f);
 
 //Stealth's new console cheats 12-26-99
-    COM_AddCommand ("blueshield", A_BlueShield);
+    COM_AddCommand ("blueshield", NULL, CAT_DEV, A_BlueShield);
 
     // set console full screen for game startup MAKE SURE VID_Init() done !!!
     con_destlines = vid.height;

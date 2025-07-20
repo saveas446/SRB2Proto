@@ -65,6 +65,20 @@ cmdalias_t  *com_alias; // aliases list
 
 vsbuf_t   com_text;     // variable sized buffer
 
+char* helpcats[] = {
+    "gameconfig",
+    "game",
+    "multiplayer",
+    "customization",
+    "cheats",
+    "dev",
+    "video",
+    "sound",
+    "input",
+    "console",
+    "misc"
+};
+
 
 //  Add text in the command buffer (for later execution)
 //
@@ -184,9 +198,11 @@ void COM_BufExecute (void)
 
 typedef struct xcommand_s
 {
-    char               *name;
-    struct xcommand_s  *next;
-    com_func_t         function;
+    char* name;
+    char* helptext;
+    helpcat_t helpcat;
+    struct xcommand_s* next;
+    com_func_t function;
 } xcommand_t;
 
 static  xcommand_t  *com_commands = NULL;     // current commands
@@ -207,11 +223,11 @@ void COM_Init (void)
     VS_Alloc (&com_text, COM_BUF_SIZE);
 
     // add standard commands
-    COM_AddCommand ("alias",COM_Alias_f);
-    COM_AddCommand ("echo", COM_Echo_f);
-    COM_AddCommand ("exec", COM_Exec_f);
-    COM_AddCommand ("wait", COM_Wait_f);
-    COM_AddCommand ("help", COM_Help_f);
+    COM_AddCommand ("alias", NULL, CAT_CONSOLE, COM_Alias_f);
+    COM_AddCommand ("echo", NULL, CAT_CONSOLE, COM_Echo_f);
+    COM_AddCommand ("exec", NULL, CAT_CONSOLE, COM_Exec_f);
+    COM_AddCommand ("wait", NULL, CAT_CONSOLE, COM_Wait_f);
+    COM_AddCommand ("help", "Take a wild guess...", CAT_CONSOLE, COM_Help_f);
     RegisterNetXCmd(XD_NETVAR,Got_NetVar);
 }
 
@@ -306,7 +322,7 @@ static void COM_TokenizeString (char *text)
 
 // Add a command before existing ones.
 //
-void COM_AddCommand (char *name, com_func_t func)
+void COM_AddCommand (char *name, char* helptext, helpcat_t helpcat, com_func_t func)
 {
     xcommand_t  *cmd;
 
@@ -329,6 +345,8 @@ void COM_AddCommand (char *name, com_func_t func)
 
     cmd = ZZ_Alloc (sizeof(xcommand_t));
     cmd->name = name;
+    cmd->helptext = helptext;
+    cmd->helpcat = helpcat;
     cmd->function = func;
     cmd->next = com_commands;
     com_commands = cmd;
@@ -518,57 +536,88 @@ static void COM_Wait_f (void)
 
 static void    COM_Help_f (void)
 {
-    xcommand_t  *cmd;
-    consvar_t  *cvar;
+    xcommand_t* cmd;
+    consvar_t* cvar;
+    char* arg;
     int i=0;
+    int cat;
 
-    if(COM_Argc()>1)
+    if (COM_Argc()>1)
     {
-        cvar = CV_FindVar (COM_Argv(1));
-        if( cvar && cvar->PossibleValue )
-        {
-            if(stricmp(cvar->PossibleValue[0].strvalue,"MIN")==0)
-            {
-                for(i=1;cvar->PossibleValue[i].strvalue!=NULL;i++)
-                    if(!stricmp(cvar->PossibleValue[i].strvalue,"MAX"))
-                        break;
-                CONS_Printf("Variable %s is range %d to %d\n",cvar->name,cvar->PossibleValue[0].value,cvar->PossibleValue[i].value);
-            }
-            else
-            {
-                CONS_Printf("Variable %s have possible value :\n",cvar->name);
-                while(cvar->PossibleValue[i].strvalue)
+        arg = COM_Argv(1);
+
+        for (cat = CAT_GAMECONFIG; cat < MAXHELPCAT; cat++) {
+            // If the second argument is the name of a category, print all variables/commands in that category
+            if (!strcmp(arg, helpcats[cat])) {
+                CONS_Printf("Commands/variables in category %s:\n", helpcats[cat]);
+                for (cmd = com_commands; cmd; cmd = cmd->next)
                 {
-                     CONS_Printf("%-2d : %s\n",cvar->PossibleValue[i].value,cvar->PossibleValue[i].strvalue);
-                     i++;
+                    if (cmd->helpcat == cat)
+                        CONS_Printf("%s ", cmd->name);
+                }
+                for (cvar = consvar_vars; cvar; cvar = cvar->next)
+                {
+                    if (cvar->helpcat == cat)
+                        CONS_Printf("%s ", cvar->name);
+                }
+                CONS_Printf("\n\n");
+                return;
+            }
+        }
+
+        for (cmd = com_commands; cmd; cmd = cmd->next)
+        {
+            if (!strcmp(cmd->name, arg)) {
+                if (cmd->helptext != NULL) {
+                    CONS_Printf("%s\n", cmd->helptext);
+                    return;
                 }
             }
         }
-        else
-            CONS_Printf("No Help for this command/variable\n");
+
+        for (cvar = consvar_vars; cvar; cvar = cvar->next)
+        {
+            if (!strcmp(cvar->name, arg)) {
+                if (cmd->helptext != NULL) {
+                    CONS_Printf("%s\n", cmd->helptext);
+                    return;
+                }
+            }
+        }
+
+        CONS_Printf("No help available for \"%s\"\n", arg);
     }
     else
     {
-        // commands
-    CONS_Printf("\2Commands\n");
-    for (cmd=com_commands ; cmd ; cmd=cmd->next)
-    {
-        CONS_Printf("%s ",cmd->name);
-        i++;
-    }
+        CONS_Printf("\nNo argument specified! Type help <category> to get the names of all commands/variables in a specific category, or type help <command or variable> to get info on that specific command/variable.\n");
+        CONS_Printf("\nCategories:\n");
+        for (cat = CAT_GAMECONFIG; cat < MAXHELPCAT - 1; cat++) {
+            // commands
+            CONS_Printf("%s,", helpcats[cat]);
+        }
+        CONS_Printf("%s", helpcats[cat++]);
+        /*   // commands
+        CONS_Printf("\2Commands\n");
+        for (cmd=com_commands ; cmd ; cmd=cmd->next)
+        {
+            CONS_Printf("%s ",cmd->name);
+            i++;
+        }
 
-        // varibale
-    CONS_Printf("\2\nVariable\n");
-    for (cvar=consvar_vars; cvar; cvar = cvar->next)
-    {
-        CONS_Printf("%s ",cvar->name);
-        i++;
-    }
+            // varibale
+        CONS_Printf("\2\nVariable\n");
+        for (cvar=consvar_vars; cvar; cvar = cvar->next)
+        {
+            CONS_Printf("%s ",cvar->name);
+            i++;
+        }
 
-        CONS_Printf("\2\nread console.txt for more or type help <command or variable>\n");
+            CONS_Printf("\2\nread console.txt for more or type help <command or variable>\n");
 
-        if( devparm )
-            CONS_Printf("\2Total : %d\n",i);
+            if( devparm )
+                CONS_Printf("\2Total : %d\n",i);*/
+
+
     }
 }
 

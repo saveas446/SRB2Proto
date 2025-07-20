@@ -27,7 +27,7 @@
 rendermode_t    rendermode;
 
 // synchronize page flipping with screen refresh
-consvar_t       cv_vidwait = {"vid_wait","1", NULL, CV_SAVE};
+consvar_t       cv_vidwait = {"vid_wait","1", NULL, CAT_VIDEO, CV_SAVE};
 
 boolean         highcolor;
 
@@ -546,10 +546,10 @@ void VID_Init (void)
     if ( ( bWinParm = M_CheckParm ("-win") ) )
         rendermode  = render_soft;
     
-    COM_AddCommand ("vid_nummodes", VID_Command_NumModes_f);
-    COM_AddCommand ("vid_modeinfo", VID_Command_ModeInfo_f);
-    COM_AddCommand ("vid_modelist", VID_Command_ModeList_f);
-    COM_AddCommand ("vid_mode", VID_Command_Mode_f);
+    COM_AddCommand ("vid_nummodes", NULL, CAT_MISC, VID_Command_NumModes_f);
+    COM_AddCommand ("vid_modeinfo", NULL, CAT_MISC, VID_Command_ModeInfo_f);
+    COM_AddCommand ("vid_modelist", NULL, CAT_MISC, VID_Command_ModeList_f);
+    COM_AddCommand ("vid_mode", NULL, CAT_MISC, VID_Command_Mode_f);
     
     // only in DirectX/win32 version
     CV_RegisterVar (&cv_vidwait);

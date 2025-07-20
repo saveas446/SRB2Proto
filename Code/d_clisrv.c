@@ -96,7 +96,7 @@ ULONG         neededtic;
 ticcmd_t      netcmds[BACKUPTICS][MAXPLAYERS];
 byte          textcmds[BACKUPTICS][MAXPLAYERS][MAXTEXTCMD];
 
-consvar_t cv_playdemospeed  = {"playdemospeed","0", NULL,0,CV_Unsigned};
+consvar_t cv_playdemospeed  = {"playdemospeed","0", NULL, CAT_GAMECONFIG, 0,CV_Unsigned};
 
 void D_Cleartic(int tic);
 
@@ -814,8 +814,8 @@ void Got_KickCmd(char **p,int playernum)
 
 CV_PossibleValue_t maxplayers_cons_t[]={{1,"MIN"},{32,"MAX"},{0,NULL}};
 
-consvar_t cv_allownewplayer = {"sv_allownewplayer","1", NULL, 0,CV_OnOff};
-consvar_t cv_maxplayers     = {"sv_maxplayers","32", NULL, CV_NETVAR,maxplayers_cons_t,NULL,32};
+consvar_t cv_allownewplayer = {"sv_allownewplayer","1", NULL, CAT_MULTIPLAYER,  0,CV_OnOff};
+consvar_t cv_maxplayers     = {"sv_maxplayers","32", NULL, CAT_MULTIPLAYER,  CV_NETVAR,maxplayers_cons_t,NULL,32};
 
 //
 // D_CheckNetGame
@@ -883,8 +883,8 @@ void D_ClientServerInit (void)
 
     RegisterNetXCmd(XD_EXIT,ExecuteExitCmd);
     RegisterNetXCmd(XD_QUIT,ExecuteQuitCmd);
-    COM_AddCommand("getplayernum",Command_GetPlayerNum);
-    COM_AddCommand("kick",Command_Kick);
+    COM_AddCommand("getplayernum", NULL, CAT_MULTIPLAYER, Command_GetPlayerNum);
+    COM_AddCommand("kick", NULL, CAT_MULTIPLAYER, Command_Kick);
 
 #ifdef JOININGAME
     CV_RegisterVar (&cv_allownewplayer);

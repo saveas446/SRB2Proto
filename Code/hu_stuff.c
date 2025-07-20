@@ -215,9 +215,9 @@ void HU_Init(void)
     int         j;
     char        buffer[9];
 
-    COM_AddCommand ("say"    , Command_Say_f);
-    COM_AddCommand ("sayto"  , Command_Sayto_f);
-    COM_AddCommand ("sayteam", Command_Sayteam_f);
+    COM_AddCommand ("say"    , NULL, CAT_MISC, Command_Say_f);
+    COM_AddCommand ("sayto"  , NULL, CAT_MISC, Command_Sayto_f);
+    COM_AddCommand ("sayteam", NULL, CAT_MISC, Command_Sayteam_f);
     RegisterNetXCmd(XD_SAY,Got_Saycmd);
 
     // set shift translation table
@@ -917,16 +917,16 @@ void HU_drawCrosshair (void)
 
 // better do HackChatmacros() because the strings are NULL !!
 
-consvar_t cv_chatmacro1 = {"_chatmacro1", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro2 = {"_chatmacro2", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro3 = {"_chatmacro3", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro4 = {"_chatmacro4", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro5 = {"_chatmacro5", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro6 = {"_chatmacro6", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro7 = {"_chatmacro7", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro8 = {"_chatmacro8", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro9 = {"_chatmacro9", NULL, NULL,  CV_SAVE,NULL};
-consvar_t cv_chatmacro0 = {"_chatmacro0", NULL, NULL,  CV_SAVE,NULL};
+consvar_t cv_chatmacro1 = {"_chatmacro1", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro2 = {"_chatmacro2", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro3 = {"_chatmacro3", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro4 = {"_chatmacro4", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro5 = {"_chatmacro5", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro6 = {"_chatmacro6", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro7 = {"_chatmacro7", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro8 = {"_chatmacro8", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro9 = {"_chatmacro9", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
+consvar_t cv_chatmacro0 = {"_chatmacro0", NULL, NULL, CAT_MULTIPLAYER,   CV_SAVE,NULL};
 
 
 // set the chatmacros original text, before config is executed

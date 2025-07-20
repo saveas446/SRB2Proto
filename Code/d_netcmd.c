@@ -80,17 +80,17 @@ void SendNameAndColor(void);
 void SendNameAndColor2(void);
 
 // these two are just meant to be saved to the config
-consvar_t cv_playername           = {"name"                ,"gi joe"   , NULL, CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor};
-consvar_t cv_playercolor          = {"color"               ,"0"        , NULL, CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor};
+consvar_t cv_playername           = {"name"                ,"gi joe"   , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor};
+consvar_t cv_playercolor          = {"color"               ,"0"        , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor};
 // player's skin, saved for commodity, when using a favorite skins wad..
-consvar_t cv_skin                 = {"skin"                ,DEFAULTSKIN, NULL, CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor};
-consvar_t cv_weaponpref           = {"weaponpref"          ,"014576328", NULL, CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendWeaponPref};
-consvar_t cv_autoaim              = {"autoaim"             ,"1"        , NULL, CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
-consvar_t cv_originalweaponswitch = {"originalweaponswitch","0"        , NULL, CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
+consvar_t cv_skin                 = {"skin"                ,DEFAULTSKIN, NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor};
+consvar_t cv_weaponpref           = {"weaponpref"          ,"014576328", NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendWeaponPref};
+consvar_t cv_autoaim              = {"autoaim"             ,"1"        , NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
+consvar_t cv_originalweaponswitch = {"originalweaponswitch","0"        , NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
 // secondary player for splitscreen mode
-consvar_t cv_playername2          = {"name2"               ,"big b"    , NULL, CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor2};
-consvar_t cv_playercolor2         = {"color2"              ,"1"        , NULL, CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor2};
-consvar_t cv_skin2                = {"skin2"               ,DEFAULTSKIN, NULL, CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor2};
+consvar_t cv_playername2          = {"name2"               ,"big b"    , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor2};
+consvar_t cv_playercolor2         = {"color2"              ,"1"        , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor2};
+consvar_t cv_skin2                = {"skin2"               ,DEFAULTSKIN, NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor2};
 
 
 CV_PossibleValue_t usemouse_cons_t[]={{0,"Off"},{1,"On"},{2,"Force"},{0,NULL}};
@@ -123,19 +123,19 @@ CV_PossibleValue_t usejoystick_cons_t[]={{0,"Off"}
 #endif
 #endif
 
-consvar_t cv_usemouse    = {"use_mouse","1", NULL, CV_SAVE | CV_CALL,usemouse_cons_t,I_StartupMouse};
-consvar_t cv_usejoystick = {"use_joystick","0", NULL, CV_SAVE | CV_CALL,usejoystick_cons_t,I_InitJoystick};
+consvar_t cv_usemouse    = {"use_mouse","1", NULL, CAT_INPUT,  CV_SAVE | CV_CALL,usemouse_cons_t,I_StartupMouse};
+consvar_t cv_usejoystick = {"use_joystick","0", NULL, CAT_INPUT,  CV_SAVE | CV_CALL,usejoystick_cons_t,I_InitJoystick};
 
 CV_PossibleValue_t teamplay_cons_t[]={{0,"Off"},{1,"Color"},{2,"Skin"},{3,NULL}};
 CV_PossibleValue_t deathmatch_cons_t[]={{0,"Coop"},{1,"1"},{2,"2"},{3,"3"},{0,NULL}};
 CV_PossibleValue_t fraglimit_cons_t[]={{0,"MIN"},{1000,"MAX"},{0,NULL}};
 
-consvar_t cv_teamplay   = {"teamplay"  ,"0", NULL, CV_NETVAR | CV_CALL,teamplay_cons_t, TeamPlay_OnChange};
-consvar_t cv_teamdamage = {"teamdamage","0", NULL, CV_NETVAR,CV_OnOff};
+consvar_t cv_teamplay   = {"teamplay"  ,"0", NULL, CAT_MULTIPLAYER,  CV_NETVAR | CV_CALL,teamplay_cons_t, TeamPlay_OnChange};
+consvar_t cv_teamdamage = {"teamdamage","0", NULL, CAT_MULTIPLAYER,  CV_NETVAR,CV_OnOff};
 
-consvar_t cv_fraglimit  = {"fraglimit" ,"0", NULL, CV_NETVAR | CV_CALL | CV_NOINIT,fraglimit_cons_t, FragLimit_OnChange};
-consvar_t cv_timelimit  = {"timelimit" ,"0", NULL, CV_NETVAR | CV_CALL | CV_NOINIT,CV_Unsigned, TimeLimit_OnChange};
-consvar_t cv_deathmatch = {"deathmatch","0", NULL, CV_NETVAR | CV_CALL,deathmatch_cons_t, Deahtmatch_OnChange};
+consvar_t cv_fraglimit  = {"fraglimit" ,"0", NULL, CAT_MULTIPLAYER,  CV_NETVAR | CV_CALL | CV_NOINIT,fraglimit_cons_t, FragLimit_OnChange};
+consvar_t cv_timelimit  = {"timelimit" ,"0", NULL, CAT_MULTIPLAYER,  CV_NETVAR | CV_CALL | CV_NOINIT,CV_Unsigned, TimeLimit_OnChange};
+consvar_t cv_deathmatch = {"deathmatch","0", NULL, CAT_MULTIPLAYER,  CV_NETVAR | CV_CALL,deathmatch_cons_t, Deahtmatch_OnChange};
 
 extern consvar_t cv_playdemospeed;
 
@@ -161,30 +161,30 @@ void D_RegisterClientCommands (void)
     RegisterNetXCmd(XD_EXITLEVEL,Got_ExitLevelcmd);
     RegisterNetXCmd(XD_PAUSE,Got_Pause);
 
-    COM_AddCommand ("playdemo", Command_Playdemo_f);
-    COM_AddCommand ("timedemo", Command_Timedemo_f);
-    COM_AddCommand ("stopdemo", Command_Stopdemo_f);
-    COM_AddCommand ("map", Command_Map_f);
+    COM_AddCommand ("playdemo", NULL, CAT_GAME, Command_Playdemo_f);
+    COM_AddCommand ("timedemo", NULL, CAT_GAME, Command_Timedemo_f);
+    COM_AddCommand ("stopdemo", NULL, CAT_GAME, Command_Stopdemo_f);
+    COM_AddCommand ("map", NULL, CAT_GAME, Command_Map_f);
 
-    COM_AddCommand ("addfile", Command_Addfile);
-    COM_AddCommand ("pause", Command_Pause);
+    COM_AddCommand ("addfile", NULL, CAT_GAME, Command_Addfile);
+    COM_AddCommand ("pause", NULL, CAT_GAME, Command_Pause);
 
-    COM_AddCommand ("turbo", Command_Turbo_f);     // turbo speed
-    COM_AddCommand ("version", Command_Version_f);
-    COM_AddCommand ("quit", Command_Quit_f);
+    COM_AddCommand ("turbo", NULL, CAT_GAMECONFIG, Command_Turbo_f);     // turbo speed
+    COM_AddCommand ("version", NULL, CAT_MISC, Command_Version_f);
+    COM_AddCommand ("quit", NULL, CAT_MISC, Command_Quit_f);
 
-    COM_AddCommand ("chatmacro", Command_Chatmacro_f); // hu_stuff.c
-    COM_AddCommand ("setcontrol", Command_Setcontrol_f);
-    COM_AddCommand ("setcontrol2", Command_Setcontrol2_f);
+    COM_AddCommand ("chatmacro", NULL, CAT_MULTIPLAYER, Command_Chatmacro_f); // hu_stuff.c
+    COM_AddCommand ("setcontrol", NULL, CAT_INPUT, Command_Setcontrol_f);
+    COM_AddCommand ("setcontrol2", NULL, CAT_INPUT, Command_Setcontrol2_f);
 
-    COM_AddCommand ("frags",Command_Frags_f);
-    COM_AddCommand ("teamfrags",Command_TeamFrags_f);
+    COM_AddCommand ("frags", NULL, CAT_MULTIPLAYER, Command_Frags_f);
+    COM_AddCommand ("teamfrags", NULL, CAT_MULTIPLAYER, Command_TeamFrags_f);
 
-    COM_AddCommand ("saveconfig",Command_SaveConfig_f);
-    COM_AddCommand ("loadconfig",Command_LoadConfig_f);
-    COM_AddCommand ("changeconfig",Command_ChangeConfig_f);
-    COM_AddCommand ("exitlevel",Command_ExitLevel_f);
-    COM_AddCommand ("screenshot",M_ScreenShot);
+    COM_AddCommand ("saveconfig", NULL, CAT_MISC, Command_SaveConfig_f);
+    COM_AddCommand ("loadconfig", NULL, CAT_MISC, Command_LoadConfig_f);
+    COM_AddCommand ("changeconfig", NULL, CAT_MISC, Command_ChangeConfig_f);
+    COM_AddCommand ("exitlevel", NULL, CAT_GAME, Command_ExitLevel_f);
+    COM_AddCommand ("screenshot", NULL, CAT_MISC, M_ScreenShot);
 
   //
   // register main variables
@@ -237,9 +237,9 @@ void D_RegisterClientCommands (void)
     CV_RegisterVar (&cv_scr_height);
 
     // add cheat commands, I'm bored of deh patches renaming the idclev ! :-)
-    COM_AddCommand ("noclip", Command_CheatNoClip_f);
-    COM_AddCommand ("god", Command_CheatGod_f);
-    COM_AddCommand ("gimme", Command_CheatGimme_f);
+    COM_AddCommand ("noclip", "Makes the player able to clip through walls.", CAT_CHEATS, Command_CheatNoClip_f);
+    COM_AddCommand ("god", "Makes the player immune to any and all damage.", CAT_CHEATS, Command_CheatGod_f);
+    COM_AddCommand ("gimme", NULL, CAT_CHEATS, Command_CheatGimme_f);
 
     // p_mobj.c
     CV_RegisterVar (&cv_itemrespawntime);
@@ -249,7 +249,7 @@ void D_RegisterClientCommands (void)
     CV_RegisterVar (&cv_fastmonsters);
 
     // WATER HACK TEST UNTIL FULLY FINISHED
-    COM_AddCommand ("dev_water", Command_Water_f);
+    COM_AddCommand ("dev_water", NULL, CAT_DEV, Command_Water_f);
 
     //misc
     CV_RegisterVar (&cv_teamplay);
@@ -259,9 +259,9 @@ void D_RegisterClientCommands (void)
     CV_RegisterVar (&cv_timelimit);
     CV_RegisterVar (&cv_playdemospeed);
 
-    COM_AddCommand ("load",Command_Load_f);
+    COM_AddCommand ("load", NULL, CAT_GAME, Command_Load_f);
     RegisterNetXCmd(XD_LOADGAME,Got_LoadGamecmd);
-    COM_AddCommand ("save",Command_Save_f);
+    COM_AddCommand ("save", NULL, CAT_GAME, Command_Save_f);
     RegisterNetXCmd(XD_SAVEGAME,Got_SaveGamecmd);
 
 /* ideas of commands names from Quake

@@ -141,13 +141,13 @@ static boolean wasPlaying;
 static int     cdVolume=0;          // current cd volume (0-31)
 
 // 0-31 like Music & Sfx, though CD hardware volume is 0-255.
-consvar_t   cd_volume = {"cd_volume","31", NULL, CV_SAVE};
+consvar_t   cd_volume = {"cd_volume","31", NULL, CAT_SOUND, CV_SAVE};
 
 // allow Update for next/loop track
 // some crap cd drivers take up to
 // a second for a simple 'busy' check..
 // (on those Update can be disabled)
-consvar_t   cdUpdate  = {"cd_update","1", NULL, CV_SAVE};
+consvar_t   cdUpdate  = {"cd_update","1", NULL, CAT_SOUND, CV_SAVE};
 
 // hour,minutes,seconds
 static char* hms(int seconds)
@@ -385,7 +385,7 @@ void I_InitCD (void)
         cdValid = true;
     }
     
-    COM_AddCommand ("cd", Command_Cd_f);
+    COM_AddCommand ("cd", NULL, CAT_MISC, Command_Cd_f);
 }
 
 

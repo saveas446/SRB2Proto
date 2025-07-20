@@ -13,7 +13,7 @@
 // Each screen is [vid.width*vid.height];
 byte*      screens[5];
 
-consvar_t cv_ticrate={"vid_ticrate","0", NULL, 0,CV_OnOff,NULL};
+consvar_t cv_ticrate={"vid_ticrate","0", NULL, CAT_VIDEO, 0,CV_OnOff,NULL};
 
 // Now where did these came from?
 byte gammatable[5][256] =

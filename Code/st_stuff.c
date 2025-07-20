@@ -1381,7 +1381,7 @@ void ST_changeDemoView (void)
 //                         STATUS BAR OVERLAY
 // =========================================================================
 
-consvar_t cv_stbaroverlay = {"overlay","kahmf", NULL, CV_SAVE,NULL};
+consvar_t cv_stbaroverlay = {"overlay","kahmf", NULL, CAT_VIDEO, CV_SAVE,NULL};
 
 boolean   st_overlay;
 

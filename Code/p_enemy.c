@@ -14,8 +14,8 @@
 void FastMonster_OnChange(void);
 
 // enable the solid corpses option : still not finished
-consvar_t cv_solidcorpse = {"solidcorpse","0", NULL, CV_NETVAR,CV_OnOff};
-consvar_t cv_fastmonsters = {"fastmonsters","0", NULL, CV_NETVAR | CV_CALL,CV_OnOff,FastMonster_OnChange};
+consvar_t cv_solidcorpse = {"solidcorpse","0", NULL, CAT_GAMECONFIG,  CV_NETVAR,CV_OnOff};
+consvar_t cv_fastmonsters = {"fastmonsters","0", NULL, CAT_GAMECONFIG,  CV_NETVAR | CV_CALL,CV_OnOff,FastMonster_OnChange};
 
 player_t *plyr;
 

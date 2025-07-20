@@ -13,19 +13,19 @@
 #include "z_zone.h"
 
 // stereo reverse 1=true, 0=false
-consvar_t stereoreverse = {"stereoreverse","0", NULL, CV_SAVE ,CV_OnOff};
+consvar_t stereoreverse = {"stereoreverse","0", NULL, CAT_SOUND, CV_SAVE ,CV_OnOff};
 
 // if true, all sounds are loaded at game startup
-consvar_t precachesound = {"precachesound","0", NULL, CV_SAVE ,CV_OnOff};
+consvar_t precachesound = {"precachesound","0", NULL, CAT_SOUND, CV_SAVE ,CV_OnOff};
 
 CV_PossibleValue_t soundvolume_cons_t[]={{0,"MIN"},{31,"MAX"},{0,NULL}};
 // actual general (maximum) sound & music volume, saved into the config
-consvar_t cv_soundvolume = {"soundvolume","15", NULL, CV_SAVE,soundvolume_cons_t};
-consvar_t cv_musicvolume = {"musicvolume","15", NULL, CV_SAVE,soundvolume_cons_t};
+consvar_t cv_soundvolume = {"soundvolume","15", NULL, CAT_SOUND, CV_SAVE,soundvolume_cons_t};
+consvar_t cv_musicvolume = {"musicvolume","15", NULL, CAT_SOUND, CV_SAVE,soundvolume_cons_t};
 
 // number of channels available
 void SetChannelsNum(void);
-consvar_t cv_numChannels = {"snd_channels","16", NULL, CV_SAVE | CV_CALL, CV_Unsigned,SetChannelsNum};
+consvar_t cv_numChannels = {"snd_channels","16", NULL, CAT_SOUND, CV_SAVE | CV_CALL, CV_Unsigned,SetChannelsNum};
 
 #define S_MAX_VOLUME            127
 

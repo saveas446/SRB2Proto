@@ -92,7 +92,7 @@ void Z_Init (void)
 
     block->size = mainzone->size - sizeof(memzone_t);
 
-    COM_AddCommand ("memfree", Command_Memfree_f);
+    COM_AddCommand ("memfree", NULL, CAT_MISC, Command_Memfree_f);
 }
 
 

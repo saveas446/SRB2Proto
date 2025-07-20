@@ -81,6 +81,25 @@ typedef enum
     CV_NOTINNET = 32  // some varaiable can't be changed in network but is not netvar (ex: splitscreen)
 } cvflags_t;
 
+// Help categories enum
+
+typedef enum {
+    CAT_GAMECONFIG = 0,
+    CAT_GAME,
+    CAT_MULTIPLAYER,
+    CAT_CUSTOMIZATION,
+    CAT_CHEATS,
+    CAT_DEV,
+    CAT_VIDEO,
+    CAT_SOUND,
+    CAT_INPUT,
+    CAT_CONSOLE,
+    CAT_MISC,
+    MAXHELPCAT
+} helpcat_t;
+
+char* helpcats[MAXHELPCAT];
+
 struct CV_PossibleValue_s {
     int   value;
     char  *strvalue;
@@ -93,6 +112,7 @@ typedef struct consvar_s
     char    *name;
     char    *string;
     char    *helptext;
+    helpcat_t helpcat;
     int     flags;             // flags see above
     CV_PossibleValue_t *PossibleValue;  // table of possible values
     void    (*func) (void);    // called on change, if CV_CALL set

@@ -48,8 +48,8 @@ boolean   fuzzymode=false;   // use original Doom fuzzy effect instead
                              // of translucency
 
 //added:03-02-98: default screen mode, as loaded/saved in config
-consvar_t   cv_scr_width  = {"scr_width","640", NULL, CV_SAVE,CV_Unsigned};
-consvar_t   cv_scr_height = {"scr_height","400", NULL, CV_SAVE,CV_Unsigned};
+consvar_t   cv_scr_width  = {"scr_width","640", NULL, CAT_VIDEO, CV_SAVE,CV_Unsigned};
+consvar_t   cv_scr_height = {"scr_height","400", NULL, CAT_VIDEO, CV_SAVE,CV_Unsigned};
 
 // =========================================================================
 //                           SCREEN VARIABLES
@@ -66,9 +66,9 @@ byte*     scr_borderpatch; // flat used to fill the reduced view borders
 CV_PossibleValue_t gamma_cons_t[]={{0,"MIN"},{4,"MAX"},{0,NULL}};
 CV_PossibleValue_t viewsize_cons_t[]={{3,"MIN"},{12,"MAX"},{0,NULL}};
 
-consvar_t cv_usegamma = {"gamma","0", NULL, CV_SAVE,gamma_cons_t};
-consvar_t cv_viewsize = {"viewsize","11", NULL, CV_SAVE,viewsize_cons_t};      //3-11
-consvar_t cv_detaillevel = {"detaillevel","0", NULL, CV_SAVE,NULL}; // UNUSED
+consvar_t cv_usegamma = {"gamma","0", NULL, CAT_VIDEO, CV_SAVE,gamma_cons_t};
+consvar_t cv_viewsize = {"viewsize","11", NULL, CAT_VIDEO, CV_SAVE,viewsize_cons_t};      //3-11
+consvar_t cv_detaillevel = {"detaillevel","0", NULL, CAT_VIDEO, CV_SAVE,NULL}; // UNUSED
 
 
 // =========================================================================
