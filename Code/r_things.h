@@ -84,4 +84,4 @@ void    SetPlayerSkin(int playernum,char *skinname);
 int     R_SkinAvailable (char* name);
 void    R_AddSkins (int wadnum);
 
-#endif __R_THINGS__
+#endif

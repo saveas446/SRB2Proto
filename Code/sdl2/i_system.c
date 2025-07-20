@@ -14,14 +14,12 @@ byte keyboard_started = 0;
 
 JoyType_t   Joystick;
 
-void I_GetFreeMem(ULONG *total)
-{
-	total = NULL;
-}
+void I_GetFreeMem(void){}
 
+#ifdef _WIN32
 static long    hacktics = 0;       //faB: used locally for keyboard repeat keys
 static DWORD starttickcount = 0; // hack for win2k time bug
-int I_GetTime(void)
+ULONG I_GetTime(void)
 {
 	int newtics = 0;
 
@@ -52,6 +50,24 @@ int I_GetTime(void)
 
 	return newtics;
 }
+#else
+ULONG I_GetTime (void)
+{
+	ULONG basetime = 0;
+	ULONG ticks = SDL_GetTicks();
+
+	if (!basetime)
+		basetime = ticks;
+
+	ticks -= basetime;
+
+	ticks = (ticks*TICRATE);
+
+	ticks = (ticks/1000);
+
+	return ticks;
+}
+#endif
 
 void I_Sleep(void){}
 
@@ -78,7 +94,7 @@ void I_Quit(void)
 	exit(0);
 }
 
-void I_Error(const char *error, ...)
+void I_Error(char *error, ...)
 {
 	va_list args;
 	va_start(args, error);
@@ -95,7 +111,6 @@ void I_Error(const char *error, ...)
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SRB2 Error", buffer, NULL);
 
 	M_SaveConfig(NULL);
-	error = NULL;
 	exit(-1);
 }
 
@@ -133,9 +148,21 @@ const char *I_GetJoyName(int joyindex)
 	return NULL;
 }
 
-void I_OutputMsg(const char *error, ...)
+void I_OutputMsg(char *error, ...)
 {
-	error = NULL;
+	va_list args;
+	va_start(args, error);
+
+	int len = vsnprintf(NULL, 0, error, args);
+	va_end(args);
+
+	char* buffer = (char*)malloc(len + 1);
+
+	va_start(args, error);
+	vsnprintf(buffer, len + 1, error, args);
+	va_end(args);
+
+	SDL_Log(buffer);
 }
 
 // Just print this to the console for now

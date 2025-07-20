@@ -437,3 +437,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
+Binaries/.ninja_deps
+Binaries/.ninja_log
+Binaries/build.ninja

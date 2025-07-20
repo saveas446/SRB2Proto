@@ -718,7 +718,9 @@ gamemode_t GetDoomVersion (char* wadfile)
 
 void IdentifyVersion (void)
 {
-    // Initialise DOOMWADDIR
+#ifdef LINUX
+    char *home;
+#endif
     char* doomwaddir;
     char  pathtemp[_MAX_PATH];
 

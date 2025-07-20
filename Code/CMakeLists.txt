@@ -26,8 +26,6 @@ add_executable(${PROJECT_NAME}
   m_fixed.c
   m_misc.c
   m_random.c
-  md5.c
-  mserv.c
   p_ceilng.c
   p_doors.c
   p_lights.c
@@ -49,11 +47,10 @@ add_executable(${PROJECT_NAME}
   screen.c
   sounds.c
   st_stuff.c
-  string.c
   tables.c
   v_video.c
   w_wad.c
-  y_inter.c
+  wi_stuff.c
   z_zone.c
   console.c
   d_netcmd.c
@@ -88,25 +85,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${SDL2_LIBRARIES}
 )
 
-# NOW I do. 
 target_compile_options(${PROJECT_NAME} PRIVATE
-  $<$<C_COMPILER_ID:GNU,Clang>:
+	-DLINUX
     -fno-pie
     -Wno-int-conversion
     -fpermissive
     -g
-    -m486
+    #-m486
     -O3
     -ffast-math
     -fomit-frame-pointer
-  >
-  $<$<C_COMPILER_ID:MSVC>:
-    /wd4244
-    /permissive-
-  >
-)
-
-
-target_include_directories(${PROJECT_NAME} PRIVATE 
-	"${CMAKE_SOURCE_DIR}/../include"
 )

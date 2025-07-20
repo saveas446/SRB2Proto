@@ -15,6 +15,10 @@
 #include <SDL_rwops.h>
 #endif
 
+#ifdef LINUX
+typedef void* HANDLE;
+#endif
+
 // See Shutdown_xxx() routines.
 extern byte graphics_started;
 extern byte keyboard_started;

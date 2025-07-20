@@ -13,8 +13,6 @@
 
 typedef void (*com_func_t) (void);
 
-void    COM_AddCommand (char *name, com_func_t func);
-
 int     COM_Argc (void);
 char    *COM_Argv (int arg);   // if argv>argc, returns empty string
 char    *COM_Args (void);
@@ -98,7 +96,9 @@ typedef enum {
     MAXHELPCAT
 } helpcat_t;
 
-char* helpcats[MAXHELPCAT];
+extern char* helpcats[MAXHELPCAT];
+
+void    COM_AddCommand (char *name, char* helptext, helpcat_t helpcat, com_func_t func);
 
 struct CV_PossibleValue_s {
     int   value;
