@@ -30,7 +30,7 @@ CV_PossibleValue_t viewheight_cons_t[]={{16,"MIN"},{56,"MAX"},{0,NULL}};
 consvar_t cv_viewheight = {"viewheight","41", NULL, CAT_VIDEO, 0,viewheight_cons_t,NULL};
 
 //Fab:26-07-98:
-consvar_t cv_gravity = {"gravity","0.5", NULL, CAT_GAMECONFIG, CV_NETVAR|CV_FLOAT|CV_CALL|CV_NOINIT,NULL,CV_Gravity_OnChange}; // No longer required in autoexec.cfg! Tails 12-01-99
+consvar_t cv_gravity = {"gravity","0.5", "Controls the game's gravity.", CAT_GAMECONFIG, CV_NETVAR | CV_FLOAT | CV_CALL | CV_NOINIT,NULL,CV_Gravity_OnChange}; // No longer required in autoexec.cfg! Tails 12-01-99
 
 // just echo to everybody for multiplayer
 void CV_Gravity_OnChange (void)

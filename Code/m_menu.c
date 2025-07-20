@@ -918,11 +918,10 @@ menuitem_t GameOptionsMenu[]=
 {
 //    {IT_STRING | IT_CVAR,"Item Respawn"        ,&cv_itemrespawn        ,0}, Tails 11-09-99
 //    {IT_STRING | IT_CVAR,"Item Respawn time"   ,&cv_itemrespawntime    ,10}, Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Messages:"       ,&cv_showmessages    ,0},
-    {IT_STRING | IT_CVAR,"Enemy Respawn"     ,&cv_respawnmonsters    ,10}, // Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Enemy Respawn time",&cv_respawnmonsterstime,20}, // Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Fast Enemies"       ,&cv_fastmonsters       ,30}, // Tails 11-09-99
-    {IT_STRING | IT_CVAR,"Crosshair"       ,&cv_crosshair       ,40}
+    {IT_STRING | IT_CVAR,"Enemy Respawn"     ,&cv_respawnmonsters    ,0}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Enemy Respawn time",&cv_respawnmonsterstime,10}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Fast Enemies"       ,&cv_fastmonsters       ,20}, // Tails 11-09-99
+    {IT_STRING | IT_CVAR,"Crosshair"       ,&cv_crosshair       ,30}
 //    {IT_STRING | IT_CVAR,"Gravity"             ,&cv_gravity            ,50}, Tails 11-09-99
 //    {IT_STRING | IT_CVAR,"Solid corpse"        ,&cv_solidcorpse        ,60}, Tails 11-09-99
 //    {IT_STRING | IT_CVAR,"BloodTime"           ,&cv_bloodtime          ,70}, Tails 11-09-99
