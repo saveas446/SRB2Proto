@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(demo2ultimate C)
+project(NewMillenium C)
+
+find_package(SDL2 REQUIRED)
+
+include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME}
   am_map.c
   command.c
-  comptime.c
   d_clisrv.c
   d_main.c
   d_net.c
@@ -14,7 +17,6 @@ add_executable(${PROJECT_NAME}
   dstrings.c
   f_finale.c
   f_wipe.c
-  filesrch.c
   g_input.c
   hu_stuff.c
   i_tcp.c
@@ -69,18 +71,13 @@ add_executable(${PROJECT_NAME}
   r_bsp.c
   r_things.c
   s_sound.c
-  
-  win32/dx_error.c  
-  win32/mid2strm.c	
-  win32/win_dbg.c  
-  win32/win_net.c  
-  win32/win_sys.c
-  win32/fabdxlib.c  
-  win32/win_cd.c	
-  win32/win_dll.c  
-  win32/win_snd.c
-  win32/win_main.c
-  win32/win_vid.c
+ 
+  sdl2/i_cdmus.c
+  sdl2/i_main.c
+  sdl2/i_net.c
+  sdl2/i_sound.c
+  sdl2/i_system.c
+  sdl2/i_video.c
 )
 
 
@@ -88,14 +85,7 @@ add_executable(${PROJECT_NAME}
 target_link_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/../lib")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
-	fmod
-	dinput
-	dxguid 
-	dsound 
-	ddraw 
-	gdi32
-	winmm 
-	wsock32
+	${SDL2_LIBRARIES}
 )
 
 # NOW I do. 
@@ -104,10 +94,15 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -fno-pie
     -Wno-int-conversion
     -fpermissive
+    -g
+    -m486
+    -O3
+    -ffast-math
+    -fomit-frame-pointer
   >
   $<$<C_COMPILER_ID:MSVC>:
-    /wd4244         # disable conversion warnings
-    /permissive-    # make MSVC less permissive (closer to standard)
+    /wd4244
+    /permissive-
   >
 )
 
