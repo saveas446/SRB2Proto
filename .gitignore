@@ -445,3 +445,17 @@ Binaries/build.ninja
 *.ninja
 Code/.vscode/settings.json
 Binaries/NewMillenium
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+build/.cmake/api/v1/query/client-vscode/query.json
+build/.cmake/api/v1/reply/cache-v2-87375b73568a1041be23.json
+build/.cmake/api/v1/reply/cmakeFiles-v1-9c9660ff8267dd41803d.json
+build/.cmake/api/v1/reply/directory-.-Debug-f5ebdc15457944623624.json
+build/.cmake/api/v1/reply/index-2025-07-20T15-53-18-0595.json
+build/.cmake/api/v1/reply/target-NewMillenium-Debug-6958375caa4b0955a37d.json
+build/.cmake/api/v1/reply/toolchains-v1-46197055ddc1f38726a3.json
+build/.ninja_deps
+build/.ninja_log
+build/NewMillenium
+Code/.vscode/launch.json
