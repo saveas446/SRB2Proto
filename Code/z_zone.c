@@ -301,16 +301,23 @@ void Z_FreeTags( int           lowtag,
 {
     memblock_t* block;
     memblock_t* next;
+    int user, tag;
 
     SDL_Log("mainzone->blocklist.next: %p\n", mainzone->blocklist.next);
     for (block = mainzone->blocklist.next; block != &mainzone->blocklist; block = block->next)
     {
+        if (block == 0x2)
+            break;
+        // Just checking (!block->user) on its own before made the compiler think it was a pointer for some reason
+        user = (int)(block->user);
+        // Same thing here
+        tag = block->tag;
 
         // free block?
-        if (!block->user)
+        if (!user)
             continue;
 
-        if (block->tag >= lowtag && block->tag <= hightag)
+        if (tag >= lowtag && tag <= hightag)
             Z_Free ( (byte *)block+sizeof(memblock_t));
     }
 }
