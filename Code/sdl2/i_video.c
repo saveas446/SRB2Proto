@@ -217,9 +217,7 @@ int VID_SetMode(int modenum)
 		I_Error("I_StartupGraphics(): Could not create renderer!");
 
 	surface = SDL_CreateRGBSurfaceWithFormat(0, vid.width, vid.height, 8, SDL_PIXELFORMAT_INDEX8);
-	
-	// Init palette... again
-	I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+
 	window_surface = SDL_GetWindowSurface(SDL_window);
 
 	// allocate buffer
@@ -234,7 +232,7 @@ int VID_SetMode(int modenum)
 void I_StartupGraphics(void) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
-
+	
 	VID_SetMode(3);
 
 	graphics_started = true;

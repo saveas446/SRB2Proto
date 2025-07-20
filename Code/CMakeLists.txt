@@ -90,6 +90,7 @@ target_link_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/../lib")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	${SDL2_LIBRARIES}
+  m
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE
@@ -99,7 +100,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -fpermissive
     -g
     #-m486
-    -O3
+    -O0
     -ffast-math
     -fomit-frame-pointer
 )

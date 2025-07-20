@@ -53,13 +53,7 @@ ULONG I_GetTime(void)
 #else
 ULONG I_GetTime (void)
 {
-	ULONG basetime = 0;
 	ULONG ticks = SDL_GetTicks();
-
-	if (!basetime)
-		basetime = ticks;
-
-	ticks -= basetime;
 
 	ticks = (ticks*TICRATE);
 

@@ -108,7 +108,7 @@ byte GetAcktosend(int node)
 boolean noackret=0;
 
 // we have got a packet proceed the ack request and ack return
-boolean inline Processackpak()
+boolean Processackpak()
 {
    int i;
    boolean goodpacket=true;

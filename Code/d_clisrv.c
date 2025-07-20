@@ -1397,7 +1397,7 @@ void SendAllTics (void)
 
 extern fixed_t angleturn[];
 
-void inline CopyTic(ticcmd_t *a,ticcmd_t *b)
+void CopyTic(ticcmd_t *a,ticcmd_t *b)
 {
     memcpy(a,b,sizeof(ticcmd_t));
 #ifndef ABSOLUTEANGLE

@@ -179,8 +179,7 @@ void R_InitTranslationTables (void)
     W_ReadLump( W_GetNumForName("TRANSFIR"), transtables+0x30000 );
     W_ReadLump( W_GetNumForName("TRANSFX1"), transtables+0x40000 );
 
-    translationtables = Z_Malloc (256*(MAXSKINCOLORS-1)+255, PU_STATIC, 0);
-    translationtables = (byte *)(( (int)translationtables + 255 )& ~255);
+    translationtables = Z_Malloc(256*(MAXSKINCOLORS), PU_STATIC, 0);
 
     // translate just the 16 green colors
     for (i=0 ; i<256 ; i++)

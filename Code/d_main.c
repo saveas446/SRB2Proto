@@ -727,6 +727,12 @@ void IdentifyVersion (void)
     // Set gamemode to commercial Doom 2
     gamemode = commercial;
 
+    // get the current directory (possible problem on NT with "." as current dir)
+    if (getcwd(pathtemp, _MAX_PATH) != NULL)
+        doomwaddir = pathtemp;
+    else
+        doomwaddir = ".";
+
     // Copy contents of config.cfg to configfile for loading later
     sprintf(configfile, "%s/"CONFIGFILENAME, doomwaddir);
 
