@@ -277,6 +277,9 @@ static patch_t*         sbar;
 // 0-9, tall numbers
 static patch_t*         tallnum[10];
 
+// 0-9, tall numbers (Xmas 0.94 font)
+static patch_t*         tallnumxmas[10];
+
 // tall % sign
 static patch_t*         tallpercent;
 
@@ -936,6 +939,9 @@ static void ST_loadGraphics(void)
         sprintf(namebuf, "STTNUM%d", i);
         tallnum[i] = (patch_t *) W_CachePatchName(namebuf, PU_STATIC);
 
+        sprintf(namebuf, "XTTNUM%d", i);
+        tallnumxmas[i] = (patch_t*)W_CachePatchName(namebuf, PU_STATIC);
+
         sprintf(namebuf, "STYSNUM%d", i);
         shortnum[i] = (patch_t *) W_CachePatchName(namebuf, PU_STATIC);
     }
@@ -1043,6 +1049,7 @@ void ST_unloadGraphics(void)
     for (i=0;i<10;i++)
     {
         Z_ChangeTag(tallnum[i], PU_CACHE);
+        Z_ChangeTag(tallnumxmas[i], PU_CACHE);
         Z_ChangeTag(shortnum[i], PU_CACHE);
     }
     // unload tall percent
@@ -1469,17 +1476,25 @@ static inline int SCX( int x )
         return x;
 }
 
-
 //  Draw the status bar overlay, customisable : the user choose which
 //  kind of information to overlay
 //
-void ST_overlayDrawer (void)
+void ST_overlayDrawer(void)
 {
     //CONS_Printf("overlay draw %d\n",gametic);
-    char*  cmds;
+    char* cmds;
     char   c;
     int    i;
     pic_t* pic;
+
+    patch_t* tallnum2;
+
+    if (cv_fonttype.value == 0) {
+        tallnum2 = tallnum;
+    }
+    else if (cv_fonttype.value == 1) {
+        tallnum2 = tallnumxmas;
+    }
 
     cmds = cv_stbaroverlay.string;
 
@@ -1497,7 +1512,7 @@ void ST_overlayDrawer (void)
 //                             SCY(198)-(16*vid.dupy),
                              SCY(56)-(16*vid.dupy), // Ring score location Tails 10-31-99
                              plyr->health-1,        // Always have 1 ring when not dead fixed: Stealth 12-25-99
-                             tallnum,NULL);
+                             tallnum2,NULL);
           }
 
           else  //Added to prevent -1 rings 12-25-99 Stealth
@@ -1506,7 +1521,7 @@ void ST_overlayDrawer (void)
 //                             SCY(198)-(16*vid.dupy),
                              SCY(56)-(16*vid.dupy), // Ring score location Tails 10-31-99
                              plyr->health, 
-                             tallnum,NULL);
+                             tallnum2,NULL);
           }
            if (rendermode==render_soft)
                V_DrawScaledPatch (SCX(16),SCY(42), FG | V_NOSCALESTART,sbohealth); // Was a number I forget and 198 =) Tails 10-31-99
@@ -1520,7 +1535,7 @@ void ST_overlayDrawer (void)
                ST_drawOverlayNum(SCX(128), // Score Tails 03-01-2000
                                  SCY(9), // Location Tails 03-01-2000
                                  plyr->score,
-                                 tallnum,NULL);
+                                 tallnum2,NULL);
 
                if (rendermode==render_soft)
                    V_DrawScaledPatch (SCX(16),SCY(10), FG | V_NOSCALESTART,sbofrags); // Draw SCORE Tails 03-01-2000
@@ -1534,7 +1549,7 @@ void ST_overlayDrawer (void)
                ST_drawOverlayNum(SCX(234),
                                  SCY(198)-(16*vid.dupy),
                                  plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
-                                 tallnum,NULL);
+                                 tallnum2,NULL);
 
                if (rendermode==render_soft)
                    V_DrawScalePic (SCX(236),SCY(198)-(pic->height*vid.dupy),0,pic);
@@ -1556,7 +1571,7 @@ void ST_overlayDrawer (void)
            ST_drawOverlayNum(SCX(112), // Tails 02-29-2000
                              SCY(40)-(16*vid.dupy), // Draw the current time Tails 02-29-2000
                              plyr->armorpoints,
-                             tallnum,NULL);
+                             tallnum2,NULL);
 
            if (rendermode==render_soft)
                V_DrawScaledPatch (SCX(17),SCY(26), FG | V_NOSCALESTART,sboarmor); // TIME location Tails 02-29-2000

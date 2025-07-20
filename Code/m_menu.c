@@ -1380,8 +1380,8 @@ void M_ChangeControl(int choice)
 
 menuitem_t VideoOptionsMenu[] =
 {
-    {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Screen Size"     ,&cv_viewsize        ,40},
+    {IT_STRING | IT_CVAR,"HUD type"     ,&cv_viewsize        ,30},
+    {IT_STRING | IT_CVAR,"Font appearance"     ,&cv_fonttype        ,40},
     {IT_STRING | IT_CVAR
      | IT_CV_SLIDER     ,"Brightness"      ,&cv_usegamma        ,50},
     {IT_SUBMENU | IT_WHITESTRING,"Change Resolution..." ,&VidModeDef,80},
@@ -2009,10 +2009,9 @@ void M_EndGame(int choice)
 //
 
 void M_TimeAttack(void)
-    {
-    D_PageDrawer ("BOSSBACK");
-    
-    }
+{
+    D_PageDrawer ("BOSSBACK");    
+}
 
 //===========================================================================
 //                                 Quit Game

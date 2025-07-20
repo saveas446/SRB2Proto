@@ -190,51 +190,52 @@ void D_RegisterClientCommands (void)
   // register main variables
   //
     //register these so it is saved to config
-    CV_RegisterVar (&cv_playername);
-    CV_RegisterVar (&cv_playercolor);
-    CV_RegisterVar (&cv_weaponpref);
-    CV_RegisterVar (&cv_autoaim);
-    CV_RegisterVar (&cv_originalweaponswitch);
+    CV_RegisterVar(&cv_playername);
+    CV_RegisterVar(&cv_playercolor);
+    CV_RegisterVar(&cv_weaponpref);
+    CV_RegisterVar(&cv_autoaim);
+    CV_RegisterVar(&cv_originalweaponswitch);
 
     // r_things.c (skin NAME)
-    CV_RegisterVar (&cv_skin);
+    CV_RegisterVar(&cv_skin);
     // secondary player (splitscreen)
-    CV_RegisterVar (&cv_skin2);
-    CV_RegisterVar (&cv_playername2);
-    CV_RegisterVar (&cv_playercolor2);
+    CV_RegisterVar(&cv_skin2);
+    CV_RegisterVar(&cv_playername2);
+    CV_RegisterVar(&cv_playercolor2);
 
     //FIXME: not to be here.. but needs be done for config loading
-    CV_RegisterVar (&cv_usegamma);
-    CV_RegisterVar (&cv_viewsize);
+    CV_RegisterVar(&cv_usegamma);
+    CV_RegisterVar(&cv_viewsize);
+    CV_RegisterVar(&cv_fonttype);
 
     //m_menu.c
-    CV_RegisterVar (&cv_crosshair);
-    CV_RegisterVar (&cv_autorun);
-    CV_RegisterVar (&cv_invertmouse);
-    CV_RegisterVar (&cv_alwaysfreelook);
-    CV_RegisterVar (&cv_showmessages);
+    CV_RegisterVar(&cv_crosshair);
+    CV_RegisterVar(&cv_autorun);
+    CV_RegisterVar(&cv_invertmouse);
+    CV_RegisterVar(&cv_alwaysfreelook);
+    CV_RegisterVar(&cv_showmessages);
 
     //g_input.c
-    CV_RegisterVar (&cv_mousesens);
-    CV_RegisterVar (&cv_mlooksens);
+    CV_RegisterVar(&cv_mousesens);
+    CV_RegisterVar(&cv_mlooksens);
 
-    CV_RegisterVar (&cv_usemouse);
-    CV_RegisterVar (&cv_usejoystick);
-    CV_RegisterVar (&cv_allowjump);
-    CV_RegisterVar (&cv_allowautoaim);
+    CV_RegisterVar(&cv_usemouse);
+    CV_RegisterVar(&cv_usejoystick);
+    CV_RegisterVar(&cv_allowjump);
+    CV_RegisterVar(&cv_allowautoaim);
 
     //s_sound.c
-    CV_RegisterVar (&cv_soundvolume);
-    CV_RegisterVar (&cv_musicvolume);
-    CV_RegisterVar (&cv_numChannels);
+    CV_RegisterVar(&cv_soundvolume);
+    CV_RegisterVar(&cv_musicvolume);
+    CV_RegisterVar(&cv_numChannels);
 
     //i_cdmus.c
-    CV_RegisterVar (&cd_volume);
-    CV_RegisterVar (&cdUpdate);
+    CV_RegisterVar(&cd_volume);
+    CV_RegisterVar(&cdUpdate);
 
     // screen.c ?
-    CV_RegisterVar (&cv_scr_width);
-    CV_RegisterVar (&cv_scr_height);
+    CV_RegisterVar(&cv_scr_width);
+    CV_RegisterVar(&cv_scr_height);
 
     // add cheat commands, I'm bored of deh patches renaming the idclev ! :-)
     COM_AddCommand ("noclip", "Makes the player able to clip through walls.", CAT_CHEATS, Command_CheatNoClip_f);
@@ -242,22 +243,22 @@ void D_RegisterClientCommands (void)
     COM_AddCommand ("gimme", NULL, CAT_CHEATS, Command_CheatGimme_f);
 
     // p_mobj.c
-    CV_RegisterVar (&cv_itemrespawntime);
-    CV_RegisterVar (&cv_itemrespawn);
-    CV_RegisterVar (&cv_respawnmonsters);
-    CV_RegisterVar (&cv_respawnmonsterstime);
-    CV_RegisterVar (&cv_fastmonsters);
+    CV_RegisterVar(&cv_itemrespawntime);
+    CV_RegisterVar(&cv_itemrespawn);
+    CV_RegisterVar(&cv_respawnmonsters);
+    CV_RegisterVar(&cv_respawnmonsterstime);
+    CV_RegisterVar(&cv_fastmonsters);
 
     // WATER HACK TEST UNTIL FULLY FINISHED
     COM_AddCommand ("dev_water", "Development command. Allows you to set the water level for testing.", CAT_DEV, Command_Water_f);
 
     //misc
-    CV_RegisterVar (&cv_teamplay);
-    CV_RegisterVar (&cv_teamdamage);
-    CV_RegisterVar (&cv_fraglimit);
-    CV_RegisterVar (&cv_deathmatch);
-    CV_RegisterVar (&cv_timelimit);
-    CV_RegisterVar (&cv_playdemospeed);
+    CV_RegisterVar(&cv_teamplay);
+    CV_RegisterVar(&cv_teamdamage);
+    CV_RegisterVar(&cv_fraglimit);
+    CV_RegisterVar(&cv_deathmatch);
+    CV_RegisterVar(&cv_timelimit);
+    CV_RegisterVar(&cv_playdemospeed);
 
     COM_AddCommand ("load", NULL, CAT_GAME, Command_Load_f);
     RegisterNetXCmd(XD_LOADGAME,Got_LoadGamecmd);

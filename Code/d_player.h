@@ -175,8 +175,6 @@ typedef struct player_s
     int dashspeed; // dashing speed Tails 03-01-2000
 
     int typechar; // Which character? Tails 03-01-2000
-  
-
 } player_t;
 
 

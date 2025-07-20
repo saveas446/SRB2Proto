@@ -64,10 +64,12 @@ byte*     scr_borderpatch; // flat used to fill the reduced view borders
                            // set at ST_Init ()
 
 CV_PossibleValue_t gamma_cons_t[]={{0,"MIN"},{4,"MAX"},{0,NULL}};
-CV_PossibleValue_t viewsize_cons_t[]={{3,"MIN"},{12,"MAX"},{0,NULL}};
+CV_PossibleValue_t viewsize_cons_t[]={{10,"Doom/Doom 2"},{11,"SRB2 March 2000"},{12,"None"},{0,NULL}};
+CV_PossibleValue_t fonttype_cons_t[] = { {0,"SRB2 March 2000"},{1,"SRB2 Christmas 0.94"},{0,NULL} };
 
 consvar_t cv_usegamma = {"gamma","0", NULL, CAT_VIDEO, CV_SAVE,gamma_cons_t};
-consvar_t cv_viewsize = {"viewsize","11", NULL, CAT_VIDEO, CV_SAVE,viewsize_cons_t};      //3-11
+consvar_t cv_viewsize = {"viewsize","SRB2 March 2000", NULL, CAT_VIDEO, CV_SAVE,viewsize_cons_t};      //3-11
+consvar_t cv_fonttype = { "fonttype", "SRB2 March 2000", NULL, CAT_VIDEO, CV_SAVE, fonttype_cons_t};
 consvar_t cv_detaillevel = {"detaillevel","0", NULL, CAT_VIDEO, CV_SAVE,NULL}; // UNUSED
 
 
