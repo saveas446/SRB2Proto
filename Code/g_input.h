@@ -33,7 +33,7 @@
 
 #define NUMINPUTS       (KEY_2MOUSE1  +MOUSE2BUTTONS)   // 270
 
-enum
+typedef enum
 {
     gc_null = 0,        //a key/button mapped to gc_null has no effect
     gc_forward,

@@ -71,7 +71,6 @@ SOCKET  insocket,sendsocket;
 int     DOOMPORT = (IPPORT_USERRESERVED +0x1d );
 boolean nodeconnected[MAXNETNODES+1];
 
-
 char *UDP_AddrToStr(struct sockaddr_in *sk)
 {
     static char s[50];

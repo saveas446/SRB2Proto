@@ -11,6 +11,7 @@
 #include "s_sound.h"
 #include "r_main.h"
 #include "st_stuff.h"
+#include "d_items.h"
 
 #define BONUSADD        6
 

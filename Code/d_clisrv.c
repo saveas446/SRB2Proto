@@ -102,6 +102,10 @@ void D_Cleartic(int tic);
 
 extern  int      viewangleoffset;
 
+void (*I_NetGet) (void);
+void (*I_NetSend) (void);
+void (*I_NetShutdown) (void);
+void (*I_NetFreeNodenum) (int nodenum);
 
 // some software don't support largest packet
 // (original sersetup, not exactely, but the probabylity of sending a packet

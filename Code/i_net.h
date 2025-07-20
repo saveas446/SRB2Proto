@@ -86,10 +86,10 @@ extern doomcom_t *doomcom;
 // Called by D_SRB2Main.
 
 // to be defined by the network driver
-void (*I_NetGet) (void);
-void (*I_NetSend) (void);
-void (*I_NetShutdown) (void);
-void (*I_NetFreeNodenum) (int nodenum);
+extern void (*I_NetGet) (void);
+extern void (*I_NetSend) (void);
+extern void (*I_NetShutdown) (void);
+extern void (*I_NetFreeNodenum) (int nodenum);
 
 void I_InitNetwork (void);
 

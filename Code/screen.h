@@ -121,7 +121,7 @@ extern consvar_t cv_scr_height;
 
 
 // quick fix for tall/short skies, depending on bytesperpixel
-void (*skydrawerfunc[2]) (void);
+extern void (*skydrawerfunc[2]) (void);
 
 // from vid_vesa.c : user config video mode decided at VID_Init ();
 extern int      vid_modenum;

@@ -19,7 +19,7 @@
 #include "r_splats.h"   //faB: in dev.
 #endif
 
-    player_t *plyr;
+extern player_t *plyr;
 
 // protos.
 void CV_ViewHeight_OnChange (void);

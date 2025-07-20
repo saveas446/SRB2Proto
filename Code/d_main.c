@@ -723,34 +723,17 @@ void IdentifyVersion (void)
 #endif
     char* doomwaddir;
     char  pathtemp[_MAX_PATH];
-
-    doomwaddir = getenv("DOOMWADDIR");
-    if (!doomwaddir)
-    {
-        // get the current directory (possible problem on NT with "." as current dir)
-        if (getcwd(pathtemp, _MAX_PATH) != NULL)
-            doomwaddir = pathtemp;
-        else
-            doomwaddir = ".";
-    }
-
+    
     // Set gamemode to commercial Doom 2
     gamemode = commercial;
 
     // Copy contents of config.cfg to configfile for loading later
-#ifdef LINUX
-    home = getenv("HOME");
-    if (!home)
-        I_Error("Please set $HOME to your home directory");
-    sprintf(configfile, "%s/"CONFIGFILENAME, home);
-#else
     sprintf(configfile, "%s/"CONFIGFILENAME, doomwaddir);
-#endif
 
-    D_AddFile("doom2.wad");
-    D_AddFile("doom3.wad");
-    D_AddFile("srb2.wad");
-    D_AddFile("test2.wad");
+    D_AddFile("DOOM2.WAD");
+    D_AddFile("DOOM3.WAD");
+    D_AddFile("SRB2.WAD");
+    D_AddFile("test2.WAD");
 }
 
 //

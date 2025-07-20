@@ -98,7 +98,7 @@ int W_LoadWadFile (char *filename)
         {
         CONS_Printf ("Couldn't open %s\n", filename);
         return -1;
-    }
+        }
     }
 
     fstat(handle,&bufstat);

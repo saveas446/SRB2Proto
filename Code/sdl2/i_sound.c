@@ -167,7 +167,9 @@ void I_StartupSound(void){
 	SDL_setenv("SDL_AUDIODRIVER", "directsound", 1);
 #endif
 
+#ifdef HAVE_SDL_MIXER
 	Mix_AllocateChannels(cv_numChannels.value);
+#endif
 }
 
 void I_ShutdownSound(void){
@@ -211,6 +213,9 @@ int I_SoundIsPlaying(int handle)
 #endif
 }
 
+void I_SubmitSound() {}
+void I_UpdateSound() {}
+
 void I_UpdateSoundParams(int handle, int vol, int sep, int pitch)
 {
 	handle = vol = sep = pitch = 0;
@@ -252,7 +257,9 @@ void I_ResumeSong(int handle)
 
 void I_SetMusicVolume(int volume)
 {
+#ifdef HAVE_SDL_MIXER
 	Mix_VolumeMusic(volume << 2);
+#endif
 }
 
 int I_RegisterSong(void *data, int len)

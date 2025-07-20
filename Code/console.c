@@ -520,7 +520,7 @@ boolean CON_Responder (event_t *ev)
 static boolean shiftdown;
 
 
-// sequential completions … la 4dos
+// sequential completions ï¿½ la 4dos
 //TODO: inverse order (shift-tab)
 static char    completion[80];
 static int     comskips,varskips;
@@ -594,7 +594,7 @@ static int     comskips,varskips;
         //
         // sequential command completion forward and backward
 
-        // remember typing for several completions (…-la-4dos)
+        // remember typing for several completions (ï¿½-la-4dos)
         if (inputlines[inputline][input_cx-1] != ' ')
         {
             if (strlen (inputlines[inputline]+1)<80)
@@ -886,21 +886,16 @@ void CONS_Printf (char *fmt, ...)
     vsprintf (txt,fmt,argptr);
     va_end   (argptr);
 
-    // echo console prints to log file
-#ifdef HAVE_SDL
-    if (logstream != INVALID_HANDLE_VALUE)
-        I_FPrintf(logstream, "%s", txt);
-#endif
+    //if (logstream != INVALID_HANDLE_VALUE)
+    //    I_FPrintf(logstream, "%s", txt);
 
 #ifdef SRB2_WIN32
     if (logstream != INVALID_HANDLE_VALUE)
         FPrintf(logstream, "%s", txt);     // uses win_dbg.c FPrintf()
 #endif
 
-#ifndef HAVE_SDL
-    if(debugfile)
-        fprintf(debugfile,"%s",txt);
-#endif
+    //if(debugfile)
+    //    fprintf(debugfile,"%s",txt);
 
     if (!con_started || !graphics_started)
     {

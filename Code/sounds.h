@@ -6,7 +6,7 @@
 
 
 // 10 customisable sounds for Skins
-enum {
+typedef enum {
     SKSPLPAIN,
     SKSSLOP,
     SKSOOF,

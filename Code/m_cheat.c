@@ -204,7 +204,7 @@ int idkfa_armor=200;
 int idkfa_armor_class=2;
 int god_health=100;
 
-player_t *plyr;
+extern player_t *plyr;
 
 boolean cht_Responder (event_t* ev)
 {

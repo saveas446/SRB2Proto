@@ -51,6 +51,7 @@
 #include "i_video.h"
 #include "p_inter.h"
 #include "byteptr.h"
+#include "d_items.h"
 
 #include "i_joy.h"
 
