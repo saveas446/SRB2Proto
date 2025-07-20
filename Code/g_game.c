@@ -140,8 +140,8 @@ CV_PossibleValue_t showmessages_cons_t[]={{0,"Off"},{1,"On"},{2,"Not All"},{0,NU
 CV_PossibleValue_t crosshair_cons_t[]   ={{0,"Off"},{1,"Cross"},{2,"Angle"},{3,"Point"},{0,NULL}};
 
 consvar_t cv_crosshair      = {"crosshair"   ,"0", NULL, CAT_GAMECONFIG,  CV_SAVE,crosshair_cons_t};
-consvar_t cv_autorun        = {"autorun"     ,"0", NULL, CAT_GAMECONFIG,  CV_SAVE,CV_OnOff};
-consvar_t cv_invertmouse    = {"invertmouse" ,"0", NULL, CAT_INPUT,  CV_SAVE,CV_OnOff};
+consvar_t cv_autorun        = {"autorun"     ,"1", NULL, CAT_GAMECONFIG,  CV_SAVE,CV_OnOff};
+consvar_t cv_invertmouse    = {"invertmouse" ,"0", "Inverts mouse movement.", CAT_INPUT,  CV_SAVE,CV_OnOff};
 consvar_t cv_alwaysfreelook = {"alwaysmlook" ,"0", NULL, CAT_INPUT,  CV_SAVE,CV_OnOff};
 consvar_t cv_showmessages   = {"showmessages","1", NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,showmessages_cons_t,ShowMessage_OnChange};
 

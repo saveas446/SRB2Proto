@@ -80,17 +80,17 @@ void SendNameAndColor(void);
 void SendNameAndColor2(void);
 
 // these two are just meant to be saved to the config
-consvar_t cv_playername           = {"name"                ,"gi joe"   , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor};
-consvar_t cv_playercolor          = {"color"               ,"0"        , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor};
+consvar_t cv_playername           = {"name"                ,"sonic"   , "Changes the name of the player.", CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor};
+consvar_t cv_playercolor          = {"color"               ,"0"        ,"Changes the player's skin color.", CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor};
 // player's skin, saved for commodity, when using a favorite skins wad..
-consvar_t cv_skin                 = {"skin"                ,DEFAULTSKIN, NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor};
-consvar_t cv_weaponpref           = {"weaponpref"          ,"014576328", NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendWeaponPref};
-consvar_t cv_autoaim              = {"autoaim"             ,"1"        , NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
+consvar_t cv_skin                 = {"skin"                ,DEFAULTSKIN,"Changes the player's skin.", CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor};
+consvar_t cv_weaponpref           = {"weaponpref"          ,"014576328","Allows you to set which weapons are prioritized.", CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendWeaponPref};
+consvar_t cv_autoaim              = {"autoaim"             ,"1"        ,"Toggles auto-aim, which allows you to shoot enemies from below or above more easily.", CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
 consvar_t cv_originalweaponswitch = {"originalweaponswitch","0"        , NULL, CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,CV_OnOff,SendWeaponPref};
 // secondary player for splitscreen mode
-consvar_t cv_playername2          = {"name2"               ,"big b"    , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor2};
-consvar_t cv_playercolor2         = {"color2"              ,"1"        , NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor2};
-consvar_t cv_skin2                = {"skin2"               ,DEFAULTSKIN, NULL, CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor2};
+consvar_t cv_playername2          = {"name2"               ,"big b"    ,"Changes the second player's name (for splitscreen).", CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL,SendNameAndColor2};
+consvar_t cv_playercolor2         = {"color2"              ,"1"        ,"Changes the second player's skin color (for splitscreen).", CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor2};
+consvar_t cv_skin2                = {"skin2"               ,DEFAULTSKIN,"Changes the second player's skin (for splitscreen).", CAT_CUSTOMIZATION,  CV_SAVE | CV_CALL | CV_NOINIT,NULL /*skin_cons_t*/,SendNameAndColor2};
 
 
 CV_PossibleValue_t usemouse_cons_t[]={{0,"Off"},{1,"On"},{2,"Force"},{0,NULL}};
@@ -123,8 +123,8 @@ CV_PossibleValue_t usejoystick_cons_t[]={{0,"Off"}
 #endif
 #endif
 
-consvar_t cv_usemouse    = {"use_mouse","1", NULL, CAT_INPUT,  CV_SAVE | CV_CALL,usemouse_cons_t,I_StartupMouse};
-consvar_t cv_usejoystick = {"use_joystick","0", NULL, CAT_INPUT,  CV_SAVE | CV_CALL,usejoystick_cons_t,I_InitJoystick};
+consvar_t cv_usemouse    = {"use_mouse","1", "Controls whether a mouse is being used.", CAT_INPUT,  CV_SAVE | CV_CALL,usemouse_cons_t,I_StartupMouse};
+consvar_t cv_usejoystick = {"use_joystick","0", "Controls whether a joystick/controller is being used.", CAT_INPUT,  CV_SAVE | CV_CALL,usejoystick_cons_t,I_InitJoystick};
 
 CV_PossibleValue_t teamplay_cons_t[]={{0,"Off"},{1,"Color"},{2,"Skin"},{3,NULL}};
 CV_PossibleValue_t deathmatch_cons_t[]={{0,"Coop"},{1,"1"},{2,"2"},{3,"3"},{0,NULL}};
@@ -161,30 +161,30 @@ void D_RegisterClientCommands (void)
     RegisterNetXCmd(XD_EXITLEVEL,Got_ExitLevelcmd);
     RegisterNetXCmd(XD_PAUSE,Got_Pause);
 
-    COM_AddCommand ("playdemo", NULL, CAT_GAME, Command_Playdemo_f);
-    COM_AddCommand ("timedemo", NULL, CAT_GAME, Command_Timedemo_f);
-    COM_AddCommand ("stopdemo", NULL, CAT_GAME, Command_Stopdemo_f);
-    COM_AddCommand ("map", NULL, CAT_GAME, Command_Map_f);
+    COM_AddCommand ("playdemo", "Plays back the demo which name is specified.", CAT_GAME, Command_Playdemo_f);
+    COM_AddCommand ("timedemo", "Plays back the demo which name is specified (like playdemo), and times how long it took to play upon completion.", CAT_GAME, Command_Timedemo_f);
+    COM_AddCommand ("stopdemo", "Stops the currently playing demo.", CAT_GAME, Command_Stopdemo_f);
+    COM_AddCommand ("map", "Warps to the specified map.", CAT_GAME, Command_Map_f);
 
-    COM_AddCommand ("addfile", NULL, CAT_GAME, Command_Addfile);
-    COM_AddCommand ("pause", NULL, CAT_GAME, Command_Pause);
+    COM_AddCommand ("addfile", "Loads the WAD file specified.", CAT_GAME, Command_Addfile);
+    COM_AddCommand ("pause", "Pauses the game.", CAT_GAME, Command_Pause);
 
-    COM_AddCommand ("turbo", NULL, CAT_GAMECONFIG, Command_Turbo_f);     // turbo speed
-    COM_AddCommand ("version", NULL, CAT_MISC, Command_Version_f);
-    COM_AddCommand ("quit", NULL, CAT_MISC, Command_Quit_f);
+    COM_AddCommand ("turbo", "Allows you to change the game speed.", CAT_GAMECONFIG, Command_Turbo_f);     // turbo speed
+    COM_AddCommand ("version", "Prints the game version, and the compile date and time.", CAT_MISC, Command_Version_f);
+    COM_AddCommand ("quit", "Quits the game.", CAT_MISC, Command_Quit_f);
 
     COM_AddCommand ("chatmacro", NULL, CAT_MULTIPLAYER, Command_Chatmacro_f); // hu_stuff.c
     COM_AddCommand ("setcontrol", NULL, CAT_INPUT, Command_Setcontrol_f);
     COM_AddCommand ("setcontrol2", NULL, CAT_INPUT, Command_Setcontrol2_f);
 
-    COM_AddCommand ("frags", NULL, CAT_MULTIPLAYER, Command_Frags_f);
-    COM_AddCommand ("teamfrags", NULL, CAT_MULTIPLAYER, Command_TeamFrags_f);
+    COM_AddCommand ("frags", "Shows the frag table.", CAT_MULTIPLAYER, Command_Frags_f);
+    COM_AddCommand ("teamfrags", "Shows the frag table for teams.", CAT_MULTIPLAYER, Command_TeamFrags_f);
 
-    COM_AddCommand ("saveconfig", NULL, CAT_MISC, Command_SaveConfig_f);
-    COM_AddCommand ("loadconfig", NULL, CAT_MISC, Command_LoadConfig_f);
-    COM_AddCommand ("changeconfig", NULL, CAT_MISC, Command_ChangeConfig_f);
-    COM_AddCommand ("exitlevel", NULL, CAT_GAME, Command_ExitLevel_f);
-    COM_AddCommand ("screenshot", NULL, CAT_MISC, M_ScreenShot);
+    COM_AddCommand ("saveconfig", "Saves the current game configuration to a specified config file.", CAT_MISC, Command_SaveConfig_f);
+    COM_AddCommand ("loadconfig", "Loads the game configuration from a specified config file.", CAT_MISC, Command_LoadConfig_f);
+    COM_AddCommand ("changeconfig", "Saves the current game configuration to config.cfg and loads the specified config file.", CAT_MISC, Command_ChangeConfig_f);
+    COM_AddCommand ("exitlevel", "Completes the current level.", CAT_GAME, Command_ExitLevel_f);
+    COM_AddCommand ("screenshot", "Takes a screenshot in PCX format.", CAT_MISC, M_ScreenShot);
 
   //
   // register main variables
@@ -249,7 +249,7 @@ void D_RegisterClientCommands (void)
     CV_RegisterVar (&cv_fastmonsters);
 
     // WATER HACK TEST UNTIL FULLY FINISHED
-    COM_AddCommand ("dev_water", NULL, CAT_DEV, Command_Water_f);
+    COM_AddCommand ("dev_water", "Development command. Allows you to set the water level for testing.", CAT_DEV, Command_Water_f);
 
     //misc
     CV_RegisterVar (&cv_teamplay);

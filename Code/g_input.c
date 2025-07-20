@@ -17,10 +17,10 @@
 CV_PossibleValue_t mousesens_cons_t[]={{1,"MIN"},{MAXMOUSESENSITIVITY,"MAXCURSOR"},{MAXINT,"MAX"},{0,NULL}};
 
 // mouse values are used once
-consvar_t  cv_mousesens    = {"mousesens","10", NULL, CAT_INPUT,  CV_SAVE,mousesens_cons_t};
-consvar_t  cv_mlooksens    = {"mlooksens","10", NULL, CAT_INPUT,  CV_SAVE,mousesens_cons_t};
-consvar_t  cv_allowjump    = {"allowjump","1", NULL, CAT_INPUT,  CV_NETVAR,CV_OnOff};
-consvar_t  cv_allowautoaim = {"allowautoaim","1", NULL, CAT_INPUT,  CV_NETVAR,CV_OnOff};
+consvar_t  cv_mousesens    = {"mousesens","10", "Controls the mouse sensitivity.", CAT_INPUT,  CV_SAVE,mousesens_cons_t};
+consvar_t  cv_mlooksens    = {"mlooksens","10", "Controls how sensitive mouselook is.", CAT_INPUT,  CV_SAVE,mousesens_cons_t};
+consvar_t  cv_allowjump    = {"allowjump","1", "Enables/disables jumping. If you are the server, this enables/disables jumping for all players.", CAT_INPUT,  CV_NETVAR,CV_OnOff};
+consvar_t  cv_allowautoaim = {"allowautoaim","1", "Enables/disables auto-aim. (See \"help autoaim\" for what auto-aim does.) If you are the server this enables/disables auto-aim for all players.", CAT_INPUT,  CV_NETVAR,CV_OnOff};
 
 int             mousex;
 int             mousey;

@@ -114,11 +114,11 @@ consvar_t   cons_msgtimeout = {"con_hudtime","5", NULL, CAT_CONSOLE, CV_SAVE,CV_
 consvar_t   cons_speed = {"con_speed","8", NULL, CAT_CONSOLE,  CV_CALL|CV_SAVE,CV_Unsigned,&CONS_speed_Change};
 
 // percentage of screen height to use for console
-consvar_t   cons_height = {"con_height","50", NULL, CAT_CONSOLE,  CV_SAVE,CV_Unsigned};
+consvar_t   cons_height = {"con_height","50", "Controls the percentage of the screen the console takes up.", CAT_CONSOLE,  CV_SAVE,CV_Unsigned};
 
 CV_PossibleValue_t backpic_cons_t[]={{0,"translucent"},{1,"picture"},{0,NULL}};
 // whether to use console background picture, or translucent mode
-consvar_t   cons_backpic = {"con_backpic","0", NULL, CAT_CONSOLE,  CV_SAVE,backpic_cons_t};
+consvar_t   cons_backpic = {"con_backpic","0", "Controls whether the console uses a picture for its background or a transparent color.", CAT_CONSOLE,  CV_SAVE,backpic_cons_t};
 
 
 //  Check CONS_speed value (must be positive and >0)

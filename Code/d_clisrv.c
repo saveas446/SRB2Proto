@@ -883,8 +883,8 @@ void D_ClientServerInit (void)
 
     RegisterNetXCmd(XD_EXIT,ExecuteExitCmd);
     RegisterNetXCmd(XD_QUIT,ExecuteQuitCmd);
-    COM_AddCommand("getplayernum", NULL, CAT_MULTIPLAYER, Command_GetPlayerNum);
-    COM_AddCommand("kick", NULL, CAT_MULTIPLAYER, Command_Kick);
+    COM_AddCommand("getplayernum", "Prints the player number of the player whose name is specified.", CAT_MULTIPLAYER, Command_GetPlayerNum);
+    COM_AddCommand("kick", "Kicks the specified player name from the server. Only works if you are the server.", CAT_MULTIPLAYER, Command_Kick);
 
 #ifdef JOININGAME
     CV_RegisterVar (&cv_allownewplayer);
