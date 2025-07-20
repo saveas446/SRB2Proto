@@ -94,7 +94,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE
-	-DLINUX
+  $<$<C_COMPILER_ID:GNU,Clang>:
+    -DLINUX
+    -DHAVE_SDL
     -fPIE
     -Wno-int-conversion
     -fpermissive
@@ -103,4 +105,15 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -O0
     -ffast-math
     -fomit-frame-pointer
+  >
+ $<$<C_COMPILER_ID:MSVC>:
+	/DLINUX 
+	/DHAVE_SDL 
+	/wd4244 
+	/Zi 
+	/Od 
+	/fp:fast 
+	/Oy 
+	/arch:IA32
+ >
 )

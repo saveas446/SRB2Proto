@@ -302,12 +302,9 @@ void Z_FreeTags( int           lowtag,
     memblock_t* block;
     memblock_t* next;
 
-    for (block = mainzone->blocklist.next ;
-         block != &mainzone->blocklist ;
-         block = next)
+    SDL_Log("mainzone->blocklist.next: %p\n", mainzone->blocklist.next);
+    for (block = mainzone->blocklist.next; block != &mainzone->blocklist; block = block->next)
     {
-        // get link before freeing
-        next = block->next;
 
         // free block?
         if (!block->user)

@@ -894,6 +894,10 @@ void CONS_Printf (char *fmt, ...)
         FPrintf(logstream, "%s", txt);     // uses win_dbg.c FPrintf()
 #endif
 
+#ifdef HAVE_SDL
+    I_OutputMsg("%s", txt);
+#endif
+
     //if(debugfile)
     //    fprintf(debugfile,"%s",txt);
 

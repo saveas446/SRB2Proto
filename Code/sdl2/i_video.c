@@ -267,7 +267,8 @@ void I_ReadScreen(byte *scr)
 	SDL_memcpy(scr, vid.buffer, vid.width * vid.height * vid.bpp);
 }
 
-#if 0
+// For some reason, I get a message about this not existing when building on Linux
+#if _WIN32
 void VID_BlitLinearScreen(byte* srcptr, byte* destptr, int width, int height, int srcrowbytes, int destrowbytes){
 	if (srcrowbytes == destrowbytes)
 	{

@@ -209,7 +209,7 @@
       <Filter>R_Render</Filter>
     </ClCompile>
     <ClCompile Include="W_wad.c">
-      <Filter>W_Wad</Filter>
+      <Filter>Win32App\W_Wad</Filter>
     </ClCompile>
     <ClCompile Include="Wi_stuff.c">
       <Filter>H_Hud</Filter>
@@ -466,7 +466,7 @@
       <Filter>R_Render</Filter>
     </ClInclude>
     <ClInclude Include="W_wad.h">
-      <Filter>W_Wad</Filter>
+      <Filter>Win32App\W_Wad</Filter>
     </ClInclude>
     <ClInclude Include="Wi_stuff.h">
       <Filter>H_Hud</Filter>
@@ -524,7 +524,7 @@
     <Filter Include="S_Sounds">
       <UniqueIdentifier>{2747e110-3292-4bc7-89c9-51a5663bc8d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="W_Wad">
+    <Filter Include="Win32App\W_Wad">
       <UniqueIdentifier>{13d8ff25-5163-4047-ab58-9d04c7b15703}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

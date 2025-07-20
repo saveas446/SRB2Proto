@@ -582,10 +582,9 @@ void R_InitColormaps (void)
     // Load in the light tables,
     //  256 byte align tables.
     lump = W_GetNumForName("COLORMAP");
-    length = W_LumpLength (lump) + 65535;
+    length = W_LumpLength (lump);
     // now 64k aligned for smokie test...
     colormaps = Z_Malloc (length, PU_STATIC, 0);
-    colormaps = (byte *)( ((int)colormaps + 65535)&0xffff0000UL);
     W_ReadLump (lump,colormaps);
 }
 
