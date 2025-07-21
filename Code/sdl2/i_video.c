@@ -150,6 +150,9 @@ static void SetSDLIcon(SDL_Window* window)
 void I_ShutdownGraphics(void){
 	SDL_DestroyRenderer(SDL_renderer);
 	SDL_DestroyWindow(SDL_window);
+	SDL_FreeSurface(surface);
+	free(vid.buffer);
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	graphics_started = false;
 }
 

@@ -173,7 +173,7 @@ void I_StartupSound(void){
 }
 
 void I_ShutdownSound(void){
-	
+	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
 //
