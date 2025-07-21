@@ -20,7 +20,7 @@ int SDL_main(int argc, char** argv)
 	// init logstream
 	logstream = SDL_RWFromFile("sdllog.txt", "a");
 	if (!logstream)
-		I_Error("Unable to initialize log file.");
+		I_Error("Unable to get write access for log file. \n Are you running multiple instances of NewMillenium?");
 
 	// startup SRB2
 	CONS_Printf ("Setting up SRB2...\n");
