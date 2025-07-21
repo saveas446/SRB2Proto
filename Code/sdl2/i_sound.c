@@ -15,6 +15,9 @@
 Mix_Music* music;
 #endif
 
+CV_PossibleValue_t midibackend_cons_t[] = { {0,"Native"},{1,"FluidSynth"},{0,NULL} };
+consvar_t cv_midibackend = {"midibackend", "Native", "Controls whether SDL2 plays audio using native playback or FluidSynth.", CAT_SOUND, CV_SAVE, midibackend_cons_t, NULL, 0, NULL, NULL};
+
 byte sound_started = 0;
 
 #ifdef HAVE_SDL_MIXER

@@ -42,6 +42,7 @@
 #include "w_wad.h"
 #include "p_local.h"
 #include "p_fab.h"
+#include "i_sound.h"
 
 extern boolean          chat_on;         // in heads-up code
 extern byte*            whitemap;        //initted by console
@@ -173,7 +174,7 @@ void M_GameOption(int choice);
 void M_NetOption(int choice);
 
 menu_t MainDef,SinglePlayerDef,MultiPlayerDef,SetupMultiPlayerDef,
-       EpiDef,NewDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundDef,
+       EpiDef,NewDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundOptionsDef,SoundDef,
        ReadDef2,ReadDef1,SaveDef,LoadDef,ControlDef2,GameOptionDef,
        NetOptionDef;
 
@@ -854,7 +855,7 @@ void M_VerifyNightmare(int ch)
 menuitem_t OptionsMenu[]=
 {
     {IT_CALL   | IT_PATCH,"M_GAMOPT"  ,M_GameOption,'g'},
-    {IT_SUBMENU | IT_PATCH,"M_SVOL"  ,&SoundDef  ,'s'},
+    {IT_SUBMENU | IT_PATCH,"M_SNDOPT"  ,&SoundOptionsDef,'s'},
     {IT_SUBMENU | IT_PATCH,"M_VIDOPT" ,&VideoOptionsDef,'v'},
     {IT_SUBMENU | IT_PATCH,"M_CONOPT",&ControlOptionsDef,'c'}
 };
@@ -1101,6 +1102,28 @@ void M_DrawReadThis2(void)
 //                        SOUND VOLUME MENU
 //===========================================================================
 void M_DrawSound(void);
+
+
+//added:10-02-98: note: alphaKey member is the y offset
+menuitem_t SoundOptionsMenu[] =
+{
+#ifdef HAVE_SDL
+    {IT_STRING | IT_CVAR,"MIDI backend",&cv_midibackend,40},
+#endif
+    {IT_WHITESTRING | IT_SUBMENU,"Sound Volume",&SoundDef,50},
+};
+
+menu_t  SoundOptionsDef =
+{
+    "M_SNDOPT",
+    sizeof(SoundOptionsMenu) / sizeof(menuitem_t),
+    &SoundOptionsDef,
+    SoundOptionsMenu,
+    M_DrawGenericMenu,
+    60,40,
+    0
+};
+
 
 void M_SfxVol(int choice);
 void M_MusicVol(int choice);

@@ -27,6 +27,11 @@
 #include "sounds.h"
 
 
+// Special consvar for deciding between native and fluidsynth
+#ifdef HAVE_SDL
+extern consvar_t cv_midibackend;
+#endif
+
 void* I_GetSfx (sfxinfo_t*  sfx);
 void  I_FreeSfx (sfxinfo_t* sfx);
 
