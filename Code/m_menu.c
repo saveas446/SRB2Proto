@@ -184,6 +184,7 @@ menu_t MainDef,SinglePlayerDef,MultiPlayerDef,SetupMultiPlayerDef,
 void M_DrawGenericMenu(void)
 {
     int x,y,i,cursory;
+    char newname[8];
 
     // DRAW MENU
     x = currentMenu->x;
@@ -202,10 +203,19 @@ void M_DrawGenericMenu(void)
             cursory=y;
         switch (currentMenu->menuitems[i].status & IT_DISPLAY) {
            case IT_PATCH  :
-               if( currentMenu->menuitems[i].name &&
-                   currentMenu->menuitems[i].name[0] )
-                   V_DrawScaledPatch (x,y,0,
-                                      W_CachePatchName(currentMenu->menuitems[i].name ,PU_CACHE));
+               if (currentMenu->menuitems[i].name && currentMenu->menuitems[i].name[0]) {           
+                   // strcpy but worse
+                   for (int j = 0; j < 8; j++) {
+                       newname[j] = currentMenu->menuitems[i].name[j];
+                   }
+                   if (cv_fonttype.value == 1) {
+                       // Use X_****** instead of M_****** if we're using the Xmas 0.94 font
+                       newname[0] = 'X';
+                       V_DrawScaledPatch(x, y, 0, W_CachePatchName(newname, PU_CACHE));
+                   } else {
+                       V_DrawScaledPatch(x, y, 0, W_CachePatchName(currentMenu->menuitems[i].name, PU_CACHE));
+                   }
+               }
            case IT_DYBIGSPACE:
                y += LINEHEIGHT;
                break;

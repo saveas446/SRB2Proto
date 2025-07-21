@@ -4,6 +4,7 @@
 #ifdef LINUX
 #define O_BINARY 0
 #include <linux/limits.h>
+#include <dirent.h> 
 #endif
 
 #include <malloc.h>
@@ -11,8 +12,8 @@
 #ifndef __WIN32__
 #include <unistd.h>
 #endif
-#include <dirent.h> 
 
+#include "d_main.h"
 #include "doomdef.h"
 #include "doomtype.h"
 #include "w_wad.h"
