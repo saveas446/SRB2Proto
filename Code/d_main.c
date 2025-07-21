@@ -744,7 +744,7 @@ int access_case_insensitive(const char *pathname, mode_t mode)
         I_Error("access_case_insensitive(): opendir failed");
     }
 #else
-    return open(pathname, flags, mode);
+    return access(pathname, mode);
 #endif
 }
 

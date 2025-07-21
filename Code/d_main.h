@@ -4,6 +4,11 @@
 #ifndef __D_MAIN__
 #define __D_MAIN__
 
+#ifdef _WIN32
+typedef unsigned int mode_t;
+#endif
+
+
 #include "d_event.h"
 #include "w_wad.h"   // for MAX_WADFILES
 
