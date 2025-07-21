@@ -271,7 +271,9 @@ int I_StartupSystem(void)
 	return -1;
 }
 
-void I_ShutdownSystem(void){}
+void I_ShutdownSystem(void){
+	SDL_Quit();
+}
 
 char *I_GetUserName(void)
 {

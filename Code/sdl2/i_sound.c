@@ -176,6 +176,9 @@ void I_StartupSound(void){
 }
 
 void I_ShutdownSound(void){
+	Mix_FreeMusic(music);
+	Mix_CloseAudio();
+	Mix_Quit();
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
