@@ -6,7 +6,9 @@
 //      and call the startup functions.
 
 #ifndef __WIN32__
+#include <dirent.h>             // for dirent, readdir
 #include <unistd.h>             // for access
+#include <linux/limits.h>       // for PATH_MAX
 #endif
 
 #include <fcntl.h>
@@ -716,6 +718,36 @@ gamemode_t GetDoomVersion (char* wadfile)
         return retail;      // Ultimate
 }
 
+// Doom Legacy is designed to be case insensitive when it comes to inputting file names, so here's a function to open files that way
+int access_case_insensitive(const char *pathname, mode_t mode) 
+{
+#ifdef LINUX
+    char cwd[PATH_MAX];
+    if (!getcwd(cwd, sizeof(cwd)))
+        I_Error("access_case_insensitive(): getcwd failed");
+
+    DIR *d;
+    struct dirent *dir;
+    d = opendir(cwd);
+    if (d) {
+        while ((dir = readdir(d)) != NULL) {
+            if (!strcasecmp(dir->d_name, pathname)) {
+                // Found a matching file, construct the full path
+                char fullpath[PATH_MAX];
+                snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, dir->d_name);
+                closedir(d);
+                return access(fullpath, mode);
+            }
+        }
+        closedir(d);
+    } else {
+        I_Error("access_case_insensitive(): opendir failed");
+    }
+#else
+    return open(pathname, flags, mode);
+#endif
+}
+
 void IdentifyVersion (void)
 {
 #ifdef LINUX
@@ -735,8 +767,12 @@ void IdentifyVersion (void)
 
     // Copy contents of config.cfg to configfile for loading later
     sprintf(configfile, "%s/"CONFIGFILENAME, doomwaddir);
-
-    D_AddFile("DOOM2.WAD");
+    if (!access("DOOM2.WAD", R_OK)) {
+        D_AddFile("DOOM2.WAD");
+    } else {
+        // Helpful message for anybody who doesn't have DOOM2.WAD
+        I_Error("Hey there! It seems you don't have a copy of DOOM2.WAD which means it's either not in your NewMillennium folder,\n you haven't bought Doom 2, or I've made a terrible mistake.\n If you haven't bought Doom 2, you can get it from Steam or GOG.com.\n You can also use the FreeDoom 2 IWAD which I haven't tested, but should work just fine.\n");
+    }
     D_AddFile("DOOM3.WAD");
     D_AddFile("SRB2.WAD");
     D_AddFile("test2.WAD");

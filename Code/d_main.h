@@ -37,6 +37,11 @@ void D_DoAdvanceDemo (void);
 //
 // BASE LEVEL
 //
+
+// Just incase I need this in another .c file
+extern int access_case_insensitive(const char *pathname, mode_t mode);
+
+
 void D_PageTicker (void);
 // pagename is lumpname of a 320x200 patch to fill the screen
 void D_PageDrawer (char* pagename);
