@@ -144,7 +144,7 @@ consvar_t cv_crosshair      = {"crosshair"   ,"0", NULL, CAT_GAMECONFIG,  CV_SAV
 consvar_t cv_autorun        = {"autorun"     ,"1", NULL, CAT_GAMECONFIG,  CV_SAVE,CV_OnOff};
 consvar_t cv_invertmouse    = {"invertmouse" ,"0", "Inverts mouse movement.", CAT_INPUT,  CV_SAVE,CV_OnOff};
 consvar_t cv_alwaysfreelook = {"alwaysmlook" ,"0", NULL, CAT_INPUT,  CV_SAVE,CV_OnOff};
-consvar_t cv_showmessages   = {"showmessages","1", "Enables extra messages for various things, such as collecting rings.", CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,showmessages_cons_t,ShowMessage_OnChange};
+consvar_t cv_showmessages   = {"showmessages","0", "Enables extra messages for various things, such as collecting rings.", CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,showmessages_cons_t,ShowMessage_OnChange};
 
 #if MAXPLAYERS>32
 #error please update "player_name" table using the new value for MAXPLAYERS

@@ -3,6 +3,7 @@
 // added for linux 19990220 by Kin
 #ifdef LINUX
 #define O_BINARY 0
+#include <linux/limits.h>
 #endif
 
 #include <malloc.h>
@@ -10,6 +11,7 @@
 #ifndef __WIN32__
 #include <unistd.h>
 #endif
+#include <dirent.h> 
 
 #include "doomdef.h"
 #include "doomtype.h"
@@ -45,6 +47,35 @@ wadfile_t*   wadfiles[MAX_WADFILES];    // 0 to numwadfiles-1 are valid
 int                     reloadlump;
 char*                   reloadname;
 
+// Doom Legacy is designed to be case insensitive when it comes to inputting file names, so here's a function to open files that way
+int open_case_insensitive(const char *pathname, int flags, mode_t mode) 
+{
+#ifdef LINUX
+    char cwd[PATH_MAX];
+    if (!getcwd(cwd, sizeof(cwd)))
+        I_Error("open_case_insensitive(): getcwd failed");
+
+    DIR *d;
+    struct dirent *dir;
+    d = opendir(cwd);
+    if (d) {
+        while ((dir = readdir(d)) != NULL) {
+            if (!strcasecmp(dir->d_name, pathname)) {
+                // Found a matching file, construct the full path
+                char fullpath[PATH_MAX];
+                snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, dir->d_name);
+                closedir(d);
+                return open(fullpath, flags, mode);
+            }
+        }
+        closedir(d);
+    } else {
+        I_Error("open_case_insensitive(): opendir failed");
+    }
+#else
+    return open(pathname, flags, mode);
+#endif
+}
 
 
 //  Allocate a wadfile, setup the lumpinfo (directory) and
@@ -83,12 +114,12 @@ int W_LoadWadFile (char *filename)
     }
 
     // open wad file
-    if ( (handle = open (filename,O_RDONLY|O_BINARY,0666)) == -1)
+    if ( (handle = open_case_insensitive (filename,O_RDONLY|O_BINARY,0666)) == -1)
     {
         nameonly(filename); // leave full path here
         if(recsearch(filename,0))
         {
-            if ( (handle = open (filename,O_RDONLY|O_BINARY,0666)) == -1)
+            if ( (handle = open_case_insensitive(filename,O_RDONLY|O_BINARY,0666)) == -1)
             {
                 CONS_Printf ("Can't open %s\n", filename);
                 return -1;

@@ -381,7 +381,7 @@ int WINAPI HandledWinMain(HINSTANCE hInstance,
     myInstance = hInstance;
     
     // open a dummy window, both 3dfx Glide and DirectX need one.
-    if ( (hWndMain = OpenMainWindow(hInstance,nCmdShow,"NewMillenium (Win32 backend)")) == NULL)
+    if ( (hWndMain = OpenMainWindow(hInstance,nCmdShow,"NewMillennium (Win32 backend)")) == NULL)
     {
         tlErrorMessage("Couldn't open window");
         return FALSE;

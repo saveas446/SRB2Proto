@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(NewMillenium C)
+project(NewMillennium C)
 
 find_package(SDL2 REQUIRED)
 

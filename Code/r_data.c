@@ -478,6 +478,8 @@ void R_LoadTextures (void)
         texture->width  = SHORT(mtexture->width);
         texture->height = SHORT(mtexture->height);
         texture->patchcount = SHORT(mtexture->patchcount);
+        
+        mtexture->name[8] = 0; // make sure it's null terminated
 
         memcpy (texture->name, mtexture->name, sizeof(texture->name));
         mpatch = &mtexture->patches[0];
