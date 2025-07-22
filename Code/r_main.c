@@ -105,7 +105,7 @@ lighttable_t*           zlight[LIGHTLEVELS][MAXLIGHTZ];
 // bumped light from gun blasts
 int                     extralight;
 
-consvar_t cv_chasecam = {"chasecam","0", NULL, CAT_GAMECONFIG, 0,CV_OnOff};
+consvar_t cv_chasecam = {"chasecam","On", NULL, CAT_GAMECONFIG, 0,CV_OnOff};
 
 consvar_t cv_psprites = {"playersprites","1", NULL, CAT_GAMECONFIG, 0,CV_OnOff};
 consvar_t cv_perspcorr = {"perspectivecrunch","0", NULL, CAT_VIDEO, 0,CV_OnOff};

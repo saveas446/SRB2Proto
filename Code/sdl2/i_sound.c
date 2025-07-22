@@ -63,7 +63,7 @@ static Mix_Chunk* ds2chunk(void* stream)
 		newsamples = samples << 2;
 		break;
 	default:
-		frac = (44100 << FRACBITS) / (UINT32)freq;
+		frac = (44100 << FRACBITS) / (int)freq;
 		if (!(frac & 0xFFFF)) // other solid multiples (change if FRACBITS != 16)
 			newsamples = samples * (frac >> FRACBITS);
 		else // strange and unusual fractional frequency steps, plus anything higher than 44100hz.
@@ -75,7 +75,7 @@ static Mix_Chunk* ds2chunk(void* stream)
 	sound = Z_Malloc(newsamples << 2, PU_SOUND, NULL); // samples * frequency shift * bytes per sample * channels
 
 	s = (char*)stream2;
-	d = (INT16*)sound;
+	d = (short*)sound;
 
 	i = 0;
 	switch (freq)
@@ -83,7 +83,7 @@ static Mix_Chunk* ds2chunk(void* stream)
 	case 44100: // already at the same rate? well that makes it simple.
 		while (i++ < samples)
 		{
-			o = ((INT16)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
+			o = ((short)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
 			*d++ = o; // left channel
 			*d++ = o; // right channel
 		}
@@ -91,7 +91,7 @@ static Mix_Chunk* ds2chunk(void* stream)
 	case 22050: // unwrap 2x
 		while (i++ < samples)
 		{
-			o = ((INT16)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
+			o = ((short)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
 			*d++ = o; // left channel
 			*d++ = o; // right channel
 			*d++ = o; // left channel
@@ -101,7 +101,7 @@ static Mix_Chunk* ds2chunk(void* stream)
 	case 11025: // unwrap 4x
 		while (i++ < samples)
 		{
-			o = ((INT16)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
+			o = ((short)(*s++) + 0x80) << 8; // changed signedness and shift up to 16 bits
 			*d++ = o; // left channel
 			*d++ = o; // right channel
 			*d++ = o; // left channel
@@ -114,10 +114,10 @@ static Mix_Chunk* ds2chunk(void* stream)
 		break;
 	default: // convert arbitrary hz to 44100.
 		step = 0;
-		frac = ((UINT32)freq << FRACBITS) / 44100 + 1; //Add 1 to counter truncation.
+		frac = ((int)freq << FRACBITS) / 44100 + 1; //Add 1 to counter truncation.
 		while (i < samples)
 		{
-			o = (INT16)(*s + 0x80) << 8; // changed signedness and shift up to 16 bits
+			o = (short)(*s + 0x80) << 8; // changed signedness and shift up to 16 bits
 			while (step < FRACUNIT) // this is as fast as I can make it.
 			{
 				*d++ = o; // left channel
@@ -132,8 +132,10 @@ static Mix_Chunk* ds2chunk(void* stream)
 		break;
 	}
 
+	int finaloutput = (char*)d - sound;
+
 	// return Mixer Chunk.
-	return Mix_QuickLoad_RAW(sound, (Uint32)((UINT8*)d - sound));
+	return Mix_QuickLoad_RAW(sound, finaloutput);
 }
 #endif
 
