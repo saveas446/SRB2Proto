@@ -303,7 +303,6 @@ void Z_FreeTags( int           lowtag,
     memblock_t* next;
     int user, tag;
 
-    SDL_Log("mainzone->blocklist.next: %p\n", mainzone->blocklist.next);
     for (block = mainzone->blocklist.next; block != &mainzone->blocklist; block = block->next)
     {
         if (block == 0x2)
