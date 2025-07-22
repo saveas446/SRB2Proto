@@ -30,7 +30,8 @@
 
 #define HU_MAXMSGLEN    80
 
-extern patch_t*       hu_font[HU_FONTSIZE];
+extern patch_t* hu_fontnormal[HU_FONTSIZE];
+extern patch_t* hu_fontxmas[HU_FONTSIZE];
 
 // P_DeathThink set this true to show scores while dead, in dmatch
 extern boolean        hu_showscores;

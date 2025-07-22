@@ -39,13 +39,16 @@
 #define HU_TITLET       (text[THUSTR_1_NUM+gamemap-1])
 
 #define HU_TITLEX       0
-#define HU_TITLEY       ((BASEVIDHEIGHT-ST_HEIGHT-1) - SHORT(hu_font[0]->height))
+#define HU_TITLEY       ((BASEVIDHEIGHT-ST_HEIGHT-1) - SHORT(hu_fontnormal[0]->height))
 
 
 //-------------------------------------------
 //              heads up font
 //-------------------------------------------
-patch_t*                hu_font[HU_FONTSIZE];
+
+
+patch_t* hu_fontnormal[HU_FONTSIZE];
+patch_t* hu_fontxmas[HU_FONTSIZE];
 
 
 static player_t*        plr;
@@ -231,7 +234,15 @@ void HU_Init(void)
     for (i=0;i<HU_FONTSIZE;i++)
     {
         sprintf(buffer, "STCFN%.3d", j++);
-        hu_font[i] = (patch_t *) W_CachePatchName(buffer, PU_STATIC);
+        hu_fontnormal[i] = (patch_t *) W_CachePatchName(buffer, PU_STATIC);
+    }
+
+    // cache the xmas font too
+    j = HU_FONTSTART;
+    for (i = 0; i < HU_FONTSIZE; i++)
+    {
+        sprintf(buffer, "XMFNT%.3d", j++);
+        hu_fontxmas[i] = (patch_t*)W_CachePatchName(buffer, PU_STATIC);
     }
 
     //hu_showscores = false;    //added:05-02-98:deathmatch rankings overlay off
@@ -671,10 +682,12 @@ static void HU_DrawChat (void)
     }
 
     if (hu_tick<4)
-        V_DrawMappedPatch (HU_INPUTX + (c<<3),
-                           y,0,
-                           hu_font['_'-HU_FONTSTART],
-                           whitemap);
+        if (cv_fonttype.value == FONT_MAR2K) {
+            V_DrawMappedPatch(HU_INPUTX + (c << 3), y, 0, hu_fontnormal['_' - HU_FONTSTART], whitemap);
+        } else {
+            V_DrawMappedPatch(HU_INPUTX + (c << 3), y, 0, hu_fontxmas['_' - HU_FONTSTART], whitemap);
+        }
+
 }
 
 

@@ -1499,7 +1499,11 @@ void M_DrawVideoMode(void)
     char    temp[80];
     patch_t* p;
 
-    p = (patch_t*) W_CachePatchName("M_VIDEO",PU_CACHE);
+    if (cv_fonttype.value == FONT_MAR2K)
+        p = (patch_t*)W_CachePatchName("M_VIDEO",PU_CACHE);
+    else
+        p = (patch_t*)W_CachePatchName("X_VIDEO", PU_CACHE);
+
     V_DrawScaledPatch ((BASEVIDWIDTH-p->width)/2,2,0,p);
 
     vidm_nummodes = 0;

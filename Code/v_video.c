@@ -1037,18 +1037,27 @@ void V_DrawCharacter (int x, int y, int c)
     if (c < 0 || c>= HU_FONTSIZE)
         return;
 
-    w = SHORT (hu_font[c]->width);
+    if (cv_fonttype.value == FONT_MAR2K)
+        w = SHORT(hu_fontnormal[c]->width);
+    else
+        w = SHORT(hu_fontxmas[c]->width);
+
     if (x+w > vid.width /*BASEVIDWIDTH*/)
         return;
 
 //    if (scalemode)
 //        V_DrawScaledPatch(x, y, 0, hu_font[c]);
 //    else
-    if (white)
-        // draw with colormap, WITHOUT scale
-        V_DrawTranslationPatch(x, y, 0, hu_font[c], whitemap);
-    else
-        V_DrawPatch(x, y, 0, hu_font[c]);
+
+    if (cv_fonttype.value == FONT_MAR2K) {
+        if (white)
+            // draw with colormap, WITHOUT scale
+            V_DrawTranslationPatch(x, y, 0, hu_fontnormal[c], whitemap);
+        else
+            V_DrawPatch(x, y, 0, hu_fontnormal[c]);
+    } else {
+        V_DrawPatch(x, y, 0, hu_fontxmas[c]);
+    }
 }
 
 
@@ -1089,10 +1098,18 @@ void V_DrawString (int x, int y, char* string)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
+        if (cv_fonttype.value == FONT_MAR2K)
+            w = SHORT (hu_fontnormal[c]->width);
+        else
+            w = SHORT(hu_fontxmas[c]->width);
+
         if (cx+w > BASEVIDWIDTH)
             break;
-        V_DrawScaledPatch(cx, cy, 0, hu_font[c]);
+
+        if (cv_fonttype.value == FONT_MAR2K)
+            V_DrawScaledPatch(cx, cy, 0, hu_fontnormal[c]);
+        else
+            V_DrawScaledPatch(cx, cy, 0, hu_fontxmas[c]);
         cx+=w;
     }
 }
@@ -1131,10 +1148,18 @@ void V_DrawStringWhite (int x, int y, char* string)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
+        if (cv_fonttype.value == FONT_MAR2K)
+            w = SHORT(hu_fontnormal[c]->width);
+        else
+            w = SHORT(hu_fontxmas[c]->width);
+
         if (cx+w > vid.width)
             break;
-        V_DrawMappedPatch(cx, cy, 0, hu_font[c], whitemap);
+        
+        if (cv_fonttype.value == FONT_MAR2K)
+            V_DrawMappedPatch(cx, cy, 0, hu_fontnormal[c], whitemap);
+        else
+            V_DrawMappedPatch(cx, cy, 0, hu_fontxmas[c], whitemap);
         cx+=w;
     }
 }
@@ -1152,10 +1177,15 @@ int V_StringWidth (char* string)
     for (i = 0;i < (int)strlen(string);i++)
     {
         c = toupper(string[i]) - HU_FONTSTART;
-        if (c < 0 || c >= HU_FONTSIZE)
+        if (c < 0 || c >= HU_FONTSIZE) {
             w += 4;
-        else
-            w += SHORT (hu_font[c]->width);
+        } else {
+            if (cv_fonttype.value == FONT_MAR2K)
+                w += SHORT(hu_fontnormal[c]->width);
+            else
+                w += SHORT(hu_fontxmas[c]->width);
+        }
+           
     }
 
     return w;

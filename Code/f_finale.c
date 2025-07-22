@@ -257,10 +257,18 @@ void F_TextWrite (void)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
+        if (cv_fonttype.value == FONT_MAR2K)
+            w = SHORT(hu_fontnormal[c]->width);
+        else 
+            w = SHORT(hu_fontxmas[c]->width);
         if (cx+w > vid.width)
             break;
-        V_DrawPatch(cx, cy, 0, hu_font[c]);
+
+        if (cv_fonttype.value == FONT_MAR2K)
+            V_DrawPatch(cx, cy, 0, hu_fontnormal[c]);
+        else
+            V_DrawPatch(cx, cy, 0, hu_fontxmas[c]);
+
         cx+=w;
     }
 

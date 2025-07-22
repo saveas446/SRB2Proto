@@ -977,9 +977,12 @@ static void CON_DrawInput (void)
     // draw the blinking cursor
     //
     x = (input_cx>=con_width) ? con_width - 1 : input_cx;
-    if (con_tick<4)
-        V_DrawTranslationPatch ((x+1)<<3, y, 0, hu_font['_'-HU_FONTSTART],
-                           whitemap);
+    if (con_tick < 4) {
+        if (cv_fonttype.value == FONT_MAR2K)
+            V_DrawTranslationPatch((x + 1) << 3, y, 0, hu_fontnormal['_' - HU_FONTSTART], whitemap);
+        else
+            V_DrawTranslationPatch((x + 1) << 3, y, 0, hu_fontxmas['_' - HU_FONTSTART], whitemap);
+    }
 
 }
 
@@ -1143,7 +1146,8 @@ void CON_Drawer (void)
         CON_RecalcSize ();
 
     //Fab: bighack: patch 'I' letter leftoffset so it centers
-    hu_font['I'-HU_FONTSTART]->leftoffset = -2;
+    hu_fontnormal['I' - HU_FONTSTART]->leftoffset = -2;
+    hu_fontxmas['I' - HU_FONTSTART]->leftoffset = -2;
 
     if (con_curlines>0)
         CON_DrawConsole ();
@@ -1151,5 +1155,6 @@ void CON_Drawer (void)
     if (gamestate==GS_LEVEL)
         CON_DrawHudlines ();
 
-    hu_font['I'-HU_FONTSTART]->leftoffset = 0;
+    hu_fontnormal['I' - HU_FONTSTART]->leftoffset = 0;
+    hu_fontxmas['I' - HU_FONTSTART]->leftoffset = 0;
 }
