@@ -460,3 +460,7 @@ build/.ninja_log
 build/NewMillenium
 Code/.vscode/launch.json
 Binaries/NewMillennium
+Binaries/NewMillenniumSDL.exe
+Binaries/NewMillenniumWin32.exe
+Binaries/NewMillenniumSDL_DEBUG.exe
+Binaries/NewMillenniumWin32_DEBUG.exe

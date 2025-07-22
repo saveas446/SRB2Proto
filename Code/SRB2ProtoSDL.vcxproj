@@ -174,7 +174,7 @@
     <ClInclude Include="Z_zone.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>SRB2ProtoSDL</ProjectName>
+    <ProjectName>NewMillenniumSDL</ProjectName>
     <SccProjectName />
     <SccLocalPath />
     <ProjectGuid>{232BA2BC-D09D-4183-B2BB-CFF89DF1B673}</ProjectGuid>
@@ -258,7 +258,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectDir)\..\Binaries\SRB2ProtoSDL_DEBUG.exe</OutputFile>
+      <OutputFile>$(ProjectDir)\..\Binaries\NewMillenniumSDL_DEBUG.exe</OutputFile>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -315,7 +315,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>..\Binaries\SRB2ProtoSDL.exe</OutputFile>
+      <OutputFile>..\Binaries\NewMillenniumSDL.exe</OutputFile>
     </Link>
     <CustomBuildStep>
       <Command>

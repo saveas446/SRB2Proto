@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>SRB2Proto</ProjectName>
+    <ProjectName>NewMillenniumWin32</ProjectName>
     <SccProjectName />
     <SccLocalPath />
     <ProjectGuid>{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}</ProjectGuid>
@@ -95,7 +95,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>dinput8.lib;dxguid.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectDir)\..\Binaries\SRB2Proto_DEBUG.exe</OutputFile>
+      <OutputFile>$(ProjectDir)\..\Binaries\NewMillenniumWin32_DEBUG.exe</OutputFile>
     </Link>
     <CustomBuildStep>
       <Command>
