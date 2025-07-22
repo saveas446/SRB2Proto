@@ -27,6 +27,7 @@
 #include "am_map.h"
 #include "byteptr.h"
 #include "i_sound.h" // For cv_midibackend
+#include "p_local.h"
 
 // ------
 // protos
@@ -224,6 +225,8 @@ void D_RegisterClientCommands (void)
     CV_RegisterVar(&cv_usejoystick);
     CV_RegisterVar(&cv_allowjump);
     CV_RegisterVar(&cv_allowautoaim);
+
+    CV_RegisterVar(&cv_movementtype);
 
     //s_sound.c
     CV_RegisterVar(&cv_soundvolume);

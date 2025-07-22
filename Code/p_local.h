@@ -62,7 +62,7 @@ extern consvar_t cv_viewheight; // p_mobj.c
 //26-07-98: p_mobj.c
 extern  consvar_t cv_gravity;
 
-
+extern  consvar_t cv_movementtype;
 //
 // P_TICK
 //

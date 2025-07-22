@@ -14,6 +14,9 @@
 extern int         numskins; // Thanks SOM! Tails 03-01-2000
 extern skin_t      skins[MAXSKINS]; // Thanks SOM! Tails 03-01-2000
 
+CV_PossibleValue_t movementtype_cons_t[] = { {0,"Beta Quest"},{1,"SRB2 March 2000"},{2,"SRB2 Xmas 0.96"},{0,NULL}};
+consvar_t cv_movementtype = {"movementtype","SRB2 March 2000", NULL, CAT_GAMECONFIG, CV_SAVE,movementtype_cons_t};
+
 // Index of the special effects (INVUL inverse) map.
 #define INVERSECOLORMAP         32
 
@@ -130,209 +133,97 @@ void P_CalcHeight (player_t* player)
         player->viewz = player->mo->ceilingz-4*FRACUNIT;
 }
 
-
-
-//
-// P_MovePlayer
-//
-void P_MovePlayer (player_t* player)
-{
-    ticcmd_t*           cmd;
-
-    cmd = &player->cmd;
-
-#ifndef ABSOLUTEANGLE
-    player->mo->angle += (cmd->angleturn<<16);
-#else
-    if(demoversion<125)
-        player->mo->angle += (cmd->angleturn<<16);
-    else
-        player->mo->angle = (cmd->angleturn<<16);
-#endif
-
+void P_Mar2KMovement(player_t* player, ticcmd_t* cmd) {
     // Do not let the player control movement
     //  if not onground.
     onground = ((player->mo->z <= player->mo->floorz) ||
-               (player->cheats & CF_FLYAROUND));
-		
+        (player->cheats & CF_FLYAROUND));
 
-    if(demoversion<128)
-    {
-        boolean  jumpover = player->cheats & CF_JUMPOVER;
-        if (cmd->forwardmove && (onground || jumpover))
+    fixed_t movepushforward = 0, movepushside = 0;
+    player->aiming = cmd->aiming << 16;
+
+    if (cmd->forwardmove) {
+        if (player->powers[pw_strength]) // do you have super sneakers? Tails 02-28-2000
         {
-            // dirty hack to let the player avatar walk over a small wall
-            // while in the air
-            if (jumpover && player->mo->momz > 0)
-                P_Thrust (player->mo, player->mo->angle, 5*5120); // Changed by Tails: 9-14-99
-            else
-                if (!jumpover && player->skin == 1)
-                    P_Thrust (player->mo, player->mo->angle, cmd->forwardmove*3072); // Changed by Tails: 9-14-99
-            else
-                if (!jumpover && player->skin == 0)
-                    P_Thrust (player->mo, player->mo->angle, cmd->forwardmove*5120);
+            if (player->skin == 1) {
+                movepushforward = cmd->forwardmove * 6144; // then go faster!! Tails 02-28-2000
+            }
+            else if (player->skin == 0) {
+                movepushforward = cmd->forwardmove * 10240; // then go faster!! Tails 02-28-2000
+            }
         }
-    
-        if (cmd->sidemove && onground)
-            P_Thrust (player->mo, player->mo->angle-ANG90, cmd->sidemove*2048); // Changed by Tails: 9-14-99
+        else // if not, then run normally Tails 02-28-2000
+            if (player->skin == 1) {
+                movepushforward = cmd->forwardmove * 3072; // Changed by Tails: 9-14-99
+            }
+            else
+                if (player->skin == 0) {
+                    movepushforward = cmd->forwardmove * 5120; // Changed by Tails: 9-14-99
+                }
+        if (player->mo->eflags & MF_UNDERWATER) {
+            // half forward speed when waist under water
+            // a little better grip if feets touch the ground
+            if (!onground)
+                movepushforward >>= 1;
+            else
+                movepushforward = movepushforward * 3 / 4;
+        }
+        else {
+            // allow very small movement while in air for gameplay
+            if (!onground) {
+                movepushforward >>= 2; // Proper air movement - Changed by Tails: 9-13-99
+            }
 
-//        player->aiming = (signed char)cmd->aiming;
+            //Dont accelerate while spinning: Stealth 2-5-00
+            if (player->mo->eflags & MF_SPINNING) {
+                movepushforward = 0;
+            }
+        }
+
+        P_Thrust(player->mo, player->mo->angle, movepushforward);
+
     }
 
-    else
-    {
-        fixed_t   movepushforward=0,movepushside=0;
-        player->aiming = cmd->aiming<<16;
-
-        if (cmd->forwardmove)
-        {
-           if(player->powers[pw_strength]) // do you have super sneakers? Tails 02-28-2000
-             {
-             if (player->skin == 1)
-               {
-               movepushforward = cmd->forwardmove * 6144; // then go faster!! Tails 02-28-2000
-               }
-            else if (player->skin == 0)
-               {
-               movepushforward = cmd->forwardmove * 10240; // then go faster!! Tails 02-28-2000
-               }
-             }
-          else // if not, then run normally Tails 02-28-2000
-           if (player->skin == 1)
-              {
-               movepushforward = cmd->forwardmove * 3072; // Changed by Tails: 9-14-99
-              }
-          else
-           if (player->skin == 0)
-              {
-               movepushforward = cmd->forwardmove * 5120; // Changed by Tails: 9-14-99
-              }
-             if (player->mo->eflags & MF_UNDERWATER)
-            {
-                // half forward speed when waist under water
-                // a little better grip if feets touch the ground
-                if (!onground)
-                    movepushforward >>= 1;
-                else
-                    movepushforward = movepushforward *3/4;
-            }
+    if (cmd->sidemove) {
+        movepushside = cmd->sidemove * 2048;
+        if (player->mo->eflags & MF_UNDERWATER) {
+            if (!onground)
+                movepushside >>= 1;
             else
-            {
-                // allow very small movement while in air for gameplay
-                if (!onground)
-                {  
-                 movepushforward >>= 2; // Proper air movement - Changed by Tails: 9-13-99
-                }
-
-                //Dont accelerate while spinning: Stealth 2-5-00
-                if (player->mo->eflags & MF_SPINNING)
-                {
-                 movepushforward=0;
-                }
-            }
-
-            P_Thrust (player->mo, player->mo->angle, movepushforward);
-
+                movepushside = movepushside * 3 / 4;
         }
+        else
+            if (!onground)
+                movepushside >>= 3;
 
-        if (cmd->sidemove)
-        {
-            movepushside = cmd->sidemove * 2048;
-            if (player->mo->eflags & MF_UNDERWATER)
-            {
-                if (!onground)
-                    movepushside >>= 1;
-                else
-                    movepushside = movepushside *3/4;
-            }
-            else 
-                if (!onground)
-                    movepushside >>= 3;
+        P_Thrust(player->mo, player->mo->angle - ANG90, movepushside);
+    }
 
-            P_Thrust (player->mo, player->mo->angle-ANG90, movepushside);
-        }
+    // mouselook swim when waist underwater
+    player->mo->eflags &= ~MF_SWIMMING;
+    if (player->mo->eflags & MF_UNDERWATER) {
+        fixed_t a;
+        // swim up/down full move when forward full speed
+        a = FixedMul(movepushforward * 50, finesine[(player->aiming >> ANGLETOFINESHIFT)] >> 5);
 
-        // mouselook swim when waist underwater
-        player->mo->eflags &= ~MF_SWIMMING;
-        if (player->mo->eflags & MF_UNDERWATER)
-        {
-             fixed_t a;
-            // swim up/down full move when forward full speed
-            a = FixedMul( movepushforward*50, finesine[ (player->aiming>>ANGLETOFINESHIFT) ] >>5 );
+        /* a little hack to don't have screen moving
+        if( a > cv_gravity.value>>2 || a < 0 )*/
+        if (a != 0) {
+            player->mo->eflags |= MF_SWIMMING;
+            player->mo->momz += a;
 
-            /* a little hack to don't have screen moving
-            if( a > cv_gravity.value>>2 || a < 0 )*/
-            if ( a != 0 ) {
-                player->mo->eflags |= MF_SWIMMING;
-                player->mo->momz += a;
-                
-            }
         }
     }
 
-if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2]))
-{
-player->powers[pw_tailsfly] = 0;
-}
+    // start improved player landing friction Tails 03-03-2000
+    if ((player->mo->eflags & MF_JUSTHITFLOOR) && !(cmd->forwardmove)) {
+        player->mo->momx = player->mo->momx / 2;
+        player->mo->momy = player->mo->momy / 2;
+    }
+    // end improved player landing friction Tails 03-03-2000
 
-// start tails putput noise Tails 03-05-2000
-if (player->mo->state == &states[S_PLAY_ABL1] && player->skin == 1 && player->powers[pw_tailsfly] && player->skin == 1)
-{
-            S_StartSound (player->mo, sfx_sawidl);
-}
 
-if (player->powers[pw_tailsfly] == 1 && player->skin == 1)
-{
-        P_SetMobjState (player->mo, S_PLAY_SPC4);
-}
-
-if (player->mo->state->nextstate == S_PLAY_SPC1 && player->skin == 1 && !player->powers[pw_tailsfly])
-{
-            S_StartSound (player->mo, sfx_sawful);
-}
-// end tails putput noise Tails 03-05-2000
-
-// start shield spawn code Tails 03-04-2000
-if (player->powers[pw_blueshield])
-{
-    P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_GREENORB);
-}   
-
-// start improved player landing friction Tails 03-03-2000
-if ((player->mo->eflags & MF_JUSTHITFLOOR) && !(cmd->forwardmove))
-     {
-	player->mo->momx = player->mo->momx/2;
-	player->mo->momy = player->mo->momy/2;
-      }
-// end improved player landing friction Tails 03-03-2000
-
-// start timer code tails 02-29-2000
-        player->armorpoints=leveltime/35;
-// end timer code tails 02-29-2000
-
-//start invincibility sparkles spawn code tails
-if (player->powers[pw_invulnerability])
-   {
-    P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_IVSP);
-   }
-//end invincibility sparkles spawn code tails
-
-// start resume normal music tails
-if ((player->powers[pw_invulnerability] == 1) || (player->powers[pw_strength] == 1))
-   {
-    S_ChangeMusic(mus_runnin + gamemap - 1, 1);
-   }
-// end resume normal music tails
-
-//start shield spawn code
-//Edited to work with new shield handling: Stealth 12-26-99
-if (player->powers[pw_strength])
-   {
-    P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
-   }
-//end shield spawn code
-
-    //Homing Attack: Stealth 12-31-99
+//Homing Attack: Stealth 12-31-99
 //       if(player->wants_to_thok && player->thok_dist)
 //       {
 //            player->mo->angle=player->thok_angle;
@@ -343,173 +234,641 @@ if (player->powers[pw_strength])
 //       player->wants_to_thok=0;
 //       player->thok_dist=999999;
 //       }
-    player->thok_dist=512*FRACUNIT;
+    player->thok_dist = 512 * FRACUNIT;
 
-// start moved homing junk here tails 02-27-2000
-       if(player->wants_to_thok && player->thok_dist)
-       {
-//            player->mo->angle=player->thok_angle;
-            P_Thrust (player->mo, player->mo->angle, 5*512000); // SSNTails 08-19-2023 note: Approximately 39.0625*FRACUNIT
-            P_ThokUp (player->mo, player->thok_angle, 5*512000);
-            S_StartSound (player->mo, sfx_pdiehi);
-            P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
-        player->wants_to_thok=0;
-        player->thok_dist=0;
-        player->thok_angle=0;
-       }
-// end moved homing junk here tails 02-27-2000
+    // start moved homing junk here tails 02-27-2000
+    if (player->wants_to_thok && player->thok_dist) {
+        //            player->mo->angle=player->thok_angle;
+        P_Thrust(player->mo, player->mo->angle, 5 * 512000); // SSNTails 08-19-2023 note: Approximately 39.0625*FRACUNIT
+        P_ThokUp(player->mo, player->thok_angle, 5 * 512000);
+        S_StartSound(player->mo, sfx_pdiehi);
+        P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
+        player->wants_to_thok = 0;
+        player->thok_dist = 0;
+        player->thok_angle = 0;
+    }
+    // end moved homing junk here tails 02-27-2000
 
-    if(cmd->buttons &BT_ATTACK)
-      {
-       player->releasedash = 1; // the first spindash rev
-           if((player->mo->eflags & MF_STARTDASH) && (player->mo->eflags & MF_SPINNING) && (player->releasedash))
-     {
-     player->mo->eflags &= ~MF_STARTDASH;
-     P_Thrust (player->mo, player->mo->angle, 10*player->dashspeed); // catapult forward ho!! Tails 02-27-2000
-     S_StartSound (player->mo, sfx_punch);
-     player->dashspeed = 0;
-     }
-      }
+    if (cmd->buttons & BT_ATTACK) {
+        player->releasedash = 1; // the first spindash rev
+        if ((player->mo->eflags & MF_STARTDASH) && (player->mo->eflags & MF_SPINNING) && (player->releasedash)) {
+            player->mo->eflags &= ~MF_STARTDASH;
+            P_Thrust(player->mo, player->mo->angle, 10 * player->dashspeed); // catapult forward ho!! Tails 02-27-2000
+            S_StartSound(player->mo, sfx_punch);
+            player->dashspeed = 0;
+        }
+    }
 
-    if(!(cmd->buttons &BT_ATTACK))
-     {
-       player->releasedash = 0;
-      }
+    if (!(cmd->buttons & BT_ATTACK)) {
+        player->releasedash = 0;
+    }
 
-    if(!(cmd->buttons &BT_USE))
-    {
-     player->usedown = false;
+    if (!(cmd->buttons & BT_USE)) {
+        player->usedown = false;
     }
 
     //Spinning and Spindashing
-    if(cmd->buttons &BT_USE) // subsequent revs
+    if (cmd->buttons & BT_USE) // subsequent revs
     {
 
-    if(((player->mo->z <= player->mo->floorz) && (player->mo->momz || !(player->mo->momx || player->mo->momy)) && (player->mo->state == &states[S_PLAY]) && (!(player->usedown)) && (!(player->mo->eflags & MF_SPINNING))))
-     {
-    P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
-    player->mo->eflags |= MF_STARTDASH;
-    player->mo->eflags |= MF_SPINNING;
-    player->dashspeed+=FRACUNIT; // more speed as you rev more Tails 03-01-2000
-    P_SetMobjState (player->mo, S_PLAY_ATK3);
-    S_StartSound (player->mo, sfx_noway);
+        if (((player->mo->z <= player->mo->floorz) && (player->mo->momz || !(player->mo->momx || player->mo->momy)) && (player->mo->state == &states[S_PLAY]) && (!(player->usedown)) && (!(player->mo->eflags & MF_SPINNING)))) {
+            P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
+            player->mo->eflags |= MF_STARTDASH;
+            player->mo->eflags |= MF_SPINNING;
+            player->dashspeed += FRACUNIT; // more speed as you rev more Tails 03-01-2000
+            P_SetMobjState(player->mo, S_PLAY_ATK3);
+            S_StartSound(player->mo, sfx_noway);
             player->usedown = true;
-     }
+        }
 
-    if((player->mo->eflags & MF_STARTDASH) && (!(player->usedown)))
-       {
-        P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
-        P_SetMobjState (player->mo, S_PLAY_ATK3);
-        player->dashspeed+=FRACUNIT;
-        S_StartSound (player->mo, sfx_noway);
-       }
+        if ((player->mo->eflags & MF_STARTDASH) && (!(player->usedown))) {
+            P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
+            P_SetMobjState(player->mo, S_PLAY_ATK3);
+            player->dashspeed += FRACUNIT;
+            S_StartSound(player->mo, sfx_noway);
+        }
 
-     if(!(player->mo->momz) && (player->mo->momy || player->mo->momx) && (!(player->usedown)) && (!(player->mo->eflags & MF_SPINNING)))
-     {
-      player->mo->eflags |= MF_SPINNING;
-      P_SetMobjState (player->mo, S_PLAY_ATK3);
-      S_StartSound (player->mo, sfx_sawup);
-      player->usedown = true;
-     }
+        if (!(player->mo->momz) && (player->mo->momy || player->mo->momx) && (!(player->usedown)) && (!(player->mo->eflags & MF_SPINNING))) {
+            player->mo->eflags |= MF_SPINNING;
+            P_SetMobjState(player->mo, S_PLAY_ATK3);
+            S_StartSound(player->mo, sfx_sawup);
+            player->usedown = true;
+        }
 
+    }
+
+    if ((player->mo->momz || !(player->mo->momx || player->mo->momy)) && (player->mo->eflags & MF_SPINNING) && (!(player->mo->eflags & MF_STARTDASH))) // has the player stopped & is still spinning?
+    {
+        player->mo->eflags &= ~MF_SPINNING;
+        player->mo->eflags &= ~MF_STARTDASH;
+        P_SetMobjState(player->mo, S_PLAY); // returning from a roll
+        player->usedown = false;
+    }
+
+    //added:22-02-98: jumping
+    if (cmd->buttons & BT_JUMP) {
+        // can't jump while in air, can't jump while jumping
+
+        if (!player->jumpdown &&
+            (onground || (player->mo->eflags & MF_UNDERWATER)))
+        {
+            if (onground)
+                player->mo->momz = JUMPGRAVITY * 1.5; // Proper Jumping - Changed by Tails: 9-13-99
+            if (!(player->mo->eflags & MF_JUMPED)) // Tails 9-15-99 Spin Attack
+                player->mo->eflags += MF_JUMPED; // Tails 9-15-99 Spin Attack
+            player->mo->eflags &= ~MF_ONGROUND; // Tails 9-15-99 Spin Attack
+            player->mo->eflags &= ~MF_JUSTHITFLOOR; // Tails 9-15-99 Spin Attack
+
+            //      else //water content // Tails 9-24-99
+            //     player->mo->momz = JUMPGRAVITY*1.5; // Tails 9-24-99
+
+            //TODO: goub gloub when push up in water
+
+            if (!(player->cheats & CF_FLYAROUND) && onground && !(player->mo->eflags & MF_UNDERWATER)) {
+                S_StartSound(player->mo, sfx_jump);
+                P_SetMobjState(player->mo, S_PLAY_ATK3); // Tails 9-24-99
+                // keep jumping ok if FLY mode.
+                player->jumpdown = true;
+            }
+            // Player now spins underwater! Joy! Tails 10-31-99
+            if (!(player->cheats & CF_FLYAROUND) && onground && (player->mo->eflags & MF_UNDERWATER)) {
+                P_SetMobjState(player->mo, S_PLAY_ATK3); // Tails 9-24-99
+                S_StartSound(player->mo, sfx_jump);
+                if (!(player->mo->eflags & MF_JUMPED)) // Tails 9-15-99 Spin Attack
+                    player->mo->eflags += MF_JUMPED; // Tails 9-15-99 Spin Attack
+                player->mo->eflags &= ~MF_ONGROUND; // Tails 9-15-99 Spin Attack
+                // keep jumping ok if FLY mode.
+                player->jumpdown = true;
+            }
+            // end underwater spin code
+
+        }
+        else if ((player->mo->eflags & MF_JUMPED) && !(player->powers[pw_tailsfly]) && !(player->jumpdown) && (player->skin == 1)) {
+            if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2])) {
+                P_SetMobjState(player->mo, S_PLAY_ABL1);
+            }
+            player->mo->momz = JUMPGRAVITY * 1;
+            player->jumpdown = true;
+            player->powers[pw_tailsfly] = 350;
+            player->mo->eflags &= ~MF_JUMPED;
+        }
+        else if ((player->powers[pw_tailsfly]) && !(player->jumpdown) && (player->skin == 1)) {
+            if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2])) {
+                P_SetMobjState(player->mo, S_PLAY_ABL1);
+            }
+            player->mo->momz = JUMPGRAVITY * 1;
+            player->jumpdown = true;
+        }
+        else if ((player->mo->eflags & MF_JUMPED) && !(player->jumpdown) && (player->skin == 0)) {
+            //   P_Thrust (player->mo, player->mo->angle, 5*512000);
+            //   S_StartSound (player->mo, sfx_pdiehi);
+            //   P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
+            player->wants_to_thok = 1;
+            player->jumpdown = true;
+        }
+
+    }
+    else
+        player->jumpdown = false;
 }
 
-    if((player->mo->momz || !(player->mo->momx || player->mo->momy)) && (player->mo->eflags & MF_SPINNING) && (!(player->mo->eflags & MF_STARTDASH))) // has the player stopped & is still spinning?
-     {
-     player->mo->eflags &= ~MF_SPINNING;
-     player->mo->eflags &= ~MF_STARTDASH;
-     P_SetMobjState (player->mo, S_PLAY); // returning from a roll
-     player->usedown = false;
-      }
+void P_Xmas96Movement(player_t* player, ticcmd_t* cmd) {
+    // Do not let the player control movement
+    //  if not onground.
+    onground = ((player->mo->z <= player->mo->floorz) ||
+        (player->cheats & CF_FLYAROUND));
+
+    player->speed = (sqrt((abs(player->mo->momx / 100000) * abs(player->mo->momx / 100000)) + (abs(player->mo->momy / 100000) * abs(player->mo->momy / 100000)))); // Player's Speed Tails 08-22-2000
+
+    fixed_t movepushforward = 0, movepushside = 0;
+    player->aiming = cmd->aiming << 16;
+
+    if (player->skin == 0) {
+        if (player->mo->eflags & MF_UNDERWATER) {
+            player->acceleration = 1024;
+        }
+        else {
+            if (player->speed > 14)
+                player->acceleration = 1024;
+            else if (player->speed > 13)
+                player->acceleration = 960;
+            else if (player->speed > 12)
+                player->acceleration = 896;
+            else if (player->speed > 11)
+                player->acceleration = 832;
+            else if (player->speed > 10)
+                player->acceleration = 768;
+            else if (player->speed > 9)
+                player->acceleration = 704;
+            else if (player->speed > 8)
+                player->acceleration = 640;
+            else if (player->speed > 7)
+                player->acceleration = 576;
+            else if (player->speed > 6)
+                player->acceleration = 512;
+            else if (player->speed > 5)
+                player->acceleration = 448;
+            else if (player->speed > 4)
+                player->acceleration = 416;
+            else if (player->speed > 3)
+                player->acceleration = 384;
+            else if (player->speed > 2)
+                player->acceleration = 320;
+            else if (player->speed > 1)
+                player->acceleration = 256;
+            else if (player->speed > 0)
+                player->acceleration = 192;
+            else
+                player->acceleration = 128;
+        }
+    }
+    else if (player->skin == 1) {
+        if (player->mo->eflags & MF_UNDERWATER) {
+            player->acceleration = 1024;
+        }
+        else {
+            //if(player->speed > 14)
+            //player->acceleration = 1024;
+            //else if(player->speed > 13)
+            //player->acceleration = 960;
+            //else if(player->speed > 12)
+            //player->acceleration = 896;
+            //else if(player->speed > 11)
+            //player->acceleration = 832;
+            //else if(player->speed > 10)
+            //player->acceleration = 768;
+            //else if(player->speed > 9)
+            //player->acceleration = 704;
+            //else if(player->speed > 8)
+            //player->acceleration = 640;
+            //else if(player->speed > 7)
+            //player->acceleration = 576;
+            //else if(player->speed > 6)
+            //player->acceleration = 512;
+            if (player->speed > 5)
+                player->acceleration = 1024;
+            else if (player->speed > 4)
+                player->acceleration = 896;
+            else if (player->speed > 3)
+                player->acceleration = 768;
+            else if (player->speed > 2)
+                player->acceleration = 512;
+            else if (player->speed > 1)
+                player->acceleration = 384;
+            else if (player->speed > 0)
+                player->acceleration = 256;
+            else
+                player->acceleration = 128;
+        }
+    }
+
+    if (cmd->forwardmove) {
+        if (player->powers[pw_strength]) // do you have super sneakers? Tails 02-28-2000
+        {
+            if (player->skin == 1) {
+                movepushforward = cmd->forwardmove * (6 * player->acceleration); // then go faster!! Tails 02-28-2000
+            }
+            else if (player->skin == 0) {
+                movepushforward = cmd->forwardmove * (10 * player->acceleration); // then go faster!! Tails 02-28-2000
+            }
+            else {
+                movepushforward = cmd->forwardmove * (4 * player->acceleration); // then go faster!! Tails 02-28-2000
+            }
+        }
+        else // if not, then run normally Tails 02-28-2000
+            if (player->skin == 1) {
+                //     movepushforward = cmd->forwardmove * 3072; // Changed by Tails: 9-14-99
+                movepushforward = cmd->forwardmove * (3 * player->acceleration); // Changed by Tails: 9-14-99
+            }
+            else
+                if (player->skin == 0) {
+                    //     movepushforward = cmd->forwardmove * 5120; // Changed by Tails: 9-14-99
+                    movepushforward = cmd->forwardmove * (5 * player->acceleration); // Changed by Tails: 9-14-99
+                }
+                else {
+                    //          movepushforward = cmd->forwardmove * 2048; // Changed by Tails: 9-14-99
+                    movepushforward = cmd->forwardmove * (2 * player->acceleration); // Changed by Tails: 9-14-99
+                }
+        if (player->mo->eflags & MF_UNDERWATER) {
+            // half forward speed when waist under water
+            // a little better grip if feets touch the ground
+            if (!onground)
+                movepushforward >>= 1;
+            else
+                movepushforward = movepushforward * 3 / 4;
+        }
+        else {
+            // allow very small movement while in air for gameplay
+            if (!onground) {
+                movepushforward >>= 2; // Proper air movement - Changed by Tails: 9-13-99
+            }
+
+            //Dont accelerate while spinning: Stealth 2-5-00
+            if (player->mo->eflags & MF_SPINNING) {
+                movepushforward = 0;
+            }
+        }
+
+        //            player->mo->angle = camera.mo->angle;
+        if (player->powers[pw_strength]) {
+            if ((player->speed < 52) && (player->skin == 0)) // Sonic's Speed
+                P_Thrust(player->mo, player->mo->angle, movepushforward);
+            else if ((player->speed < 34) && (player->skin == 1)) // Tails's Speed
+                P_Thrust(player->mo, player->mo->angle, movepushforward);
+            else if ((player->speed < 26) && (player->skin > 1)) // Other's Speed
+                P_Thrust(player->mo, player->mo->angle, movepushforward);
+        }
+        else {
+            if ((player->speed < 26) && (player->skin == 0)) // Sonic's Speed
+                P_Thrust(player->mo, player->mo->angle, movepushforward);
+            else if ((player->speed < 17) && (player->skin == 1)) // Tails's Speed
+                P_Thrust(player->mo, player->mo->angle, movepushforward);
+            else if ((player->speed < 13) && (player->skin > 1)) // Other's Speed
+                P_Thrust(player->mo, player->mo->angle, movepushforward);
+        }
+
+    }
+
+    if (cmd->sidemove) {
+        if (player->powers[pw_strength]) {
+            if (player->mo->eflags & MF_STARTDASH || player->mo->eflags & MF_SPINNING)
+                movepushside = 0;
+            else if (player->skin == 1)
+                movepushside = cmd->sidemove * (6 * player->acceleration);
+            else if (player->skin == 0)
+                movepushside = cmd->sidemove * (10 * player->acceleration);
+            else
+                movepushside = cmd->sidemove * (4 * player->acceleration);
+        }
+        else {
+            if (player->mo->eflags & MF_STARTDASH || player->mo->eflags & MF_SPINNING)
+                movepushside = 0;
+            else if (player->skin == 1)
+                movepushside = cmd->sidemove * (3 * player->acceleration);
+            else if (player->skin == 0)
+                movepushside = cmd->sidemove * (5 * player->acceleration);
+            else
+                movepushside = cmd->sidemove * (2 * player->acceleration);
+        }
+
+        if (player->mo->eflags & MF_UNDERWATER) {
+            if (!onground) {
+                movepushside >>= 1;
+                //                    player->mo->angle = camera.mo->angle-ANG90;
+            }
+            else {
+                movepushside = movepushside * 3 / 4;
+                //                    player->mo->angle = camera.mo->angle-ANG90;
+            }
+        }
+        else
+            if (!onground) {
+                movepushside >>= 3;
+                //                    player->mo->angle = camera.mo->angle-ANG90;
+            }
+        //               player->mo->angle = camera.mo->angle-ANG90;
+        if ((player->speed < 26) && (player->skin == 0)) // Sonic's Speed
+            P_Thrust(player->mo, player->mo->angle - ANG90, movepushside);
+        else if ((player->speed < 17) && (player->skin == 1)) // Tails's Speed
+            P_Thrust(player->mo, player->mo->angle - ANG90, movepushside);
+        else if ((player->speed < 13) && (player->skin > 1)) // Other's Speed
+            P_Thrust(player->mo, player->mo->angle - ANG90, movepushside);
+
+    }
+
+    // mouselook swim when waist underwater
+    player->mo->eflags &= ~MF_SWIMMING;
+    if (player->mo->eflags & MF_UNDERWATER) {
+        fixed_t a;
+        // swim up/down full move when forward full speed
+        a = FixedMul(movepushforward * 50, finesine[(player->aiming >> ANGLETOFINESHIFT)] >> 5);
+
+        /* a little hack to don't have screen moving
+        if( a > cv_gravity.value>>2 || a < 0 )*/
+        if (a != 0) {
+            player->mo->eflags |= MF_SWIMMING;
+            player->mo->momz += a;
+
+        }
+    }
+
+    /*
+    if ((cmd->forwardmove || cmd->sidemove) &&
+        (player->speed > 18) &&
+        (player->mo->state == &states[S_PLAY_RUN1] || player->mo->state == &states[S_PLAY_RUN2] || player->mo->state == &states[S_PLAY_RUN3] || player->mo->state == &states[S_PLAY_RUN4] || player->mo->state == &states[S_PLAY_RUN5] || player->mo->state == &states[S_PLAY_RUN6] || player->mo->state == &states[S_PLAY_RUN7] || player->mo->state == &states[S_PLAY_RUN8]) &&
+        (onground)) {
+        P_SetMobjState(player->mo, S_PLAY_SPD1);
+    }*/
+
+    if ((player->mo->momx || player->mo->momy) && (player->mo->state == &states[S_PLAY]))
+        P_SetMobjState(player->mo, S_PLAY_RUN1);
+
+    // TEST TAILS 08-19-2000
+    if (player->mo->state == &states[S_PLAY_RUN1] || player->mo->state == &states[S_PLAY_RUN2] || player->mo->state == &states[S_PLAY_RUN3] || player->mo->state == &states[S_PLAY_RUN4] || player->mo->state == &states[S_PLAY_RUN5] || player->mo->state == &states[S_PLAY_RUN6] || player->mo->state == &states[S_PLAY_RUN7] || player->mo->state == &states[S_PLAY_RUN8])
+        player->walking = 1;
+    else
+        player->walking = 0;
+
+    // Mar2K doesn't have a running animation so we're just disabling it
+    player->running = 0;
+
+    if (player->mo->state == &states[S_PLAY_ATK1] || player->mo->state == &states[S_PLAY_ATK2] || player->mo->state == &states[S_PLAY_ATK3] || player->mo->state == &states[S_PLAY_ATK4])
+        player->spinning = 1;
+    else
+        player->spinning = 0;
+
+    if (onground) {
+        if (player->walking) {
+            if (player->speed > 5)
+                player->mo->state->tics = 2;
+            else if (player->speed > 2)
+                player->mo->state->tics = 3;
+            else
+                player->mo->state->tics = 4;
+        }
+
+        if (player->running) {
+            if (player->speed > 35)
+                player->mo->state->tics = 1;
+            else
+                player->mo->state->tics = 2;
+        }
+    }
+
+    if (player->spinning) {
+        if (player->speed > 10)
+            player->mo->state->tics = 1;
+        else
+            player->mo->state->tics = 2;
+    }
+    // TEST TAILS
+
+    // start make sure player is in a ball when jumped Tails 03-13-2000
+    if (player->mo->eflags & MF_JUMPED && !(player->mo->state == &states[S_PLAY_ATK1] || player->mo->state == &states[S_PLAY_ATK2] || player->mo->state == &states[S_PLAY_ATK3] || player->mo->state == &states[S_PLAY_ATK4])) {
+        P_SetMobjState(player->mo, S_PLAY_ATK1);
+    }
+
+    // start improved player landing friction Tails 03-03-2000
+    if ((player->mo->eflags & MF_JUSTHITFLOOR) && !(cmd->forwardmove)) {
+        player->mo->momx = player->mo->momx / 2;
+        player->mo->momy = player->mo->momy / 2;
+    }
+    // end improved player landing friction Tails 03-03-2000
+
+    player->thok_dist = 512 * FRACUNIT;
+
+    // start moved homing junk here tails 02-27-2000
+    if (player->wants_to_thok && player->thok_dist) {
+        //            player->mo->angle=player->thok_angle;
+        P_Thrust(player->mo, player->mo->angle, 5 * 512000);
+        //            P_ThokUp (player->mo, player->thok_angle, 5*512000);
+        S_StartSound(player->mo, sfx_pdiehi);
+        P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z, MT_THOK);
+        player->wants_to_thok = 0;
+        //        player->thok_dist=0;
+        player->thok_angle = 0;
+    }
+
+    // end moved homing junk here tails 02-27-2000
+
+    if (!(cmd->buttons & BT_USE) && (player->dashspeed)) {
+        //       player->releasedash = 1; // the first spindash rev
+        if ((player->mo->eflags & MF_STARTDASH) && (player->mo->eflags & MF_SPINNING)) {
+            player->mo->eflags &= ~MF_STARTDASH;
+            P_Thrust(player->mo, player->mo->angle, 1 * player->dashspeed); // catapult forward ho!! Tails 02-27-2000
+            S_StartSound(player->mo, sfx_punch);
+            player->dashspeed = 0;
+        }
+    }
+
+    if (player->mo->eflags & MF_SPINNING && (player->mo->momx < 5 * FRACUNIT && player->mo->momx > -5 * FRACUNIT) && (player->mo->momy < 5 * FRACUNIT && player->mo->momy > -5 * FRACUNIT)) {
+        player->mo->momx = 0;
+        player->mo->momy = 0;
+    }
+
+    if (!(cmd->buttons & BT_USE)) {
+        player->usedown = false;
+    }
+
+    if (player->mo->z > player->mo->floorz) {
+        player->mo->eflags &= ~MF_STARTDASH;
+        //     player->mo->eflags &= ~MF_SPINNING;
+        player->dashspeed = 0;
+    }
+
+    //Spinning and Spindashing
+    if (cmd->buttons & BT_USE) // subsequent revs
+    {
+
+        if (((player->mo->z <= player->mo->floorz) && (!(player->mo->momz || player->mo->momx || player->mo->momy)) && (player->mo->state == &states[S_PLAY]) && (!(player->usedown)) && (!(player->mo->eflags & MF_SPINNING)))) {
+            //    P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z, MT_THOK);
+            player->mo->eflags |= MF_STARTDASH;
+            player->mo->eflags |= MF_SPINNING;
+            player->dashspeed += FRACUNIT; // more speed as you rev more Tails 03-01-2000
+            P_SetMobjState(player->mo, S_PLAY_ATK3);
+            //    S_StartSound (player->mo, sfx_noway);
+            player->usedown = true;
+        }
+
+        if (player->mo->eflags & MF_STARTDASH) {
+            player->dashspeed += FRACUNIT;
+            if (leveltime & 15) {
+                S_StartSound(player->mo, sfx_noway);
+                P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z, MT_THOK);
+            }
+        }
+
+        if (!(player->mo->momz) && (player->mo->momy || player->mo->momx) && (!(player->usedown)) && (!(player->mo->eflags & MF_SPINNING))) {
+            player->mo->eflags |= MF_SPINNING;
+            P_SetMobjState(player->mo, S_PLAY_ATK3);
+            S_StartSound(player->mo, sfx_sawup);
+            player->usedown = true;
+        }
+
+    }
+
+    if ((!(player->mo->momz || player->mo->momx || player->mo->momy)) && (player->mo->eflags & MF_SPINNING) && (!(player->mo->eflags & MF_STARTDASH))) // has the player stopped & is still spinning?
+    {
+        player->mo->eflags &= ~MF_SPINNING;
+        P_SetMobjState(player->mo, S_PLAY);
+        player->usedown = false;
+    }
 
     //added:22-02-98: jumping
     if (cmd->buttons & BT_JUMP)
     {
         // can't jump while in air, can't jump while jumping
-
         if (!player->jumpdown &&
-             (onground || (player->mo->eflags & MF_UNDERWATER)) )
-             
+            (onground || (player->mo->eflags & MF_UNDERWATER)))
+
         {
             if (onground)
-                player->mo->momz = JUMPGRAVITY*1.5; // Proper Jumping - Changed by Tails: 9-13-99
-                if(!(player->mo->eflags & MF_JUMPED)) // Tails 9-15-99 Spin Attack
-		player->mo->eflags += MF_JUMPED; // Tails 9-15-99 Spin Attack
-		player->mo->eflags &= ~MF_ONGROUND; // Tails 9-15-99 Spin Attack
-		player->mo->eflags &= ~MF_JUSTHITFLOOR; // Tails 9-15-99 Spin Attack
-                
-        //      else //water content // Tails 9-24-99
-           //     player->mo->momz = JUMPGRAVITY*1.5; // Tails 9-24-99
-
-            //TODO: goub gloub when push up in water
-
-            if ( !(player->cheats & CF_FLYAROUND) && onground && !(player->mo->eflags & MF_UNDERWATER))
             {
-                S_StartSound (player->mo, sfx_jump);
-                P_SetMobjState (player->mo, S_PLAY_ATK3); // Tails 9-24-99
+                player->mo->z += 1;
+                player->mo->momz = JUMPGRAVITY * 1.5; // Proper Jumping - Changed by Tails: 9-13-99
+                if (!(player->mo->eflags & MF_JUMPED)) // Tails 9-15-99 Spin Attack
+                {
+                    player->mo->eflags += MF_JUMPED; // Tails 9-15-99 Spin Attack
+                }
+                player->mo->eflags &= ~MF_ONGROUND; // Tails 9-15-99 Spin Attack
+                player->mo->eflags &= ~MF_JUSTHITFLOOR; // Tails 9-15-99 Spin Attack
+            }
+
+            if (!(player->cheats & CF_FLYAROUND) && onground)
+            {
+                S_StartSound(player->mo, sfx_jump);
+                P_SetMobjState(player->mo, S_PLAY_ATK3);
                 // keep jumping ok if FLY mode.
                 player->jumpdown = true;
             }
-// Player now spins underwater! Joy! Tails 10-31-99
-            if ( !(player->cheats & CF_FLYAROUND) && onground && (player->mo->eflags & MF_UNDERWATER))
-            {
-                P_SetMobjState (player->mo, S_PLAY_ATK3); // Tails 9-24-99
-                S_StartSound (player->mo, sfx_jump);
-                if(!(player->mo->eflags & MF_JUMPED)) // Tails 9-15-99 Spin Attack
-		player->mo->eflags += MF_JUMPED; // Tails 9-15-99 Spin Attack
-		player->mo->eflags &= ~MF_ONGROUND; // Tails 9-15-99 Spin Attack
-                // keep jumping ok if FLY mode.
-                player->jumpdown = true;
-            }
-// end underwater spin code
-
         }
-
-//Moved "Thok" code, placing it on jump button and killing the repeat: Stealth 12-25-99
-//TODO: place tails flight and knuckles gliding here if they are added to game
-//skin[player->skin].typechar == 1
-
         else if ((player->mo->eflags & MF_JUMPED) && !(player->powers[pw_tailsfly]) && !(player->jumpdown) && (player->skin == 1))
+        {
+            if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2]))
             {
-           if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2]))
-              {
-                P_SetMobjState (player->mo, S_PLAY_ABL1);
-              }
-            player->mo->momz = JUMPGRAVITY*1;
+                P_SetMobjState(player->mo, S_PLAY_ABL1);
+            }
+            player->mo->momz += 5 * FRACUNIT;
             player->jumpdown = true;
             player->powers[pw_tailsfly] = 350;
             player->mo->eflags &= ~MF_JUMPED;
-            }
-
+        }
         else if ((player->powers[pw_tailsfly]) && !(player->jumpdown) && (player->skin == 1))
+        {
+            if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2]))
             {
-           if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2]))
-              {
-                P_SetMobjState (player->mo, S_PLAY_ABL1);
-              }
-            player->mo->momz = JUMPGRAVITY*1;
-            player->jumpdown = true;
+                P_SetMobjState(player->mo, S_PLAY_ABL1);
             }
+            if (player->mo->momz < JUMPGRAVITY)
+                player->mo->momz += 5 * FRACUNIT;
+            if (player->mo->momz > JUMPGRAVITY)
+                player->mo->momz = JUMPGRAVITY;
+            player->jumpdown = true;
+        }
 
         else if ((player->mo->eflags & MF_JUMPED) && !(player->jumpdown) && (player->skin == 0))
-           {
-         //   P_Thrust (player->mo, player->mo->angle, 5*512000);
-         //   S_StartSound (player->mo, sfx_pdiehi);
-         //   P_SpawnMobj (player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
-            player->wants_to_thok=1;
+        {
+            player->wants_to_thok = 1;
             player->jumpdown = true;
-           }
+        }
 
     }
     else
         player->jumpdown = false;
+}
 
-    if  ( (cmd->forwardmove || cmd->sidemove)
-         && (player->mo->state == &states[S_PLAY] || player->mo->state == &states[S_PLAY_TAP1] || player->mo->state == &states[S_PLAY_TAP2]))
-    {
-        P_SetMobjState (player->mo, S_PLAY_RUN1);
+//
+// P_MovePlayer
+//
+void P_MovePlayer(player_t* player) {
+    ticcmd_t* cmd;
+
+    cmd = &player->cmd;
+#ifndef ABSOLUTEANGLE
+    player->mo->angle += (cmd->angleturn << 16);
+#else
+    if (demoversion < 125)
+        player->mo->angle += (cmd->angleturn << 16);
+    else
+        player->mo->angle = (cmd->angleturn << 16);
+#endif
+
+    if (cv_movementtype.value == 1)
+        P_Mar2KMovement(player, cmd);
+
+    if (cv_movementtype.value == 2)
+        P_Xmas96Movement(player, cmd);
+
+    if (!(player->mo->state == &states[S_PLAY_ABL1] || player->mo->state == &states[S_PLAY_ABL2])) {
+        player->powers[pw_tailsfly] = 0;
     }
 
+    // start tails putput noise Tails 03-05-2000
+    if (player->mo->state == &states[S_PLAY_ABL1] && player->skin == 1 && player->powers[pw_tailsfly] && player->skin == 1) {
+        S_StartSound(player->mo, sfx_sawidl);
+    }
+
+    if (player->powers[pw_tailsfly] == 1 && player->skin == 1) {
+        P_SetMobjState(player->mo, S_PLAY_SPC4);
+    }
+
+    if (player->mo->state->nextstate == S_PLAY_SPC1 && player->skin == 1 && !player->powers[pw_tailsfly]) {
+        S_StartSound(player->mo, sfx_sawful);
+    }
+    // end tails putput noise Tails 03-05-2000
+
+    // start shield spawn code Tails 03-04-2000
+    if (player->powers[pw_blueshield]) {
+        P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_GREENORB);
+    }
+
+    // start timer code tails 02-29-2000
+    player->armorpoints = leveltime / 35;
+    // end timer code tails 02-29-2000
+
+    //start invincibility sparkles spawn code tails
+    if (player->powers[pw_invulnerability]) {
+        P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_IVSP);
+    }
+    //end invincibility sparkles spawn code tails
+
+    // start resume normal music tails
+    if ((player->powers[pw_invulnerability] == 1) || (player->powers[pw_strength] == 1)) {
+        S_ChangeMusic(mus_runnin + gamemap - 1, 1);
+    }
+    // end resume normal music tails
+
+    //start shield spawn code
+    //Edited to work with new shield handling: Stealth 12-26-99
+    if (player->powers[pw_strength]) {
+        P_SpawnMobj(player->mo->x, player->mo->y, player->mo->z + (player->mo->info->height / 2), MT_THOK);
+    }
+    //end shield spawn code
+
+    if ((cmd->forwardmove || cmd->sidemove) &&
+        (player->mo->state == &states[S_PLAY] || player->mo->state == &states[S_PLAY_TAP1] || player->mo->state == &states[S_PLAY_TAP2])) {
+        P_SetMobjState(player->mo, S_PLAY_RUN1);
+    }
 }
 
 //

@@ -175,6 +175,14 @@ typedef struct player_s
     int dashspeed; // dashing speed Tails 03-01-2000
 
     int typechar; // Which character? Tails 03-01-2000
+
+    // Values for Xmas 0.96's movement to work
+    int speed;
+    int acceleration;
+    boolean walking;
+    boolean running;
+    boolean spinning;
+
 } player_t;
 
 

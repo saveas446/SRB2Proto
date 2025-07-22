@@ -886,13 +886,15 @@ menu_t  OptionsDef =
 //added:10-02-98: note: alphaKey member is the y offset
 menuitem_t ControlOptionsMenu[] =
 {
+    {IT_STRING | IT_CVAR,"Control Style",&cv_movementtype,20},
+    {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,30},
     {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Mouse Speed"     ,&cv_mousesens       ,20},
-    {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,40},
-    {IT_STRING | IT_CVAR,"Invert Mouse"    ,&cv_invertmouse     ,50},
+     | IT_CV_SLIDER     ,"Mouse Speed"     ,&cv_mousesens       ,40},
+    {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,50},
+    {IT_STRING | IT_CVAR,"Invert Mouse"    ,&cv_invertmouse     ,60},
     {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Mouselook Speed"     ,&cv_mlooksens       ,60},
-    {IT_CALL | IT_WHITESTRING,"Configure Keybinds...",M_SetupControlsMenu,80}
+     | IT_CV_SLIDER     ,"Mouselook Speed"     ,&cv_mlooksens       ,70},
+    {IT_CALL | IT_WHITESTRING,"Configure Keybinds...",M_SetupControlsMenu,90}
 };
 
 menu_t  ControlOptionsDef =
@@ -2392,13 +2394,6 @@ void M_ChangeCvar(int choise)
 {
     consvar_t *cv=(consvar_t *)currentMenu->menuitems[itemOn].itemaction;
 
-    if (cv_viewsize.value == 10 && cv_fonttype.value == 1)
-        CONS_Printf("NOTE: The Xmas 0.94 font is not compatible with the Doom/Doom 2 HUD. You will most likely see no difference.\n");
-#ifdef HAVE_SDL
-    if (cv_midibackend.value == 1)
-        CONS_Printf("NOTE: You will need to restart the game for FluidSynth to apply. If you haven't already, you will also need to quit the game and modify the \"soundfontpath\" console variable in your config.cfg file to point to a soundfont file.\n");
-#endif
-
     if(((currentMenu->menuitems[itemOn].status & IT_CVARTYPE) == IT_CV_SLIDER )
      ||((currentMenu->menuitems[itemOn].status & IT_CVARTYPE) == IT_CV_NOMOD  ))
     {
@@ -2411,8 +2406,17 @@ void M_ChangeCvar(int choise)
             sprintf(s,"%f",(float)cv->value/FRACUNIT+(choise*2-1)*(1.0/16.0));
             CV_Set(cv,s);
         }
-        else
-            CV_SetValueMod(cv,cv->value+choise*2-1);
+        else {
+            CV_SetValueMod(cv, cv->value + choise * 2 - 1);
+            // If trying to use the Doom HUD and Xmas 0.94 font at the same time, print a message
+            if ((!(strcmp(cv->name, "fonttype")) || !(strcmp(cv->name, "viewsize"))) && (cv_viewsize.value == 10 && cv_fonttype.value == 1))
+                CONS_Printf("NOTE: The Xmas 0.94 font is not compatible with the Doom/Doom 2 HUD. You will most likely see no difference.\n");
+            // When switching to the FluidSynth backend, print a message
+#ifdef HAVE_SDL
+            if (!(strcmp(cv->name, "midibackend")) && cv_midibackend.value == 1)
+                CONS_Printf("NOTE: You will need to restart the game for FluidSynth to apply. If you haven't already, you will also need to quit the game and modify the \"soundfontpath\" console variable in your config.cfg file to point to a soundfont file.\n");
+#endif
+        }
 }
 
 //
