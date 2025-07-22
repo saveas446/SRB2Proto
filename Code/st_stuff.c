@@ -1489,10 +1489,10 @@ void ST_overlayDrawer(void)
 
     patch_t* tallnum2;
 
-    if (cv_fonttype.value == 0) {
+    if (cv_fonttype.value == FONT_MAR2K) {
         tallnum2 = tallnum;
     }
-    else if (cv_fonttype.value == 1) {
+    else if (cv_fonttype.value == FONT_XMAS) {
         tallnum2 = tallnumxmas;
     }
 

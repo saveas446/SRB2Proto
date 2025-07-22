@@ -113,11 +113,17 @@ extern byte*    scr_borderpatch;   // patch used to fill the view borders
 
 extern consvar_t cv_usegamma;
 extern consvar_t cv_viewsize;
-extern consvar_t cv_fonttype;
 extern consvar_t cv_detaillevel;
 
 extern consvar_t cv_scr_width;
 extern consvar_t cv_scr_height;
+
+extern consvar_t cv_fonttype;
+
+enum {
+    FONT_MAR2K = 0, 
+    FONT_XMAS
+};
 
 
 // quick fix for tall/short skies, depending on bytesperpixel

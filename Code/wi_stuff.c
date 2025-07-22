@@ -312,14 +312,18 @@ static patch_t*         yah[2];
 static patch_t*         splat;
 
 // %, : graphics
-static patch_t*         percent;
-static patch_t*         colon;
+static patch_t* percent;
+static patch_t* percentxmas;
+static patch_t* colon;
+static patch_t* colonxmas;
 
 // 0-9 graphic
-static patch_t*         num[10];
+static patch_t* num[10];
+static patch_t* numxmas[10];
 
 // minus sign
-static patch_t*         wiminus;
+static patch_t* wiminus;
+static patch_t* wiminusxmas;
 
 // "Finished!" graphics
 static patch_t*         finished;
@@ -331,14 +335,21 @@ static patch_t*         entering;
 static patch_t*         sp_secret;
 
  // "Kills", "Scrt", "Items", "Frags"
-static patch_t*         kills;
-static patch_t*         secret;
-static patch_t*         items;
-static patch_t*         frags;
+static patch_t* kills;
+static patch_t* secret;
+static patch_t* items;
+static patch_t* frags;
+
+static patch_t* killsxmas;
+static patch_t* secretxmas;
+static patch_t* itemsxmas;
+static patch_t* fragsxmas;
 
 // Time sucks.
-static patch_t*         time;
-static patch_t*         par;
+static patch_t* time;
+static patch_t* timexmas;
+static patch_t* par;
+static patch_t* parxmas;
 static patch_t*         sucks;
 
 // "killers", "victims"
@@ -580,17 +591,17 @@ void WI_drawAnimatedBack(void)
 // Returns new x position.
 //
 
-int
-WI_drawNum
-( int           x,
-  int           y,
-  int           n,
-  int           digits )
-{
+int WI_drawNum(int x, int y, int n, int digits) {
+    int fontwidth;
+    int neg;
+    int temp;
 
-    int         fontwidth = SHORT(num[0]->width);
-    int         neg;
-    int         temp;
+    if (cv_fonttype.value == FONT_MAR2K) {
+        fontwidth = SHORT(num[0]->width);
+    }
+    else {
+        fontwidth = SHORT(numxmas[0]->width);
+    }
 
     if (digits < 0)
     {
@@ -625,13 +636,22 @@ WI_drawNum
     while (digits--)
     {
         x -= fontwidth;
-        V_DrawScaledPatch(x, y, FB, num[ n % 10 ]);
+        if (cv_fonttype.value == FONT_MAR2K) {
+            V_DrawScaledPatch(x, y, FB, num[n % 10]);
+        }
+        else {
+            V_DrawScaledPatch(x, y, FB, numxmas[n % 10]);
+        }
         n /= 10;
     }
 
     // draw a minus sign if necessary
-    if (neg)
-        V_DrawScaledPatch(x-=8, y, FB, wiminus);
+    if (neg) {
+        if (cv_fonttype.value == FONT_XMAS)
+            V_DrawScaledPatch(x -= 8, y, FB, wiminusxmas);
+        else
+            V_DrawScaledPatch(x -= 8, y, FB, wiminus);
+    }
 
     return x;
 
@@ -645,8 +665,10 @@ WI_drawPercent
 {
     if (p < 0)
         return;
-
-    V_DrawScaledPatch(x, y, FB, percent);
+    if (cv_fonttype.value == FONT_MAR2K)
+        V_DrawScaledPatch(x, y, FB, percent);
+    else
+        V_DrawScaledPatch(x, y, FB, percentxmas);
     WI_drawNum(x, y, p, -1);
 }
 
@@ -669,26 +691,51 @@ WI_drawTime
     if (t<0)
         return;
 
-    if (t <= 61*59)
-    {
-        div = 1;
-
-        do
+    if (cv_fonttype.value == FONT_MAR2K) {
+        if (t <= 61 * 59)
         {
-            n = (t / div) % 60;
-            x = WI_drawNum(x, y, n, 2) - SHORT(colon->width);
-            div *= 60;
+            div = 1;
 
-            // draw
-            if (div==60 || t / div)
-                V_DrawScaledPatch(x, y, FB, colon);
+            do
+            {
+                n = (t / div) % 60;
+                x = WI_drawNum(x, y, n, 2) - SHORT(colon->width);
+                div *= 60;
 
-        } while (t / div);
+                // draw
+                if (div == 60 || t / div)
+                    V_DrawScaledPatch(x, y, FB, colon);
+
+            } while (t / div);
+        }
+        else
+        {
+            // "sucks"
+            V_DrawScaledPatch(x - SHORT(sucks->width), y, FB, sucks);
+        }
     }
-    else
-    {
-        // "sucks"
-        V_DrawScaledPatch(x - SHORT(sucks->width), y, FB, sucks);
+    else {
+        if (t <= 61 * 59)
+        {
+            div = 1;
+
+            do
+            {
+                n = (t / div) % 60;
+                x = WI_drawNum(x, y, n, 2) - SHORT(colonxmas->width);
+                div *= 60;
+
+                // draw
+                if (div == 60 || t / div)
+                    V_DrawScaledPatch(x, y, FB, colonxmas);
+
+            } while (t / div);
+        }
+        else
+        {
+            // "sucks"
+            V_DrawScaledPatch(x - SHORT(sucks->width), y, FB, sucks);
+        }
     }
 }
 
@@ -1473,22 +1520,42 @@ void WI_drawNetgameStats(void)
 
     WI_drawLF();
 
-    // draw stat titles (top line)
-    V_DrawScaledPatch(NG_STATSX+NG_SPACINGX-SHORT(kills->width),
-                NG_STATSY, FB, kills);
+    if (cv_fonttype.value == FONT_MAR2K) {
+        // draw stat titles (top line)
+        V_DrawScaledPatch(NG_STATSX + NG_SPACINGX - SHORT(kills->width),
+            NG_STATSY, FB, kills);
 
-    V_DrawScaledPatch(NG_STATSX+2*NG_SPACINGX-SHORT(items->width),
-                NG_STATSY, FB, items);
+        V_DrawScaledPatch(NG_STATSX + 2 * NG_SPACINGX - SHORT(items->width),
+            NG_STATSY, FB, items);
 
-    V_DrawScaledPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),
-                NG_STATSY, FB, secret);
+        V_DrawScaledPatch(NG_STATSX + 3 * NG_SPACINGX - SHORT(secret->width),
+            NG_STATSY, FB, secret);
 
-    if (dofrags)
-        V_DrawScaledPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
-                    NG_STATSY, FB, frags);
+        if (dofrags)
+            V_DrawScaledPatch(NG_STATSX + 4 * NG_SPACINGX - SHORT(frags->width),
+                NG_STATSY, FB, frags);
 
-    // draw stats
-    y = NG_STATSY + SHORT(kills->height);
+        // draw stats
+        y = NG_STATSY + SHORT(kills->height);
+    }
+    else {
+        // draw stat titles (top line)
+        V_DrawScaledPatch(NG_STATSX + NG_SPACINGX - SHORT(killsxmas->width),
+            NG_STATSY, FB, killsxmas);
+
+        V_DrawScaledPatch(NG_STATSX + 2 * NG_SPACINGX - SHORT(itemsxmas->width),
+            NG_STATSY, FB, itemsxmas);
+
+        V_DrawScaledPatch(NG_STATSX + 3 * NG_SPACINGX - SHORT(secretxmas->width),
+            NG_STATSY, FB, secretxmas);
+
+        if (dofrags)
+            V_DrawScaledPatch(NG_STATSX + 4 * NG_SPACINGX - SHORT(fragsxmas->width),
+                NG_STATSY, FB, fragsxmas);
+
+        // draw stats
+        y = NG_STATSY + SHORT(killsxmas->height);
+    }
 
     //added:08-02-98: p[i] replaced by stpb (see WI_loadData for more)
     for (i=0 ; i<MAXPLAYERS ; i++)
@@ -1654,21 +1721,41 @@ void WI_drawStats(void)
 
     WI_drawLF();
 
-    V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, kills);
-    WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+    if (cv_fonttype.value == FONT_MAR2K) {
+        V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, kills);
+        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawScaledPatch(SP_STATSX, SP_STATSY+lh, FB, items);
-    WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
+        V_DrawScaledPatch(SP_STATSX, SP_STATSY + lh, FB, items);
+        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + lh, cnt_items[0]);
 
-    V_DrawScaledPatch(SP_STATSX, SP_STATSY+2*lh, FB, sp_secret);
-    WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
+        V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, sp_secret);
+        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + 2 * lh, cnt_secret[0]);
 
-    V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, time);
-    WI_drawTime(BASEVIDWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time);
+        V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, time);
+        WI_drawTime(BASEVIDWIDTH / 2 - SP_TIMEX, SP_TIMEY, cnt_time);
+    }
+    else {
+        V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, killsxmas);
+        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+
+        V_DrawScaledPatch(SP_STATSX, SP_STATSY + lh, FB, itemsxmas);
+        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + lh, cnt_items[0]);
+
+        V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, secretxmas);
+        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + 2 * lh, cnt_secret[0]);
+
+        V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, timexmas);
+        WI_drawTime(BASEVIDWIDTH / 2 - SP_TIMEX, SP_TIMEY, cnt_time);
+    }
 
     if (wbs->epsd < 3)
     {
-        V_DrawScaledPatch(BASEVIDWIDTH/2 + SP_TIMEX, SP_TIMEY, FB, par);
+        if (cv_fonttype.value == FONT_MAR2K) {
+            V_DrawScaledPatch(BASEVIDWIDTH / 2 + SP_TIMEX, SP_TIMEY, FB, par);
+        }
+        else {
+            V_DrawScaledPatch(BASEVIDWIDTH / 2 + SP_TIMEX, SP_TIMEY, FB, parxmas);
+        }
         WI_drawTime(BASEVIDWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
     }
 
@@ -1742,6 +1829,7 @@ void WI_Ticker(void)
 
 }
 
+
 void WI_loadData(void)
 {
     int         i;
@@ -1750,36 +1838,15 @@ void WI_loadData(void)
     char        name[9];
 
     // choose the background of the intermission
-    if (gamemode == commercial){ // Tails 12-02-99
        if (gamemap == 1) { // Tails 12-02-99
-        strcpy(bgname, "TITLEPIC"); } // Tails 12-02-99
-       else strcpy(bgname, "INTERPIC"); } // Tails 12-02-99
-    else
-        sprintf(bgname, "WIMAP%d", wbs->epsd);
-
-    if ( gamemode == retail )
-    {
-      if (wbs->epsd == 3)
-          strcpy(bgname,"INTERPIC");
-    }
+            strcpy(bgname, "TITLEPIC"); 
+       } else {
+           strcpy(bgname, "INTERPIC");
+       }
 
     // background stored in backbuffer
-    //if (rendermode == render_soft)
-        V_DrawScaledPatch(0, 0, 1, W_CachePatchName(bgname, PU_CACHE));
+    V_DrawScaledPatch(0, 0, 1, W_CachePatchName(bgname, PU_CACHE));
 
-    // UNUSED unsigned char *pic = screens[1];
-    // if (gamemode == commercial)
-    // {
-    // darken the background image
-    // while (pic != screens[1] + SCREENHEIGHT*SCREENWIDTH)
-    // {
-    //   *pic = colormaps[256*25 + *pic];
-    //   pic++;
-    // }
-    //}
-
-    if (gamemode == commercial)
-    {
         NUMCMAPS = 32;
         lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS,
                                        PU_STATIC, 0);
@@ -1788,52 +1855,10 @@ void WI_loadData(void)
             sprintf(name, "CWILV%2.2d", i);
             lnames[i] = W_CachePatchName(name, PU_STATIC);
         }
-    }
-    else
-    {
-        lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS,
-                                       PU_STATIC, 0);
-        for (i=0 ; i<NUMMAPS ; i++)
-        {
-            sprintf(name, "WILV%d%d", wbs->epsd, i);
-            lnames[i] = W_CachePatchName(name, PU_STATIC);
-        }
 
-        // you are here
-        yah[0] = W_CachePatchName("WIURH0", PU_STATIC);
-
-        // you are here (alt.)
-        yah[1] = W_CachePatchName("WIURH1", PU_STATIC);
-
-        // splat
-        splat = W_CachePatchName("WISPLAT", PU_STATIC);
-
-        if (wbs->epsd < 3)
-        {
-            for (j=0;j<NUMANIMS[wbs->epsd];j++)
-            {
-                a = &anims[wbs->epsd][j];
-                for (i=0;i<a->nanims;i++)
-                {
-                    // MONDO HACK!
-                    if (wbs->epsd != 1 || j != 8)
-                    {
-                        // animations
-                        sprintf(name, "WIA%d%.2d%.2d", wbs->epsd, j, i);
-                        a->p[i] = W_CachePatchName(name, PU_STATIC);
-                    }
-                    else
-                    {
-                        // HACK ALERT!
-                        a->p[i] = anims[1][4].p[i];
-                    }
-                }
-            }
-        }
-    }
-
-    // More hacks on minus sign.
+    // Load font (both March2K and Xmas)
     wiminus = W_CachePatchName("WIMINUS", PU_STATIC);
+    wiminusxmas = W_CachePatchName("XIMINUS", PU_STATIC);
 
     for (i=0;i<10;i++)
     {
@@ -1842,72 +1867,48 @@ void WI_loadData(void)
         num[i] = W_CachePatchName(name, PU_STATIC);
     }
 
-    // percent sign
+
+    for (i = 0; i < 10; i++)
+    {
+        // numbers 0-9
+        sprintf(name, "XINUM%d", i);
+        numxmas[i] = W_CachePatchName(name, PU_STATIC);
+    }
+
     percent = W_CachePatchName("WIPCNT", PU_STATIC);
-
-    // "finished"
+    percentxmas = W_CachePatchName("XIPCNT", PU_STATIC);
     finished = W_CachePatchName("WIF", PU_STATIC);
-
-    // "entering"
     entering = W_CachePatchName("WIENTER", PU_STATIC);
 
-    // "kills"
     kills = W_CachePatchName("WIOSTK", PU_STATIC);
-
-    // "scrt"
     secret = W_CachePatchName("WIOSTS", PU_STATIC);
-
-     // "secret"
     sp_secret = W_CachePatchName("WISCRT2", PU_STATIC);
-
-    //added:08-02-98: WIOBJ is not in Doom2 wad... dont know what it is
-    //added:18-02-98: hmmm, I found out that 'french' was misused...
-    //                in fact french is an enum, and language has to be tested
-    //if (language==french)
-    //{
-        // "items"
-        //if (netgame && !cv_deathmatch.value)
-        //    items = W_CachePatchName("WIOBJ", PU_STATIC);
-        //else
-        //    items = W_CachePatchName("WIOSTI", PU_STATIC);
-    //} else
-        items = W_CachePatchName("WIOSTI", PU_STATIC);
-
-    // "frgs"
+    items = W_CachePatchName("WIOSTI", PU_STATIC);
     frags = W_CachePatchName("WIFRGS", PU_STATIC);
 
-    // ":"
+    killsxmas = W_CachePatchName("XIOSTK", PU_STATIC);
+    secretxmas = W_CachePatchName("XIOSTS", PU_STATIC);
+    itemsxmas = W_CachePatchName("XIOSTI", PU_STATIC);
+    fragsxmas = W_CachePatchName("XIFRGS", PU_STATIC);
+
     colon = W_CachePatchName("WICOLON", PU_STATIC);
+    colonxmas = W_CachePatchName("XICOLON", PU_STATIC);
 
-    // "time"
     time = W_CachePatchName("WITIME", PU_STATIC);
+    timexmas = W_CachePatchName("XITIME", PU_STATIC);
 
-    // "sucks"
     sucks = W_CachePatchName("WISUCKS", PU_STATIC);
 
-    // "par"
     par = W_CachePatchName("WIPAR", PU_STATIC);
+    parxmas = W_CachePatchName("XIPAR", PU_STATIC);
 
-    // "killers" (vertical)
     killers = W_CachePatchName("WIKILRS", PU_STATIC);
-
-    // "victims" (horiz)
     victims = W_CachePatchName("WIVCTMS", PU_STATIC);
-
-    // "total"
     total = W_CachePatchName("WIMSTT", PU_STATIC);
 
-    // your face
+
     star = W_CachePatchName("STFST01", PU_STATIC);
-
-    // dead face
     bstar = W_CachePatchName("STFDEAD0", PU_STATIC);
-
-
-    //added:08-02-98: now uses a single STPB0 which is remapped to the
-    //                player translation table. Whatever new colors we add
-    //                since we'll have to define a translation table for
-    //                it, we'll have the right colors here automatically.
     stpb = W_CachePatchName("STPB0", PU_STATIC);
 }
 
@@ -1921,9 +1922,13 @@ void WI_unloadData(void)
     if (rendermode==render_soft)
     {
     Z_ChangeTag(wiminus, PU_CACHE);
+    Z_ChangeTag(wiminusxmas, PU_CACHE);
 
     for (i=0 ; i<10 ; i++)
         Z_ChangeTag(num[i], PU_CACHE);
+
+    for (i = 0; i < 10; i++)
+        Z_ChangeTag(numxmas[i], PU_CACHE);
 
     if (gamemode == commercial)
     {
@@ -1957,17 +1962,28 @@ void WI_unloadData(void)
     if (rendermode==render_soft)
     {
     Z_ChangeTag(percent, PU_CACHE);
+    Z_ChangeTag(percentxmas, PU_CACHE);
     Z_ChangeTag(colon, PU_CACHE);
+    Z_ChangeTag(colonxmas, PU_CACHE);
     Z_ChangeTag(finished, PU_CACHE);
     Z_ChangeTag(entering, PU_CACHE);
+
     Z_ChangeTag(kills, PU_CACHE);
     Z_ChangeTag(secret, PU_CACHE);
     Z_ChangeTag(sp_secret, PU_CACHE);
     Z_ChangeTag(items, PU_CACHE);
     Z_ChangeTag(frags, PU_CACHE);
     Z_ChangeTag(time, PU_CACHE);
+   
+    Z_ChangeTag(killsxmas, PU_CACHE);
+    Z_ChangeTag(secretxmas, PU_CACHE);
+    Z_ChangeTag(itemsxmas, PU_CACHE);
+    Z_ChangeTag(fragsxmas, PU_CACHE);
+    Z_ChangeTag(timexmas, PU_CACHE);
+
     Z_ChangeTag(sucks, PU_CACHE);
     Z_ChangeTag(par, PU_CACHE);
+    Z_ChangeTag(parxmas, PU_CACHE);
 
     Z_ChangeTag(victims, PU_CACHE);
     Z_ChangeTag(killers, PU_CACHE);

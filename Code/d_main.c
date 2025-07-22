@@ -373,7 +373,7 @@ void D_Display (void)
             y = 4;
         else
             y = viewwindowy+4;
-        if (cv_fonttype.value == 1)
+        if (cv_fonttype.value == FONT_XMAS)
             patch = W_CachePatchName("X_PAUSE", PU_CACHE);
         else
             patch = W_CachePatchName ("M_PAUSE", PU_CACHE);
