@@ -85,6 +85,10 @@ ticcmd_t *I_BaseTiccmd2(void)
 void I_Quit(void)
 {
 	M_SaveConfig(NULL);
+	D_QuitNetGame();
+	I_ShutdownGraphics();
+	I_ShutdownAudio();
+	I_ShutdownSystem();
 	exit(0);
 }
 
@@ -105,6 +109,10 @@ void I_Error(char *error, ...)
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SRB2 Error", buffer, NULL);
 
 	M_SaveConfig(NULL);
+	D_QuitNetGame();
+	I_ShutdownGraphics();
+	I_ShutdownAudio();
+	I_ShutdownSystem();
 	exit(-1);
 }
 
