@@ -194,7 +194,16 @@ void M_DrawGenericMenu(void)
     // draw title (or big pic)
     if( currentMenu->menutitlepic )
     {
-        patch_t* p = W_CachePatchName(currentMenu->menutitlepic,PU_CACHE);
+        // strcpy but worse
+        for (int j = 0; j < 8; j++) {
+            newname[j] = currentMenu->menutitlepic[j];
+        }
+        if (cv_fonttype.value == 1) {
+            // Use X_****** instead of M_****** if we're using the Xmas 0.94 font
+            newname[0] = 'X';
+        }
+        patch_t* p = W_CachePatchName(newname, PU_CACHE);
+        
         V_DrawScaledPatch ((BASEVIDWIDTH-p->width)/2,(y-p->height)/2,0,p);
     }
 
@@ -800,7 +809,10 @@ void M_DrawNewGame(void)
     patch_t* p;
 
     //faB: testing with glide
-    p = W_CachePatchName("M_SKILL",PU_CACHE);
+    if (cv_fonttype.value == 1)
+        p = W_CachePatchName("X_SKILL", PU_CACHE);
+    else 
+        p = W_CachePatchName("M_SKILL",PU_CACHE);
     V_DrawScaledPatch ((BASEVIDWIDTH-p->width)/2,38,0,p);
 
     //    V_DrawScaledPatch (54,38,0,W_CachePatchName("M_SKILL",PU_CACHE));
