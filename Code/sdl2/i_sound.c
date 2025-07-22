@@ -17,6 +17,7 @@ Mix_Music* music;
 
 CV_PossibleValue_t midibackend_cons_t[] = { {0,"Native"},{1,"FluidSynth"},{0,NULL} };
 consvar_t cv_midibackend = {"midibackend", "Native", "Controls whether SDL2 plays audio using native playback or FluidSynth.", CAT_SOUND, CV_SAVE, midibackend_cons_t, NULL, 0, NULL, NULL};
+consvar_t cv_soundfontpath = {"soundfontpath", "NOT CONFIGURED! Replace this with a path to a .sf2 file.", "Configures FluidSynth's soundfont path.", CAT_SOUND, CV_SAVE, NULL, NULL, 0, NULL, NULL};
 
 byte sound_started = 0;
 
@@ -237,8 +238,16 @@ byte music_started = 0;
 void I_InitMusic(void){
 #ifdef HAVE_SDL_MIXER
 	if (!nomusic) {
-		SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
+		SDL_setenv("SDL_MIXER_DEBUG_MIDI", "1", 1);
 		SDL_Init(SDL_INIT_AUDIO);
+		Mix_Init(MIX_INIT_MID);
+		if (cv_midibackend.value == 0) {
+			SDL_setenv("SDL_MIXER_MIDI_DRIVER", "native", 1);
+		} else {
+			SDL_setenv("SDL_MIXER_MIDI_DRIVER", "fluidsynth", 1);
+			SDL_setenv("SDL_SOUNDFONTS", cv_soundfontpath.string, 1);
+			Mix_SetSoundFonts(cv_soundfontpath.string);
+		}
 		Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	}
 #endif

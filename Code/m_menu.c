@@ -2380,6 +2380,13 @@ void M_ChangeCvar(int choise)
 {
     consvar_t *cv=(consvar_t *)currentMenu->menuitems[itemOn].itemaction;
 
+    if (cv_viewsize.value == 10 && cv_fonttype.value == 1)
+        CONS_Printf("NOTE: The Xmas 0.94 font is not compatible with the Doom/Doom 2 HUD. You will most likely see no difference.\n");
+#ifdef HAVE_SDL
+    if (cv_midibackend.value == 1)
+        CONS_Printf("NOTE: You will need to restart the game for FluidSynth to apply. If you haven't already, you will also need to quit the game and modify the \"soundfontpath\" console variable in your config.cfg file to point to a soundfont file.\n");
+#endif
+
     if(((currentMenu->menuitems[itemOn].status & IT_CVARTYPE) == IT_CV_SLIDER )
      ||((currentMenu->menuitems[itemOn].status & IT_CVARTYPE) == IT_CV_NOMOD  ))
     {

@@ -18,6 +18,7 @@
 #include "m_misc.h"
 #include "m_fixed.h"
 #include "screen.h"
+#include "i_sound.h"
 
 
 //========
@@ -910,9 +911,6 @@ found:
         var->value = atoi (var->string);
 
 finish:
-    if (cv_viewsize.value == 10 && cv_fonttype.value == 1) {
-        CONS_Printf("WARNING: The Xmas 0.94 font is not compatible with the Doom/Doom 2 HUD. You will most likely see no difference.\n");
-    }
     // raise 'on change' code
     if (var->flags & CV_CALL)
         var->func ();

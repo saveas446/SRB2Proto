@@ -186,6 +186,7 @@ void I_StartFrame(void) {
 	SDL_Event e_s;
 	// This exists so we can reuse most of the keydown event code for the keyup event
 	boolean up = false;
+	boolean ignoremodifiers = false;
 
 	while (SDL_PollEvent(&e_s) != 0) {
 		switch (e_s.type) {
@@ -198,23 +199,6 @@ void I_StartFrame(void) {
 			case SDL_KEYDOWN:
 				if (!up)
 					e_w.type = ev_keydown;
-
-				// Intercept modifier keys
-				if (SDL_GetModState() & KMOD_SHIFT) {
-					e_w.data1 = KEY_SHIFT;
-					D_PostEvent(&e_w);
-					return;
-				}
-				if (SDL_GetModState() & KMOD_CTRL) {
-					e_w.data1 = KEY_CTRL;
-					D_PostEvent(&e_w);
-					return;
-				}
-				if (SDL_GetModState() & KMOD_ALT) {
-					e_w.data1 = KEY_ALT;
-					D_PostEvent(&e_w);
-					return;
-				}
 
 				switch (e_s.key.keysym.sym) {
 					case SDLK_UP:
@@ -233,10 +217,29 @@ void I_StartFrame(void) {
 						e_w.data1 = e_s.key.keysym.sym;
 						break;
 				}
+
+				if (!ignoremodifiers) {
+					// Intercept modifier keys
+					if (SDL_GetModState() & KMOD_SHIFT) {
+						e_w.data1 = KEY_SHIFT;
+						D_PostEvent(&e_w);
+						return;
+					}
+					if (SDL_GetModState() & KMOD_CTRL) {
+						e_w.data1 = KEY_CTRL;
+						D_PostEvent(&e_w);
+						return;
+					}
+					if (SDL_GetModState() & KMOD_ALT) {
+						e_w.data1 = KEY_ALT;
+						D_PostEvent(&e_w);
+						return;
+					}
+				}
 					
 				// For when I inevitably come back to this
-				//SDL_Log("Virtual key code: 0x%02X (%c)\n", e_s.key.keysym.sym, e_s.key.keysym.sym);
-				//SDL_Log("Physical key code: 0x%02X (%c)\n", e_s.key.keysym.scancode, e_s.key.keysym.scancode);
+				//CONS_Printf("Virtual key code: 0x%02X (%c)\n", e_s.key.keysym.sym, e_s.key.keysym.sym);
+				//CONS_Printf("Physical key code: 0x%02X (%c)\n", e_s.key.keysym.scancode, e_s.key.keysym.scancode);
 				D_PostEvent(&e_w);
 				break;
 			case SDL_MOUSEMOTION:

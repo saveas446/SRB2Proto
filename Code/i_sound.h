@@ -30,6 +30,7 @@
 // Special consvar for deciding between native and fluidsynth
 #ifdef HAVE_SDL
 extern consvar_t cv_midibackend;
+extern consvar_t cv_soundfontpath;
 #endif
 
 void* I_GetSfx (sfxinfo_t*  sfx);

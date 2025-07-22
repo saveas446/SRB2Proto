@@ -26,6 +26,7 @@
 #include "m_misc.h"
 #include "am_map.h"
 #include "byteptr.h"
+#include "i_sound.h" // For cv_midibackend
 
 // ------
 // protos
@@ -251,6 +252,11 @@ void D_RegisterClientCommands (void)
 
     // WATER HACK TEST UNTIL FULLY FINISHED
     COM_AddCommand ("dev_water", "Development command. Allows you to set the water level for testing.", CAT_DEV, Command_Water_f);
+
+#ifdef HAVE_SDL
+    CV_RegisterVar(&cv_midibackend);
+    CV_RegisterVar(&cv_soundfontpath);
+#endif
 
     //misc
     CV_RegisterVar(&cv_teamplay);
