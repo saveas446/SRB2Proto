@@ -87,7 +87,8 @@ void I_Quit(void)
 	M_SaveConfig(NULL);
 	D_QuitNetGame();
 	I_ShutdownGraphics();
-	I_ShutdownAudio();
+	I_ShutdownSound();
+	I_ShutdownMusic();
 	I_ShutdownSystem();
 	exit(0);
 }
@@ -111,7 +112,8 @@ void I_Error(char *error, ...)
 	M_SaveConfig(NULL);
 	D_QuitNetGame();
 	I_ShutdownGraphics();
-	I_ShutdownAudio();
+	I_ShutdownSound();
+	I_ShutdownMusic();
 	I_ShutdownSystem();
 	exit(-1);
 }
@@ -283,6 +285,8 @@ int I_StartupSystem(void)
 }
 
 void I_ShutdownSystem(void){
+	CONS_Printf("I_ShutdownSystem...\n");
+	SDL_RWclose(logstream);
 	SDL_Quit();
 }
 

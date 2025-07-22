@@ -148,6 +148,7 @@ static void SetSDLIcon(SDL_Window* window)
 }
 
 void I_ShutdownGraphics(void){
+	CONS_Printf("I_ShutdownGraphics...\n");
 	SDL_DestroyRenderer(SDL_renderer);
 	SDL_DestroyWindow(SDL_window);
 	SDL_FreeSurface(surface);

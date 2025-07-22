@@ -1016,7 +1016,7 @@ void D_SRB2Main (void)
     }
 
     //added:11-01-98:center the string, add compilation time and date.
-    sprintf(legacy,"Doom LEGACY v%i.%i"VERSIONSTRING,VERSION/100,VERSION%100);
+    sprintf(legacy,"NewMillenium (Doom Legacy v%i.%i)"VERSIONSTRING,VERSION/100,VERSION%100);
     D_MakeTitleString(legacy);
 
 #ifdef PC_DOS

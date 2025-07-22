@@ -687,7 +687,7 @@ void Command_TeamFrags_f(void)
 //
 void Command_Version_f (void)
 {
-    CONS_Printf ("Doom LEGACY version %i.%i ("
+    CONS_Printf ("NewMillennium (Doom Legacy %i.%i) ("
                 __TIME__" "__DATE__")\n"VERSIONSTRING,
                 VERSION/100,VERSION%100);
 

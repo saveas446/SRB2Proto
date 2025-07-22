@@ -177,9 +177,11 @@ void I_StartupSound(void){
 }
 
 void I_ShutdownSound(void){
-	Mix_FreeMusic(music);
+	CONS_Printf("I_ShutdownSound...\n");
+#ifdef HAVE_SDL_MIXER
 	Mix_CloseAudio();
 	Mix_Quit();
+#endif
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
@@ -254,9 +256,11 @@ void I_InitMusic(void){
 }
 
 void I_ShutdownMusic(void){
+	CONS_Printf("I_ShutdownMusic...\n");
 #ifdef HAVE_SDL_MIXER
 	if (!nomusic)
 		Mix_CloseAudio();
+		Mix_FreeMusic(music);
 #endif
 }
 
