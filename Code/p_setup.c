@@ -367,9 +367,10 @@ void P_LoadSectors (int lump)
         ss->special = SHORT(ms->special);
         ss->tag = SHORT(ms->tag);
 
-        //added:31-03-98: quick hack to test water with DCK
+// This message is annoying, so I removed it.
+/*        //added:31-03-98: quick hack to test water with DCK
         if (ss->tag < 0)
-            CONS_Printf("Level uses dck-water-hack\n");
+            CONS_Printf("Level uses dck-water-hack\n");*/
 
         ss->thinglist = NULL;
     }
