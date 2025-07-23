@@ -57,4 +57,6 @@ typedef enum {
 void D_RegisterClientCommands (void);
 void D_SendPlayerConfig(void);
 
+int D_Addmap(int mapnum);
+
 #endif

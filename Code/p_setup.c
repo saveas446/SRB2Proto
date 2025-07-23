@@ -784,6 +784,12 @@ boolean P_SetupLevel (int           episode,
     int         i;
     char        lumpname[9];
 
+    // Load the map if it isn't already
+    if (!maploaded[map])
+        D_Addmap(map);
+
+
+
     totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
     wminfo.partime = 180;
     for (i=0 ; i<MAXPLAYERS ; i++)

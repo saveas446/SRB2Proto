@@ -910,7 +910,7 @@ void D_MakeTitleString( char *s )
     strcpy(s,temp);
 }
 
-char* wad_filenames[31] = {
+char* wad_filenames[MAX_DEVMAPNUM] = {
     "SRB2Z1M1.wad",
     "SRB2Z1M2.wad",
     "SRB2Z1M3.wad",
@@ -1085,7 +1085,7 @@ void D_SRB2Main (void)
             sscanf(s, "%d", &d);
 
             // Check just in case the user tries to load an invalid map number
-            if (d > 0 && d < 31) {
+            if (d > 0 && d < MAX_DEVMAPNUM) {
                 // Decrement for array indexing purposes
                 d--;
 

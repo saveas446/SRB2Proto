@@ -39,8 +39,9 @@ void D_PostEvent_end (void);    // delimiter for locking memory
 void D_ProcessEvents (void);
 void D_DoAdvanceDemo (void);
 
+#define MAX_DEVMAPNUM 31
+extern char* wad_filenames[MAX_DEVMAPNUM];
 
-extern char* wad_filenames[31];
 
 //
 // BASE LEVEL

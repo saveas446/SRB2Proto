@@ -606,20 +606,33 @@ void Command_Addmap(void)
     unsigned int d;
     if (COM_Argc() != 2)
     {
-        CONS_Printf("addmap <map number, 1-31> : load developer map\n");
+        // This probably isn't the best way to do this...
+        CONS_Printf("addmap <map number, 1-%d> : load developer map\n", MAX_DEVMAPNUM);
         return;
     }
 
     sscanf(COM_Argv(1), "%d", &d);
 
     // sanity check
-    if (d < 1 || d > 31) {
-        CONS_Printf("addmap <map number, 1-31> : load developer map\n");
+    if (d < 1 || d > MAX_DEVMAPNUM) {
+        // This probably isn't the best way to do this...
+        CONS_Printf("addmap <map number, 1-%d> : load developer map\n", MAX_DEVMAPNUM);
         return;
     }
 
     d--;
     P_AddWadFile(wad_filenames[d]);
+}
+
+int D_Addmap(int mapnum) {
+
+    if (mapnum < 1 || mapnum > MAX_DEVMAPNUM) {
+        CONS_Printf("Tried to load invalid developer map!\n");
+        return 1;
+    }
+
+    P_AddWadFile(wad_filenames[mapnum - 1]);
+    return 0;
 }
 
 // =========================================================================
