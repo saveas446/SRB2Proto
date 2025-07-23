@@ -28,6 +28,7 @@
 #include "byteptr.h"
 #include "i_sound.h" // For cv_midibackend
 #include "p_local.h"
+#include "d_main.h"
 
 // ------
 // protos
@@ -56,6 +57,7 @@ void Command_Stopdemo_f (void);
 void Command_Map_f (void);
 
 void Command_Addfile (void);
+void Command_Addmap (void);
 void Command_Pause(void);
 
 void Command_Turbo_f (void);
@@ -163,30 +165,32 @@ void D_RegisterClientCommands (void)
     RegisterNetXCmd(XD_EXITLEVEL,Got_ExitLevelcmd);
     RegisterNetXCmd(XD_PAUSE,Got_Pause);
 
-    COM_AddCommand ("playdemo", "Plays back the demo which name is specified.", CAT_GAME, Command_Playdemo_f);
-    COM_AddCommand ("timedemo", "Plays back the demo which name is specified (like playdemo), and times how long it took to play upon completion.", CAT_GAME, Command_Timedemo_f);
-    COM_AddCommand ("stopdemo", "Stops the currently playing demo.", CAT_GAME, Command_Stopdemo_f);
-    COM_AddCommand ("map", "Warps to the specified map.", CAT_GAME, Command_Map_f);
+    COM_AddCommand("playdemo", "Plays back the demo which name is specified.", CAT_GAME, Command_Playdemo_f);
+    COM_AddCommand("timedemo", "Plays back the demo which name is specified (like playdemo), and times how long it took to play upon completion.", CAT_GAME, Command_Timedemo_f);
+    COM_AddCommand("stopdemo", "Stops the currently playing demo.", CAT_GAME, Command_Stopdemo_f);
+    COM_AddCommand("map", "Warps to the specified map.", CAT_GAME, Command_Map_f);
 
-    COM_AddCommand ("addfile", "Loads the WAD file specified.", CAT_GAME, Command_Addfile);
-    COM_AddCommand ("pause", "Pauses the game.", CAT_GAME, Command_Pause);
 
-    COM_AddCommand ("turbo", "Allows you to change the game speed.", CAT_GAMECONFIG, Command_Turbo_f);     // turbo speed
-    COM_AddCommand ("version", "Prints the game version, and the compile date and time.", CAT_MISC, Command_Version_f);
-    COM_AddCommand ("quit", "Quits the game.", CAT_MISC, Command_Quit_f);
+    COM_AddCommand("addmap", "Allows you to quickly load developer maps by typing a number from 1-30.", CAT_GAME, Command_Addmap);
+    COM_AddCommand("addfile", "Loads the WAD file specified.", CAT_GAME, Command_Addfile);
+    COM_AddCommand("pause", "Pauses the game.", CAT_GAME, Command_Pause);
 
-    COM_AddCommand ("chatmacro", NULL, CAT_MULTIPLAYER, Command_Chatmacro_f); // hu_stuff.c
-    COM_AddCommand ("setcontrol", NULL, CAT_INPUT, Command_Setcontrol_f);
-    COM_AddCommand ("setcontrol2", NULL, CAT_INPUT, Command_Setcontrol2_f);
+    COM_AddCommand("turbo", "Allows you to change the game speed.", CAT_GAMECONFIG, Command_Turbo_f);     // turbo speed
+    COM_AddCommand("version", "Prints the game version, and the compile date and time.", CAT_MISC, Command_Version_f);
+    COM_AddCommand("quit", "Quits the game.", CAT_MISC, Command_Quit_f);
 
-    COM_AddCommand ("frags", "Shows the frag table.", CAT_MULTIPLAYER, Command_Frags_f);
-    COM_AddCommand ("teamfrags", "Shows the frag table for teams.", CAT_MULTIPLAYER, Command_TeamFrags_f);
+    COM_AddCommand("chatmacro", NULL, CAT_MULTIPLAYER, Command_Chatmacro_f); // hu_stuff.c
+    COM_AddCommand("setcontrol", NULL, CAT_INPUT, Command_Setcontrol_f);
+    COM_AddCommand("setcontrol2", NULL, CAT_INPUT, Command_Setcontrol2_f);
 
-    COM_AddCommand ("saveconfig", "Saves the current game configuration to a specified config file.", CAT_MISC, Command_SaveConfig_f);
-    COM_AddCommand ("loadconfig", "Loads the game configuration from a specified config file.", CAT_MISC, Command_LoadConfig_f);
-    COM_AddCommand ("changeconfig", "Saves the current game configuration to config.cfg and loads the specified config file.", CAT_MISC, Command_ChangeConfig_f);
-    COM_AddCommand ("exitlevel", "Completes the current level.", CAT_GAME, Command_ExitLevel_f);
-    COM_AddCommand ("screenshot", "Takes a screenshot in PCX format.", CAT_MISC, M_ScreenShot);
+    COM_AddCommand("frags", "Shows the frag table.", CAT_MULTIPLAYER, Command_Frags_f);
+    COM_AddCommand("teamfrags", "Shows the frag table for teams.", CAT_MULTIPLAYER, Command_TeamFrags_f);
+
+    COM_AddCommand("saveconfig", "Saves the current game configuration to a specified config file.", CAT_MISC, Command_SaveConfig_f);
+    COM_AddCommand("loadconfig", "Loads the game configuration from a specified config file.", CAT_MISC, Command_LoadConfig_f);
+    COM_AddCommand("changeconfig", "Saves the current game configuration to config.cfg and loads the specified config file.", CAT_MISC, Command_ChangeConfig_f);
+    COM_AddCommand("exitlevel", "Completes the current level.", CAT_GAME, Command_ExitLevel_f);
+    COM_AddCommand("screenshot", "Takes a screenshot in PCX format.", CAT_MISC, M_ScreenShot);
 
   //
   // register main variables
@@ -597,7 +601,26 @@ void Command_Addfile (void)
     P_AddWadFile (COM_Argv(1));
 }
 
+void Command_Addmap(void)
+{
+    unsigned int d;
+    if (COM_Argc() != 2)
+    {
+        CONS_Printf("addmap <map number, 1-31> : load developer map\n");
+        return;
+    }
 
+    sscanf(COM_Argv(1), "%d", &d);
+
+    // sanity check
+    if (d < 1 || d > 31) {
+        CONS_Printf("addmap <map number, 1-31> : load developer map\n");
+        return;
+    }
+
+    d--;
+    P_AddWadFile(wad_filenames[d]);
+}
 
 // =========================================================================
 //                            MISC. COMMANDS

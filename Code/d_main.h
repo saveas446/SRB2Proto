@@ -39,6 +39,9 @@ void D_PostEvent_end (void);    // delimiter for locking memory
 void D_ProcessEvents (void);
 void D_DoAdvanceDemo (void);
 
+
+extern char* wad_filenames[31];
+
 //
 // BASE LEVEL
 //

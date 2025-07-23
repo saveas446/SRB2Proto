@@ -81,6 +81,8 @@ typedef struct mapdata_s {
 } mapdata_t;
 */
 
+boolean maploaded[32];
+
 
 // BLOCKMAP
 // Created from axis aligned bounding box
@@ -1034,6 +1036,7 @@ boolean P_AddWadFile (char* wadfilename)
             {
                 num = (name[3]-'0')*10 + (name[4]-'0');
                 CONS_Printf ("Map %d\n", num);
+                maploaded[num] = true;
             }
         }
         else

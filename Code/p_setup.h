@@ -8,10 +8,11 @@
 
 // Player spawn spots for deathmatch.
 #define MAX_DM_STARTS   64
-extern  mapthing_t      deathmatchstarts[MAX_DM_STARTS];
-extern  mapthing_t*     deathmatch_p;
+extern mapthing_t deathmatchstarts[MAX_DM_STARTS];
+extern mapthing_t* deathmatch_p;
 
-extern int        lastloadedmaplumpnum; // for comparative savegame
+extern int lastloadedmaplumpnum; // for comparative savegame
+extern boolean maploaded[32];
 //
 // MAP used flats lookup table
 //

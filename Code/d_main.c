@@ -910,7 +910,7 @@ void D_MakeTitleString( char *s )
     strcpy(s,temp);
 }
 
-char* wad_filenames[30] = {
+char* wad_filenames[31] = {
     "SRB2Z1M1.wad",
     "SRB2Z1M2.wad",
     "SRB2Z1M3.wad",
@@ -935,6 +935,7 @@ char* wad_filenames[30] = {
     "SRB2Z8M1.wad",
     "SRB2Z8M2.wad",
     "SRB2Z8M3.wad",
+    "SRB2Z9M1.wad",
     "WOOD.wad",
     "SPDHWY.wad",
     "REALHPZ.wad",
@@ -1084,7 +1085,7 @@ void D_SRB2Main (void)
             sscanf(s, "%d", &d);
 
             // Check just in case the user tries to load an invalid map number
-            if (d > 0 && d < 51) {
+            if (d > 0 && d < 31) {
                 // Decrement for array indexing purposes
                 d--;
 
@@ -1174,6 +1175,8 @@ void D_SRB2Main (void)
         getchar();
 #endif
     }
+
+    memset(maploaded, false, sizeof(boolean)*32);
 
     //added:28-02-98: check for Ultimate doom.
 //    if ( (gamemode==registered) && (W_CheckNumForName("E4M1") > 0) )
