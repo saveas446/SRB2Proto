@@ -129,6 +129,8 @@ byte*           demo_p;
 byte*           demoend;
 boolean         singledemo;             // quit after playing a demo from cmdline
 
+boolean         istimeattack;             // Are we in Time Attack?
+
 boolean         precache = true;        // if true, load all graphics at start
 
 wbstartstruct_t wminfo;                 // parms for world map / intermission
@@ -139,12 +141,14 @@ void ShowMessage_OnChange(void);
 
 CV_PossibleValue_t showmessages_cons_t[]={{0,"Off"},{1,"On"},{2,"Not All"},{0,NULL}};
 CV_PossibleValue_t crosshair_cons_t[]   ={{0,"Off"},{1,"Cross"},{2,"Angle"},{3,"Point"},{0,NULL}};
+CV_PossibleValue_t timeattacklevel_cons_t[] = {{0,"GFZ1"},{1,"GFZ2"},{2,"GFZ3"},{0,NULL}};
 
-consvar_t cv_crosshair      = {"crosshair"   ,"0", NULL, CAT_GAMECONFIG,  CV_SAVE,crosshair_cons_t};
-consvar_t cv_autorun        = {"autorun"     ,"1", NULL, CAT_GAMECONFIG,  CV_SAVE,CV_OnOff};
+consvar_t cv_crosshair      = {"crosshair"   ,"0", NULL, CAT_GAMECONFIG, CV_SAVE,crosshair_cons_t};
+consvar_t cv_autorun        = {"autorun"     ,"1", NULL, CAT_GAMECONFIG, CV_SAVE,CV_OnOff};
 consvar_t cv_invertmouse    = {"invertmouse" ,"0", "Inverts mouse movement.", CAT_INPUT,  CV_SAVE,CV_OnOff};
-consvar_t cv_alwaysfreelook = {"alwaysmlook" ,"0", NULL, CAT_INPUT,  CV_SAVE,CV_OnOff};
+consvar_t cv_alwaysfreelook = {"alwaysmlook" ,"0", NULL, CAT_INPUT, CV_SAVE,CV_OnOff};
 consvar_t cv_showmessages   = {"showmessages","0", "Enables extra messages for various things, such as collecting rings.", CAT_GAMECONFIG,  CV_SAVE | CV_CALL | CV_NOINIT,showmessages_cons_t,ShowMessage_OnChange};
+consvar_t cv_timeattacklevel = {"timeattacklevel","GFZ1", NULL, CAT_MISC, NULL, timeattacklevel_cons_t, NULL};
 
 #if MAXPLAYERS>32
 #error please update "player_name" table using the new value for MAXPLAYERS
@@ -1483,6 +1487,10 @@ void G_DoCompleted (void)
 // init next level or go to the final scene
 void G_WorldDone (void)
 {
+    if (istimeattack) {
+        D_StartTitle();
+    }
+
     gameaction = ga_worlddone;
 
     if (secretexit)
@@ -1509,8 +1517,8 @@ void G_WorldDone (void)
 void G_DoWorldDone (void)
 {
     gamestate = GS_LEVEL;
-    gamemap = wminfo.next+1;
-    G_DoLoadLevel ();
+    gamemap = wminfo.next + 1;
+    G_DoLoadLevel();
     gameaction = ga_nothing;
     viewactive = true;
 }
@@ -1651,8 +1659,8 @@ void G_DoSaveGame (int   savegameslot, char* savedescription)
         return;
     }
 
-    strcpy(description,savedescription);
-    description[SAVESTRINGSIZE]=0;
+    strcpy(description, savedescription);
+    description[SAVESTRINGSIZE - 1]=0;
     memcpy (save_p, description, SAVESTRINGSIZE);
     save_p += SAVESTRINGSIZE;
     memset (name2,0,sizeof(name2));

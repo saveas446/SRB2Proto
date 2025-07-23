@@ -174,7 +174,7 @@ void M_GameOption(int choice);
 void M_NetOption(int choice);
 
 menu_t MainDef,SinglePlayerDef,MultiPlayerDef,SetupMultiPlayerDef,
-       EpiDef,NewDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundOptionsDef,SoundDef,
+       EpiDef,NewDef,TimeAttackDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundOptionsDef,SoundDef,
        ReadDef2,ReadDef1,SaveDef,LoadDef,ControlDef2,GameOptionDef,
        NetOptionDef;
 
@@ -347,6 +347,7 @@ void M_LoadGame(int choice);
 void M_SaveGame(int choice);
 void M_EndGame(int choice);
 void M_TimeAttack(void); // TIME ATTACK! Tails 12-05-99
+void M_StartTimeAttack(void);
 
 enum
 {
@@ -2059,9 +2060,34 @@ void M_EndGame(int choice)
 // M_TimeAttack
 //
 
+menuitem_t TimeAttackMenu[] =
+{
+    {IT_STRING,"Best Time: 1:23.45",NULL, 20},
+    {IT_STRING | IT_CVAR,"Selected Level",&cv_timeattacklevel, 30},
+    {IT_STRING,"Start",M_StartTimeAttack, 40}
+};
+
+menu_t  TimeAttackDef =
+{
+    "M_TATTAK",
+    sizeof(TimeAttackMenu) / sizeof(menuitem_t),
+    SinglePlayerMenu,
+    &TimeAttackMenu,
+    M_DrawGenericMenu,
+    97,64,
+    0
+};
+
 void M_TimeAttack(void)
 {
-    D_PageDrawer ("BOSSBACK");    
+    M_SetupNextMenu(&TimeAttackDef);
+}
+
+void M_StartTimeAttack(void)
+{
+    istimeattack = true;
+    G_DeferedInitNew(3, G_BuildMapName(epi + 1, cv_timeattacklevel.value + 1));
+    M_ClearMenus();
 }
 
 //===========================================================================

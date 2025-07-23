@@ -32,15 +32,18 @@ extern  boolean timingdemo;       // timedemo
 // Quit after playing a demo from cmdline.
 extern  boolean         singledemo;
 
+extern  boolean			istimeattack;
+
 extern  ULONG           levelstarttic;  // gametic at level start
 
 // used in game menu
-extern consvar_t  cv_crosshair;
-extern consvar_t  cv_autorun;
-extern consvar_t  cv_invertmouse;
-extern consvar_t  cv_alwaysfreelook;
-extern consvar_t  cv_showmessages;
-extern consvar_t  cv_fastmonsters;
+extern consvar_t cv_crosshair;
+extern consvar_t cv_autorun;
+extern consvar_t cv_invertmouse;
+extern consvar_t cv_alwaysfreelook;
+extern consvar_t cv_showmessages;
+extern consvar_t cv_fastmonsters;
+extern consvar_t cv_timeattacklevel;
 
 // build an internal map name ExMx MAPxx from episode,map numbers
 char* G_BuildMapName (int episode, int map);
