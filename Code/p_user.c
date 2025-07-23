@@ -133,6 +133,107 @@ void P_CalcHeight (player_t* player)
         player->viewz = player->mo->ceilingz-4*FRACUNIT;
 }
 
+void P_Legacy128Movement(player_t* player, ticcmd_t* cmd) {
+    // Do not let the player control movement
+//  if not onground.
+    onground = (player->mo->z <= player->mo->floorz) ||
+        (player->cheats & CF_FLYAROUND);
+
+
+    fixed_t   movepushforward = 0, movepushside = 0;
+    player->aiming = cmd->aiming << 16;
+
+    if (cmd->forwardmove)
+    {
+        movepushforward = cmd->forwardmove * 2048;
+
+        if (player->mo->eflags & MF_UNDERWATER)
+        {
+            // half forward speed when waist under water
+            // a little better grip if feets touch the ground
+            if (!onground)
+                movepushforward >>= 1;
+            else
+                movepushforward = movepushforward * 3 / 4;
+        }
+        else
+        {
+            // allow very small movement while in air for gameplay
+            if (!onground)
+                movepushforward >>= 3;
+        }
+
+        P_Thrust(player->mo, player->mo->angle, movepushforward);
+    }
+
+    if (cmd->sidemove)
+    {
+        movepushside = cmd->sidemove * 2048;
+        if (player->mo->eflags & MF_UNDERWATER)
+        {
+            if (!onground)
+                movepushside >>= 1;
+            else
+                movepushside = movepushside * 3 / 4;
+        }
+        else
+            if (!onground)
+                movepushside >>= 3;
+
+        P_Thrust(player->mo, player->mo->angle - ANG90, movepushside);
+    }
+
+    // mouselook swim when waist underwater
+    player->mo->eflags &= ~MF_SWIMMING;
+    if (player->mo->eflags & MF_UNDERWATER)
+    {
+        fixed_t a;
+        // swim up/down full move when forward full speed
+        a = FixedMul(movepushforward * 50, finesine[(player->aiming >> ANGLETOFINESHIFT)] >> 5);
+
+
+        /* a little hack to don't have screen moving
+        if( a > cv_gravity.value>>2 || a < 0 )*/
+        if (a != 0) {
+            player->mo->eflags |= MF_SWIMMING;
+            player->mo->momz += a;
+        }
+    }
+
+    //added:22-02-98: jumping
+    if (cmd->buttons & BT_JUMP)
+    {
+        // can't jump while in air, can't jump while jumping
+        if (!player->jumpdown &&
+            (onground || (player->mo->eflags & MF_UNDERWATER)))
+        {
+            if (onground)
+                player->mo->momz = JUMPGRAVITY;
+            else //water content
+                player->mo->momz = JUMPGRAVITY / 2;
+
+            //TODO: goub gloub when push up in water
+
+            if (!(player->cheats & CF_FLYAROUND) && onground && !(player->mo->eflags & MF_UNDERWATER))
+            {
+                S_StartSound(player->mo, sfx_jump);
+
+                // keep jumping ok if FLY mode.
+                player->jumpdown = true;
+            }
+        }
+    }
+    else
+        player->jumpdown = false;
+
+
+    if ((cmd->forwardmove || cmd->sidemove)
+        && player->mo->state == &states[S_PLAY])
+    {
+        P_SetMobjState(player->mo, S_PLAY_RUN1);
+    }
+}
+
 void P_Mar2KMovement(player_t* player, ticcmd_t* cmd) {
     // Do not let the player control movement
     //  if not onground.
@@ -812,6 +913,10 @@ void P_MovePlayer(player_t* player) {
     else
         player->mo->angle = (cmd->angleturn << 16);
 #endif
+
+
+    if (cv_movementtype.value == 0)
+        P_Legacy128Movement(player, cmd);
 
     if (cv_movementtype.value == 1)
         P_Mar2KMovement(player, cmd);
