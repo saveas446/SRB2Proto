@@ -345,8 +345,8 @@ static patch_t* secretxmas;
 static patch_t* itemsxmas;
 static patch_t* fragsxmas;
 
-// Time sucks.
-static patch_t* time;
+// Renamed to "timepatch" because the name "time" was confusing something in devkitPro
+static patch_t* timepatch;
 static patch_t* timexmas;
 static patch_t* par;
 static patch_t* parxmas;
@@ -1731,7 +1731,7 @@ void WI_drawStats(void)
         V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, sp_secret);
         WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + 2 * lh, cnt_secret[0]);
 
-        V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, time);
+        V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, timepatch);
         WI_drawTime(BASEVIDWIDTH / 2 - SP_TIMEX, SP_TIMEY, cnt_time);
     }
     else {
@@ -1894,7 +1894,7 @@ void WI_loadData(void)
     colon = W_CachePatchName("WICOLON", PU_STATIC);
     colonxmas = W_CachePatchName("XICOLON", PU_STATIC);
 
-    time = W_CachePatchName("WITIME", PU_STATIC);
+    timepatch = W_CachePatchName("WITIME", PU_STATIC);
     timexmas = W_CachePatchName("XITIME", PU_STATIC);
 
     sucks = W_CachePatchName("WISUCKS", PU_STATIC);
@@ -1973,7 +1973,7 @@ void WI_unloadData(void)
     Z_ChangeTag(sp_secret, PU_CACHE);
     Z_ChangeTag(items, PU_CACHE);
     Z_ChangeTag(frags, PU_CACHE);
-    Z_ChangeTag(time, PU_CACHE);
+    Z_ChangeTag(timepatch, PU_CACHE);
    
     Z_ChangeTag(killsxmas, PU_CACHE);
     Z_ChangeTag(secretxmas, PU_CACHE);

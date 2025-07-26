@@ -111,8 +111,11 @@ void I_ShutdownSystem (void);
 
 #ifdef HAVE_SDL
 void I_FPrintf(SDL_RWops* fileHandle, char* lpFmt, ...);
-#else
+#elif defined(__WIN32__)
 void I_FPrintf(HANDLE fileHandle, char* lpFmt, ...);
+#else
+// Here for 3DS reasons
+void I_FPrintf(void* fileHandle, char* lpFmt, ...);
 #endif
 
 
