@@ -121,17 +121,14 @@ CV_PossibleValue_t usejoystick_cons_t[]={{0,"Off"}
 #else
 #ifdef LINUX
 #define usejoystick_cons_t  NULL
-#elif !defined(CTR)
+#else
 #error "cv_usejoystick don't have possible value for this OS !"
 #endif
 #endif
 #endif
 
-// Can't choose input method on CTR
-#ifndef CTR
 consvar_t cv_usemouse    = {"use_mouse","1", "Controls whether a mouse is being used.", CAT_INPUT,  CV_SAVE | CV_CALL,usemouse_cons_t,I_StartupMouse};
 consvar_t cv_usejoystick = {"use_joystick","0", "Controls whether a joystick/controller is being used.", CAT_INPUT,  CV_SAVE | CV_CALL,usejoystick_cons_t,I_InitJoystick};
-#endif
 
 CV_PossibleValue_t teamplay_cons_t[]={{0,"Off"},{1,"Color"},{2,"Skin"},{3,NULL}};
 CV_PossibleValue_t deathmatch_cons_t[]={{0,"Coop"},{1,"1"},{2,"2"},{3,"3"},{0,NULL}};
@@ -228,11 +225,8 @@ void D_RegisterClientCommands (void)
     CV_RegisterVar(&cv_mousesens);
     CV_RegisterVar(&cv_mlooksens);
 
-    #ifndef CTR
     CV_RegisterVar(&cv_usemouse);
     CV_RegisterVar(&cv_usejoystick);
-    #endif
-    
     CV_RegisterVar(&cv_allowjump);
     CV_RegisterVar(&cv_allowautoaim);
 

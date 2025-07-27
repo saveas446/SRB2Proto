@@ -1,1 +1,0 @@
-extern int mb_used;

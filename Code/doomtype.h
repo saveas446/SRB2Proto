@@ -25,12 +25,6 @@ typedef unsigned short USHORT;
         #define strcasecmp              strcmpi
     #endif
 #endif
-
-#ifdef CTR
-#define strnicmp                strncasecmp
-#define stricmp                 strcasecmp
-#endif
-
 // added for Linux 19990220 by Kin
 #ifdef LINUX
 #define stricmp(x,y) strcasecmp(x,y)
@@ -53,17 +47,15 @@ typedef unsigned short USHORT;
             #define false   FALSE           // use windows types
             #define true    TRUE
             #define boolean BOOL
-        #elif !defined(CTR)
-            typedef enum {false, true} boolean;
         #else
-            typedef bool boolean;
+            typedef enum {false, true} boolean;
         #endif
     //#endif // __cplusplus
 #endif // __BYTEBOOL__
 
 
 // Predefined with some OS.
-#if !defined(__WIN32__) && !defined(HAVE_SDL) && !defined(CTR)
+#if !defined(__WIN32__) && !defined(HAVE_SDL)
 #include <values.h>
 #endif
 

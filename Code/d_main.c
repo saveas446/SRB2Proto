@@ -8,9 +8,6 @@
 #ifndef __WIN32__
 #include <dirent.h>             // for dirent, readdir
 #include <unistd.h>             // for access
-#endif
-
-#if defined(__linux__) || defined(linux)
 #include <linux/limits.h>       // for PATH_MAX
 #endif
 

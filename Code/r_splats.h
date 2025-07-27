@@ -64,4 +64,4 @@ void R_AddVisibleFloorSplats (subsector_t* subsec);
 void R_DrawVisibleFloorSplats (void);
 
 
-#endif
+#endif __R_SPLATS_H__
