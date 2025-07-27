@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#ifndef LINUX
+#if !defined(LINUX) && !defined(CTR)
 #include <io.h>
 #include <direct.h>
 #endif
@@ -269,7 +269,7 @@ int recsearch(char *filename,time_t timestamp)
   return 0;
 }
 #else
-#ifdef LINUX
+#if defined(LINUX) || defined(CTR)
 int recsearch(char *filename,time_t timestamp)
 {
     return 0;

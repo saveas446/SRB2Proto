@@ -19,7 +19,7 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-#ifndef LINUX
+#if !defined(LINUX) && !defined(CTR)
 // only dos need this 19990203 by Kin
 #include <io.h>
 #endif
