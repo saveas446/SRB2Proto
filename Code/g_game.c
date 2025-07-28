@@ -1489,6 +1489,9 @@ void G_WorldDone (void)
 {
     if (istimeattack) {
         D_StartTitle();
+
+        M_StartControlPanel();
+        currentMenu = &TimeAttackDef;
     }
 
     gameaction = ga_worlddone;

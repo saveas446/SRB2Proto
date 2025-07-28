@@ -53,6 +53,47 @@ void M_StartMessage ( char*         string,
                       void*         routine,
                       int           itemtype );
 
+// Hacks to get time attack to work properly
+
+typedef union
+{
+    struct menu_s* submenu;               // IT_SUBMENU
+    consvar_t* cvar;                  // IT_CVAR
+    void             (*routine)(int choice);  // IT_CALL, IT_KEYHANDLER, IT_ARROWS
+} itemaction_t;
+
+//
+// MENU TYPEDEFS
+//
+typedef struct menuitem_s
+{
+    // show IT_xxx
+    short       status;
+
+    char* name;
+
+    // FIXME: should be itemaction_t !!!
+    void* itemaction;
+
+    // hotkey in menu
+    unsigned char   alphaKey;
+} menuitem_t;
+
+typedef struct menu_s
+{
+    char* menutitlepic;
+    short           numitems;               // # of menu items
+    struct menu_s* prevMenu;               // previous menu
+    menuitem_t* menuitems;              // menu items
+    void            (*drawroutine)(void);   // draw routine
+    short           x;
+    short           y;                      // x,y of menu
+    short           lastOn;                 // last item user was on in menu
+    boolean(*quitroutine)(void);   // called before quit a menu return true if we can
+} menu_t;
+
+extern menu_t* currentMenu;
+extern menu_t TimeAttackDef;
 
 #endif
 //-----------------------------------------------------------------------------

@@ -949,6 +949,7 @@ void P_MovePlayer(player_t* player) {
 
     // start timer code tails 02-29-2000
     player->armorpoints = leveltime / 35;
+    player->milliseconds = (float)leveltime;
     // end timer code tails 02-29-2000
 
     //start invincibility sparkles spawn code tails

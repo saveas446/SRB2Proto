@@ -106,43 +106,6 @@ char    endstring[160];
 #define  IT_CVARMAX     (IT_CVAR   +IT_CV_NOMOD)
 #define  IT_DISABLED    (IT_SPACE  +IT_GRAYPATCH)
 
-typedef union
-{
-    struct menu_s     *submenu;               // IT_SUBMENU
-    consvar_t         *cvar;                  // IT_CVAR
-    void             (*routine)(int choice);  // IT_CALL, IT_KEYHANDLER, IT_ARROWS
-} itemaction_t;
-
-//
-// MENU TYPEDEFS
-//
-typedef struct menuitem_s
-{
-    // show IT_xxx
-    short       status;
-
-    char        *name;
-
-    // FIXME: should be itemaction_t !!!
-    void *itemaction;
-
-    // hotkey in menu
-    unsigned char   alphaKey;
-} menuitem_t;
-
-typedef struct menu_s
-{
-    char            *menutitlepic;
-    short           numitems;               // # of menu items
-    struct menu_s*  prevMenu;               // previous menu
-    menuitem_t*     menuitems;              // menu items
-    void            (*drawroutine)(void);   // draw routine
-    short           x;
-    short           y;                      // x,y of menu
-    short           lastOn;                 // last item user was on in menu
-    boolean         (*quitroutine)(void);   // called before quit a menu return true if we can
-} menu_t;
-
 // current menudef
 menu_t*   currentMenu;
 short     itemOn;                       // menu item skull is on
@@ -174,7 +137,7 @@ void M_GameOption(int choice);
 void M_NetOption(int choice);
 
 menu_t MainDef,SinglePlayerDef,MultiPlayerDef,SetupMultiPlayerDef,
-       EpiDef,NewDef,TimeAttackDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundOptionsDef,SoundDef,
+       EpiDef,NewDef,TimeAttackDef,TimeAttackMainDef,OptionsDef,VideoOptionsDef,VidModeDef,ControlOptionsDef,ControlDef,SoundOptionsDef,SoundDef,
        ReadDef2,ReadDef1,SaveDef,LoadDef,ControlDef2,GameOptionDef,
        NetOptionDef;
 
@@ -348,6 +311,7 @@ void M_SaveGame(int choice);
 void M_EndGame(int choice);
 void M_TimeAttack(void); // TIME ATTACK! Tails 12-05-99
 void M_StartTimeAttack(void);
+void M_DrawTimeAttack(void);
 
 enum
 {
@@ -2061,7 +2025,7 @@ void M_EndGame(int choice)
 
 menuitem_t TimeAttackMenu[] =
 {
-    {IT_STRING,"Best Time: 1:23.45",NULL, 20},
+    {IT_STRING,"Best Time:",NULL, 20},
     {IT_STRING | IT_CVAR,"Selected Level",&cv_timeattacklevel, 30},
     {IT_STRING,"Start",M_StartTimeAttack, 40}
 };
@@ -2072,7 +2036,7 @@ menu_t  TimeAttackDef =
     sizeof(TimeAttackMenu) / sizeof(menuitem_t),
     SinglePlayerMenu,
     &TimeAttackMenu,
-    M_DrawGenericMenu,
+    M_DrawTimeAttack,
     97,64,
     0
 };
@@ -2082,12 +2046,45 @@ void M_TimeAttack(void)
     M_SetupNextMenu(&TimeAttackDef);
 }
 
+void M_DrawTimeAttack(void)
+{
+    V_DrawString(BASEVIDWIDTH - TimeAttackDef.x - V_StringWidth("PLACEHOLDER"), TimeAttackDef.y + 20, "PLACEHOLDER");
+    M_DrawGenericMenu();
+}
+
 void M_StartTimeAttack(void)
 {
     istimeattack = true;
     G_DeferedInitNew(3, G_BuildMapName(epi + 1, cv_timeattacklevel.value + 1));
     M_ClearMenus();
 }
+
+void M_StopTimeAttack(void)
+{
+    istimeattack = false;
+    D_StartTitle();
+    M_StartControlPanel();
+    currentMenu = &TimeAttackDef;
+}
+
+// time attack pause menu
+menuitem_t TimeAttackMainMenu[] =
+{
+    {IT_STRING,"Continue",M_ClearMenus, 40},
+    {IT_STRING,"Retry",NULL, 50},
+    {IT_STRING,"Retire",M_StopTimeAttack, 60},
+};
+
+menu_t  TimeAttackMainDef =
+{
+    "M_PAUSE",
+    sizeof(TimeAttackMainMenu) / sizeof(menuitem_t),
+    NULL,
+    &TimeAttackMainMenu,
+    M_DrawGenericMenu,
+    97,64,
+    0
+};
 
 //===========================================================================
 //                                 Quit Game
@@ -2925,7 +2922,12 @@ void M_StartControlPanel (void)
         return;
 
     menuactive = 1;
-    currentMenu = &MainDef;         // JDC
+
+    if (!istimeattack)
+        currentMenu = &MainDef;         // JDC
+    else
+        currentMenu = &TimeAttackMainDef;
+
     itemOn = currentMenu->lastOn;   // JDC
     if(!netgame && !demoplayback && !paused)
         COM_BufAddText("pause\n");

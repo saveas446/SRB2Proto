@@ -92,7 +92,12 @@ typedef struct player_s
     // This is only used between levels,
     // mo->health is used during levels.
     int                 health;
+
+    // Ignore the name, this value is used for time.
     int                 armorpoints;
+    // Only displayed in Time Attack
+    float                 milliseconds;
+
     // Armor type is 0-2.
     int                 armortype;
 

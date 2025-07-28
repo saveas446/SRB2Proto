@@ -362,10 +362,12 @@ static int      st_randomnumber;
 // ------------------------------------------
 
 // icons for overlay
-static   patch_t*   sbohealth;
-static   patch_t*   sbofrags;
-static   patch_t*   sboarmor;
-static   pic_t*   sboammo[NUMWEAPONS];
+static patch_t* sbohealth;
+static patch_t* sbofrags;
+static patch_t* sboarmor;
+static patch_t* dot;
+static patch_t* dotxmas;
+static pic_t* sboammo[NUMWEAPONS];
 
 
 //
@@ -950,6 +952,11 @@ static void ST_loadGraphics(void)
     //Note: why not load STMINUS here, too?
     tallpercent = (patch_t *) W_CachePatchName("STTPRCNT", PU_STATIC);
 
+
+    dot = (patch_t*)W_CachePatchName("WIDOT", PU_STATIC);
+
+    dotxmas = (patch_t*)W_CachePatchName("XIDOT", PU_STATIC);
+
     // key cards
     for (i=0;i<NUMCARDS;i++)
     {
@@ -1485,6 +1492,7 @@ void ST_overlayDrawer(void)
     char* cmds;
     char   c;
     int    i;
+    float  mil;
     pic_t* pic;
 
     patch_t* tallnum2;
@@ -1572,6 +1580,36 @@ void ST_overlayDrawer(void)
                              SCY(40)-(16*vid.dupy), // Draw the current time Tails 02-29-2000
                              plyr->armorpoints,
                              tallnum2,NULL);
+
+           // God this is so bad
+           // So much stuff is dependent on positions
+           if (istimeattack) {
+
+               // Draw dot
+               if (cv_fonttype.value == FONT_MAR2K)
+                   V_DrawScaledPatch(SCX(112-5), SCY(41) - (16 * vid.dupy), FG | V_NOSCALESTART, dot);
+               else
+                   V_DrawScaledPatch(SCX(112-5), SCY(41) - (16 * vid.dupy), FG | V_NOSCALESTART, dotxmas);
+
+               // Convert absolute tics value to milliseconds
+               mil = plyr->milliseconds / 35;
+               mil *= 100;
+
+               mil -= ((float)plyr->armorpoints) * 100;
+
+               if ((int)mil < 10) {
+                   ST_drawOverlayNum(SCX(112 + 11 + 5), // Tails 02-29-2000
+                       SCY(40) - (16 * vid.dupy), // Draw the current time Tails 02-29-2000
+                       (int)mil,
+                       tallnum2, NULL);
+               }
+               else {
+                   ST_drawOverlayNum(SCX(112 + 11 + 5 + 11), // Tails 02-29-2000
+                       SCY(40) - (16 * vid.dupy), // Draw the current time Tails 02-29-2000
+                       (int)mil,
+                       tallnum2, NULL);
+               }
+           }
 
            if (rendermode==render_soft)
                V_DrawScaledPatch (SCX(17),SCY(26), FG | V_NOSCALESTART,sboarmor); // TIME location Tails 02-29-2000
