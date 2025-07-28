@@ -580,8 +580,8 @@ static void    COM_Help_f (void)
         for (cvar = consvar_vars; cvar; cvar = cvar->next)
         {
             if (!strcmp(cvar->name, arg)) {
-                if (cmd->helptext != NULL) {
-                    CONS_Printf("%s\n", cmd->helptext);
+                if (cvar->helptext != NULL) {
+                    CONS_Printf("%s\n", cvar->helptext);
                     return;
                 }
             }
