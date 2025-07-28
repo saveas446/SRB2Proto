@@ -1395,7 +1395,8 @@ menuitem_t VideoOptionsMenu[] =
     {IT_STRING | IT_CVAR,"Font appearance"     ,&cv_fonttype        ,40},
     {IT_STRING | IT_CVAR
      | IT_CV_SLIDER     ,"Brightness"      ,&cv_usegamma        ,50},
-    {IT_SUBMENU | IT_WHITESTRING,"Change Resolution..." ,&VidModeDef,80},
+    {IT_STRING | IT_CVAR,"Fullscreen"     ,&cv_fullscreen        ,60},
+    {IT_SUBMENU | IT_WHITESTRING,"Change Resolution..." ,&VidModeDef,90},
 };
 
 menu_t  VideoOptionsDef =

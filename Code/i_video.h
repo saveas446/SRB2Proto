@@ -4,11 +4,15 @@
 #ifndef __I_VIDEO__
 #define __I_VIDEO__
 
-
+#include "command.h"
 #include "doomtype.h"
 
 #ifdef __GNUG__
 #pragma interface
+#endif
+
+#ifdef HAVE_SDL
+extern consvar_t cv_fullscreen;
 #endif
 
 typedef enum {

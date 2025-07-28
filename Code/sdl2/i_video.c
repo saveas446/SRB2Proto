@@ -13,7 +13,10 @@ boolean highcolor = false;
 
 boolean allow_fullscreen = false;
 
-consvar_t cv_vidwait = {"vid_wait", "On", NULL, CAT_VIDEO, CV_SAVE, CV_OnOff, NULL, 0, 0, NULL};
+// Function proto here so the compiler doesn't complain that the function isn't defined yet.
+void I_ToggleFullscreen(void);
+
+consvar_t cv_fullscreen = {"fullscreen", "On", "Toggles whether the game runs in windowed mode or fullscreen.", CAT_VIDEO, CV_SAVE | CV_CALL, CV_OnOff, I_ToggleFullscreen};
 
 SDL_Window* SDL_window = NULL;
 
@@ -22,7 +25,10 @@ SDL_Surface* surface;
 SDL_Surface* window_surface;
 SDL_Surface* icon_surface;
 
-vmode_t window_modes[10] = {
+// todo: un-hardcode this
+#define NUM_SDLMODES 12
+
+vmode_t window_modes[NUM_SDLMODES] = {
 		// Fallback mode, 320x200 is gross
 		{
 			NULL,
@@ -115,6 +121,26 @@ vmode_t window_modes[10] = {
 			NULL,
 			0          // misc
 		},
+		{
+			NULL,
+			"1920x1080W", //faB: W to make sure it's the windowed mode
+			1920, 1080,   //(200.0/320.0)*(320.0/240.0),
+			1920, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
+		{
+			NULL,
+			"1920x1200W", //faB: W to make sure it's the windowed mode
+			1920, 1200,   //(200.0/320.0)*(320.0/240.0),
+			1920, 1,     // rowbytes, bytes per pixel
+			1, 2,       // windowed (TRUE), numpages
+			NULL,
+			NULL,
+			0          // misc
+		},
 };
 
 static void SetSDLIcon(SDL_Window* window)
@@ -145,6 +171,10 @@ static void SetSDLIcon(SDL_Window* window)
 
 	SDL_FreeSurface(icon_surface);
 
+}
+
+void I_ToggleFullscreen(void) {
+	
 }
 
 void I_ShutdownGraphics(void){
@@ -180,17 +210,52 @@ void I_SetPalette(byte *palette)
 int VID_NumModes(void)
 {
 	// TODO: Find a way to get length of windowed_modes and return that
-	return 10;
+	return NUM_SDLMODES;
 }
 
 int VID_GetModeForSize(int w, int h)
 {
-	return 3;
+	int diffx, diffy;
+	int bestdiff, bestmode;
+
+	bestdiff = 9999;
+
+	// Iterate through (accessible) modes
+	for (int i = 1; i < NUM_SDLMODES; i++) {
+
+		// Get difference between current window mode's width and our requested width
+		diffx = window_modes[i].width - w;
+		if (diffx < 0) {
+			diffx *= -1;
+		}
+
+		// Get difference between current window mode's height and our requested height
+		diffy = window_modes[i].height - h;
+		if (diffy < 0) {
+			diffy *= -1;
+		}
+
+		// If the mode has the exact coords of our dimensions, use that!
+		if (diffx == 0 && diffy == 0)
+			return i;
+
+		// If our current mode is the closest found so far to requested dimensions, record it as our best candidate so far
+		if (bestdiff > diffx + diffy) {
+			bestdiff = diffx + diffy;
+			bestmode = i;
+		}
+	}
+
+	// Well, we didn't find any exact matches. Darn.
+	// Oh well, that's what that whole closest match system was for!
+	return bestmode;
 }
 
 // TODO: Some of the stuff done when we change modes might not be needed. See how much we can keep between mode switches (For example, we might just be able to change the window's dimensions instead of destroying and remaking it)
 int VID_SetMode(int modenum)
 {
+	int flags;
+
 	if (SDL_window != NULL)
 		SDL_DestroyWindow(SDL_window);
 
@@ -209,8 +274,14 @@ int VID_SetMode(int modenum)
 	vid.dupy = vid.height / 200;
 	vid.recalc = 1;
 
+	// Handle 
+	if (cv_fullscreen.value)
+		flags = SDL_WINDOW_FULLSCREEN;
+	else
+		flags = NULL;
+
 	// Init window (hardcoded to 640x400 for now) in the center of the screen
-	SDL_window = SDL_CreateWindow("NewMillennium (SDL2 backend)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid.width, vid.height, 0);
+	SDL_window = SDL_CreateWindow("NewMillennium (SDL2 backend)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid.width, vid.height, flags);
 	SetSDLIcon(SDL_window);
 
 	if (!SDL_window)

@@ -317,7 +317,7 @@ void CON_Init(void)
     COM_AddCommand ("bind", NULL, CAT_INPUT, CONS_Bind_f);
 
 //Stealth's new console cheats 12-26-99
-    COM_AddCommand ("blueshield", NULL, CAT_DEV, A_BlueShield);
+    COM_AddCommand ("blueshield", "Gives the player a shield for testing purposes.", CAT_DEV, A_BlueShield);
 
     // set console full screen for game startup MAKE SURE VID_Init() done !!!
     con_destlines = vid.height;

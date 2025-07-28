@@ -29,6 +29,7 @@
 #include "i_sound.h" // For cv_midibackend
 #include "p_local.h"
 #include "d_main.h"
+#include "i_video.h"
 
 // ------
 // protos
@@ -263,6 +264,7 @@ void D_RegisterClientCommands (void)
 #ifdef HAVE_SDL
     CV_RegisterVar(&cv_midibackend);
     CV_RegisterVar(&cv_soundfontpath);
+    CV_RegisterVar(&cv_fullscreen);
 #endif
 
     //misc
