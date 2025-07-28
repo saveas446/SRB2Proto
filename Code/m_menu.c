@@ -891,11 +891,10 @@ menuitem_t ControlOptionsMenu[] =
     {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,30},
     {IT_STRING | IT_CVAR
      | IT_CV_SLIDER     ,"Mouse Speed"     ,&cv_mousesens       ,40},
-    {IT_STRING | IT_CVAR,"Always MouseLook",&cv_alwaysfreelook  ,50},
-    {IT_STRING | IT_CVAR,"Invert Mouse"    ,&cv_invertmouse     ,60},
+    {IT_STRING | IT_CVAR,"Invert Mouse"    ,&cv_invertmouse     ,50},
     {IT_STRING | IT_CVAR
-     | IT_CV_SLIDER     ,"Mouselook Speed"     ,&cv_mlooksens       ,70},
-    {IT_CALL | IT_WHITESTRING,"Configure Keybinds...",M_SetupControlsMenu,90}
+     | IT_CV_SLIDER     ,"Mouselook Speed"     ,&cv_mlooksens       ,60},
+    {IT_CALL | IT_WHITESTRING,"Configure Keybinds...",M_SetupControlsMenu,80}
 };
 
 menu_t  ControlOptionsDef =
