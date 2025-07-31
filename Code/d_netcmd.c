@@ -261,12 +261,6 @@ void D_RegisterClientCommands (void)
     // WATER HACK TEST UNTIL FULLY FINISHED
     COM_AddCommand ("dev_water", "Development command. Allows you to set the water level for testing.", CAT_DEV, Command_Water_f);
 
-#ifdef HAVE_SDL
-    CV_RegisterVar(&cv_midibackend);
-    CV_RegisterVar(&cv_soundfontpath);
-    CV_RegisterVar(&cv_fullscreen);
-#endif
-
     //misc
     CV_RegisterVar(&cv_teamplay);
     CV_RegisterVar(&cv_teamdamage);

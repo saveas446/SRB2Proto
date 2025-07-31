@@ -1,11 +1,13 @@
-#include "../doomdef.h"
-#include "../command.h"
-#include "../i_video.h"
-#include "i_video.h"
 #include <SDL.h>
+
+#include "../command.h"
+#include "../doomdef.h"
+#include "../i_system.h"
+#include "../i_video.h"
 #include "../screen.h"
 #include "../z_zone.h"
-#include "../i_system.h"
+
+#include "i_video.h"
 
 rendermode_t rendermode = render_soft;
 
@@ -13,10 +15,15 @@ boolean highcolor = false;
 
 boolean allow_fullscreen = false;
 
-// Function proto here so the compiler doesn't complain that the function isn't defined yet.
-void I_ToggleFullscreen(void);
+// Stores the current mode
+int currentmode;
 
-consvar_t cv_fullscreen = {"fullscreen", "On", "Toggles whether the game runs in windowed mode or fullscreen.", CAT_VIDEO, CV_SAVE | CV_CALL, CV_OnOff, I_ToggleFullscreen};
+// Various unction protos
+void I_ToggleFullscreen(void);
+void VID_Command_Vidmode(void);
+void VID_Command_Listmodes(void);
+
+consvar_t cv_fullscreen = {"fullscreen", "Off", "Toggles whether the game runs in windowed mode or fullscreen.", CAT_VIDEO, CV_SAVE | CV_CALL, CV_OnOff, I_ToggleFullscreen};
 
 SDL_Window* SDL_window = NULL;
 
@@ -26,7 +33,7 @@ SDL_Surface* window_surface;
 SDL_Surface* icon_surface;
 
 // todo: un-hardcode this
-#define NUM_SDLMODES 12
+#define NUM_SDLMODES 11
 
 vmode_t window_modes[NUM_SDLMODES] = {
 		// Fallback mode, 320x200 is gross
@@ -174,7 +181,7 @@ static void SetSDLIcon(SDL_Window* window)
 }
 
 void I_ToggleFullscreen(void) {
-	
+	VID_SetMode(currentmode);
 }
 
 void I_ShutdownGraphics(void){
@@ -285,11 +292,11 @@ int VID_SetMode(int modenum)
 	SetSDLIcon(SDL_window);
 
 	if (!SDL_window)
-		I_Error("I_StartupGraphics(): Could not create window!");
+		I_Error("VID_SetMode(): Could not create window!");
 
 	SDL_renderer = SDL_CreateRenderer(SDL_window, -1, SDL_RENDERER_ACCELERATED);
 	if (!SDL_renderer)
-		I_Error("I_StartupGraphics(): Could not create renderer!");
+		I_Error("VID_SetMode(): Could not create renderer!");
 
 	surface = SDL_CreateRGBSurfaceWithFormat(0, vid.width, vid.height, 8, SDL_PIXELFORMAT_INDEX8);
 
@@ -301,13 +308,19 @@ int VID_SetMode(int modenum)
 
 	vid.buffer = malloc((vid.width * vid.height * vid.bpp * NUMSCREENS) + (vid.width * ST_HEIGHT * vid.bpp));
 
+	// Set mode number accordingly
+	currentmode = modenum;
+
 	return 0;
 }
 
 void I_StartupGraphics(void) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		I_Error("Could not initialize SDL2: %s\n", SDL_GetError());
+		I_Error("I_StartupGraphics(): Could not initialize SDL2: %s\n", SDL_GetError());
 	
+	if (VID_InitConsole())
+		I_Error("I_StartupGraphics(): Could not initialize commands / console variables!\n");
+
 	VID_SetMode(3);
 
 	graphics_started = true;
@@ -365,3 +378,43 @@ void I_BeginRead(void){}
 
 void I_EndRead(void){}
 
+
+// COMMAND STUFF
+
+boolean VID_InitConsole(void) {
+	// Register cvars
+	CV_RegisterVar(&cv_fullscreen);
+
+	// Register commands
+	COM_AddCommand("videomode", "Changes the video mode to the specified one.", CAT_VIDEO, VID_Command_Vidmode);
+	COM_AddCommand("listmodes", "Lists all available video modes.", CAT_VIDEO, VID_Command_Listmodes);
+
+	return 0;
+}
+
+void VID_Command_Vidmode(void) {
+
+	int modenum;
+
+	if (COM_Argc() != 2) {
+		CONS_Printf("videomode <mode number>: Changes the video mode to the specified one. Number must be between 1 and %d.\n", NUM_SDLMODES - 1);
+		return 0;
+	}
+
+	modenum = atoi(COM_Argv(1));
+
+	if (modenum < 1 || modenum > NUM_SDLMODES - 1) {
+		CONS_Printf("Invalid video mode \"%d\"! Must be between 1 and %d.\n", modenum, NUM_SDLMODES - 1);
+		return;
+	} else {
+		VID_SetMode(modenum);
+	}
+
+	CONS_Printf("Changed to video mode %s (index %d).\n", VID_GetModeName(modenum), modenum);
+}
+
+void VID_Command_Listmodes(void) {
+	for (int i = 1; i < NUM_SDLMODES; i++) {
+		CONS_Printf("Video mode %d: %s.\n", i, VID_GetModeName(i));
+	}
+}
