@@ -71,6 +71,9 @@ char                    savegamestrings[10][SAVESTRINGSIZE];
 
 char    endstring[160];
 
+// Best time for each map. 9:59.99 if not set.
+int besttimes[32];
+
 // flags for items in the menu
 #define  IT_TYPE             14     // (2+4+8)
 #define  IT_CALL              0
@@ -2049,7 +2052,33 @@ void M_TimeAttack(void)
 
 void M_DrawTimeAttack(void)
 {
-    V_DrawString(BASEVIDWIDTH - TimeAttackDef.x - V_StringWidth("PLACEHOLDER"), TimeAttackDef.y + 20, "PLACEHOLDER");
+    char besttimestr[16];
+    int besttime;
+    int minutes;
+    int seconds;
+    int milliseconds;
+
+    besttime = besttimes[cv_timeattacklevel.value];
+
+    seconds = besttime / 35;
+
+    minutes = seconds / 60;
+
+    // Since we already set "minutes" and its value should be fine, let's modulo seconds by 60 so it can be displayed properly
+    seconds = seconds % 60;
+
+    milliseconds = (besttime * 1000) / 35;
+
+    milliseconds /= 10;
+
+    milliseconds %= 100;
+
+    
+    // Assemble final string to display
+    sprintf(besttimestr, "%d:%02d.%02d", minutes, seconds, milliseconds);
+
+    //
+    V_DrawString(BASEVIDWIDTH - TimeAttackDef.x - V_StringWidth(besttimestr), TimeAttackDef.y + 20, besttimestr);
     M_DrawGenericMenu();
 }
 
@@ -2072,7 +2101,7 @@ void M_StopTimeAttack(void)
 menuitem_t TimeAttackMainMenu[] =
 {
     {IT_STRING,"Continue",M_ClearMenus, 40},
-    {IT_STRING,"Retry",NULL, 50},
+    {IT_STRING,"Retry",M_StartTimeAttack, 50},
     {IT_STRING,"Retire",M_StopTimeAttack, 60},
 };
 
@@ -3046,5 +3075,11 @@ void M_Init (void)
         // We are fine.
       default:
         break;
+    }
+
+    // Init time attack
+    for (int i = 0; i < 32; i++) {
+        // 9:59 in tics
+        besttimes[i] = 20999;
     }
 }

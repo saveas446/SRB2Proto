@@ -141,7 +141,7 @@ void ShowMessage_OnChange(void);
 
 CV_PossibleValue_t showmessages_cons_t[]={{0,"Off"},{1,"On"},{2,"Not All"},{0,NULL}};
 CV_PossibleValue_t crosshair_cons_t[]   ={{0,"Off"},{1,"Cross"},{2,"Angle"},{3,"Point"},{0,NULL}};
-CV_PossibleValue_t timeattacklevel_cons_t[] = {{0,"GFZ1"},{1,"GFZ2"},{2,"GFZ3"},{0,NULL}};
+CV_PossibleValue_t timeattacklevel_cons_t[] = {{0,"GFZ1"},{1,"GFZ2"},{2,"GFZ3"},{3,"THZ1"},{4,"THZ2"},{5,"THZ3"},{6,"DSZ1"},{7,"DSZ2"},{8,"DSZ3"},{9,"MMZ1"},{10,"MMZ2"},{11,"MMZ3"},{12,"RMZ1"},{13,"RMZ2"},{14,"RMZ3"},{15,"RVZ1"},{16,"RVZ2"},{17,"RVZ3"},{18,"DCZ1"},{19,"DCZ2"},{20,"DCZ3"},{21,"DZ1"},{22,"DZ2"},{23,"DZ3"},{24,"RRZ1"},{0,NULL}};
 
 consvar_t cv_crosshair      = {"crosshair"   ,"0", NULL, CAT_GAMECONFIG, CV_SAVE,crosshair_cons_t};
 consvar_t cv_autorun        = {"autorun"     ,"1", NULL, CAT_GAMECONFIG, CV_SAVE,CV_OnOff};
@@ -1489,6 +1489,10 @@ void G_WorldDone (void)
 {
     if (istimeattack) {
         D_StartTitle();
+
+        // Save best time if we got a new PB
+        if (leveltime < besttimes[gamemap])
+            besttimes[gamemap - 1] = leveltime;
 
         M_StartControlPanel();
         currentMenu = &TimeAttackDef;

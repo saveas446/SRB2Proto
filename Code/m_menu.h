@@ -95,6 +95,9 @@ typedef struct menu_s
 extern menu_t* currentMenu;
 extern menu_t TimeAttackDef;
 
+// So we can modify it in g_game.c
+extern int besttimes[32];
+
 #endif
 //-----------------------------------------------------------------------------
 //

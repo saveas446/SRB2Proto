@@ -1721,42 +1721,61 @@ void WI_drawStats(void)
 
     WI_drawLF();
 
-    if (cv_fonttype.value == FONT_MAR2K) {
-        V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, kills);
-        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+        if (cv_fonttype.value == FONT_MAR2K) {
+            if (!istimeattack) {
+                V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, kills);
+                V_DrawScaledPatch(SP_STATSX, SP_STATSY + lh, FB, items);
+                V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, sp_secret);
+            }
 
-        V_DrawScaledPatch(SP_STATSX, SP_STATSY + lh, FB, items);
-        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + lh, cnt_items[0]);
+            if (!istimeattack)
+                V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, time);
+            else
+                V_DrawScaledPatch(BASEVIDWIDTH / 2 - 50, BASEVIDHEIGHT / 2, FB, time);
+        }
+        else {
+            if (!istimeattack) {
+                V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, killsxmas);
+                V_DrawScaledPatch(SP_STATSX, SP_STATSY + lh, FB, itemsxmas);
+                V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, secretxmas);
+            }
 
-        V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, sp_secret);
-        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + 2 * lh, cnt_secret[0]);
+            if (!istimeattack)
+                V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, timexmas);
+            else
+                V_DrawScaledPatch(BASEVIDWIDTH / 2 - 50, BASEVIDHEIGHT / 2, FB, timexmas);
+        }
 
-        V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, time);
-        WI_drawTime(BASEVIDWIDTH / 2 - SP_TIMEX, SP_TIMEY, cnt_time);
-    }
-    else {
-        V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, killsxmas);
-        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+        if (!istimeattack) {
+            WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+            WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + lh, cnt_items[0]);
+            WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + 2 * lh, cnt_secret[0]);
+        }
 
-        V_DrawScaledPatch(SP_STATSX, SP_STATSY + lh, FB, itemsxmas);
-        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + lh, cnt_items[0]);
-
-        V_DrawScaledPatch(SP_STATSX, SP_STATSY + 2 * lh, FB, secretxmas);
-        WI_drawPercent(BASEVIDWIDTH - SP_STATSX, SP_STATSY + 2 * lh, cnt_secret[0]);
-
-        V_DrawScaledPatch(SP_TIMEX, SP_TIMEY, FB, timexmas);
-        WI_drawTime(BASEVIDWIDTH / 2 - SP_TIMEX, SP_TIMEY, cnt_time);
-    }
+        if (!istimeattack) 
+            WI_drawTime(BASEVIDWIDTH / 2 - SP_TIMEX, SP_TIMEY, cnt_time);
+        else
+            WI_drawTime(BASEVIDWIDTH / 2 + 50, BASEVIDHEIGHT / 2, cnt_time);
 
     if (wbs->epsd < 3)
     {
         if (cv_fonttype.value == FONT_MAR2K) {
-            V_DrawScaledPatch(BASEVIDWIDTH / 2 + SP_TIMEX, SP_TIMEY, FB, par);
+            if (!istimeattack)
+                V_DrawScaledPatch(BASEVIDWIDTH / 2 + SP_TIMEX, SP_TIMEY, FB, par);
+            else
+                V_DrawScaledPatch(BASEVIDWIDTH / 2 - 50, BASEVIDHEIGHT / 2 - 20, FB, par);
         }
         else {
-            V_DrawScaledPatch(BASEVIDWIDTH / 2 + SP_TIMEX, SP_TIMEY, FB, parxmas);
+            if (!istimeattack)
+                V_DrawScaledPatch(BASEVIDWIDTH / 2 + SP_TIMEX, SP_TIMEY, FB, parxmas);
+            else
+                V_DrawScaledPatch(BASEVIDWIDTH / 2 - 50, BASEVIDHEIGHT / 2 - 20, FB, parxmas);
         }
-        WI_drawTime(BASEVIDWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
+
+        if (!istimeattack)
+            WI_drawTime(BASEVIDWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
+        else
+            WI_drawTime(BASEVIDWIDTH / 2 + 50, BASEVIDHEIGHT / 2 - 20, cnt_par);
     }
 
 }
