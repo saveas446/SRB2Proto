@@ -1730,6 +1730,7 @@ void WI_drawStats(void)
 
     WI_drawLF();
 
+    // TODO: Add best time and millisecond values on the intermission screen during Time Attack
         if (cv_fonttype.value == FONT_MAR2K) {
             if (!istimeattack) {
                 V_DrawScaledPatch(SP_STATSX, SP_STATSY, FB, kills);

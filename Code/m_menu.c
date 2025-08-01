@@ -72,6 +72,7 @@ char                    savegamestrings[10][SAVESTRINGSIZE];
 char    endstring[160];
 
 // Best time for each map. 9:59.99 if not set.
+// TODO: How do we save these between gameplay sessions?
 int besttimes[32];
 
 // flags for items in the menu
