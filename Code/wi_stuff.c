@@ -687,6 +687,9 @@ WI_drawTime
 
     int         div;
     int         n;
+    int         initialt;
+
+    initialt = t;
 
     if (t<0)
         return;
@@ -707,6 +710,9 @@ WI_drawTime
                     V_DrawScaledPatch(x, y, FB, colon);
 
             } while (t / div);
+
+            if (initialt < 60)
+                WI_drawNum(x, y, 0, 1);
         }
         else
         {
@@ -730,6 +736,9 @@ WI_drawTime
                     V_DrawScaledPatch(x, y, FB, colonxmas);
 
             } while (t / div);
+
+            if (initialt < 60)
+                WI_drawNum(x, y, 0, 1);
         }
         else
         {
