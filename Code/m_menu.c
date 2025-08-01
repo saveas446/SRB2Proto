@@ -2039,7 +2039,7 @@ menu_t  TimeAttackDef =
 {
     "M_TATTAK",
     sizeof(TimeAttackMenu) / sizeof(menuitem_t),
-    SinglePlayerMenu,
+    &SinglePlayerDef,
     &TimeAttackMenu,
     M_DrawTimeAttack,
     97,64,
