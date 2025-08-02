@@ -20,6 +20,7 @@ int currentmode;
 
 // Various unction protos
 void I_ToggleFullscreen(void);
+boolean VID_InitConsole(void);
 void VID_Command_Vidmode(void);
 void VID_Command_Listmodes(void);
 
